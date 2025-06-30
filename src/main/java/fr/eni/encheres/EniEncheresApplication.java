@@ -10,6 +10,7 @@ public class EniEncheresApplication {
         SpringApplication.run(EniEncheresApplication.class, args);
         System.out.println("Testing");
         System.out.println("Testing");
+        System.out.println("milor");
     }
 
 }
