@@ -9,7 +9,11 @@ public class EniEncheresApplication {
     public static void main(String[] args) {
         SpringApplication.run(EniEncheresApplication.class, args);
         System.out.println("Testing");
+<<<<<<< HEAD
         System.out.println("testaissa");
+=======
+        System.out.println("Testing");
+>>>>>>> develop
     }
 
 }
