@@ -9,8 +9,7 @@ public class EniEncheresApplication {
     public static void main(String[] args) {
         SpringApplication.run(EniEncheresApplication.class, args);
         System.out.println("Testing");
-        System.out.println("testing2");
-
+        System.out.println("Testing");
     }
 
 }
