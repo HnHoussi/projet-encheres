@@ -1,9 +1,11 @@
 package fr.eni.encheres.bll;
 
 import fr.eni.encheres.bo.Article;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class ArticleServiceImpl implements ArticleService {
     @Override
     public void vendreArticle(Article article) {

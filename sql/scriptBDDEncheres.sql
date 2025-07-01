@@ -32,8 +32,8 @@ CREATE TABLE Articles (
     etatVente VARCHAR(50),
     noUtilisateur INT,
     noCategorie INT,
-    FOREIGN KEY (noUtilisateur) REFERENCES Utilisateurs(idUtilisateur),
-    FOREIGN KEY (noCategorie) REFERENCES Categories(idCategorie)
+    FOREIGN KEY (idUtilisateur) REFERENCES Utilisateurs(idUtilisateur),
+    FOREIGN KEY (idCategorie) REFERENCES Categories(idCategorie)
 );
 
 -- Table: Retraits
@@ -42,7 +42,7 @@ CREATE TABLE Retraits (
     rue VARCHAR(100),
     code_postal VARCHAR(10),
     ville VARCHAR(50),
-    FOREIGN KEY (noArticle) REFERENCES Articles(idArticle)
+    FOREIGN KEY (idArticle) REFERENCES Articles(idArticle)
 );
 
 -- Table: Encheres
