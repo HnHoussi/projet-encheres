@@ -38,7 +38,7 @@ CREATE TABLE Articles (
 
 -- Table: Retraits
 CREATE TABLE Retraits (
-    noArticle INT PRIMARY KEY,
+    idArticle INT PRIMARY KEY,
     rue VARCHAR(100),
     code_postal VARCHAR(10),
     ville VARCHAR(50),
