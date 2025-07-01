@@ -10,6 +10,7 @@ import java.util.List;
 public interface UtilisateurService {
     public void creerCompte();
     public void supprimerCompte();
+    public void modifierProfil();
     public Utilisateur consulterSonCompte(int idUtilisateur);
     public Utilisateur voirProfilUtilisateur(int idUtilisateur);
     public void desactiverCompte(int idUtilisateur);
