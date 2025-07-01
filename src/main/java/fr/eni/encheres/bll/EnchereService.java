@@ -10,6 +10,7 @@ public interface EnchereService {
     public List<Enchere> consulterEncheresParEtat(String etatVente);
     public void annulerEnchere(Enchere enchere);
     public Enchere consulterEnchereparNom(String nomArticle);
-    public Enchere consulterEnchereparCategorie(int idEnchere);
+    public Enchere consulterEnchereparCategorie(int idCategorie);
+
 
 }
