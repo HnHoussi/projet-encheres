@@ -15,7 +15,6 @@ public interface UtilisateurService {
     public Utilisateur voirProfilUtilisateur(int idUtilisateur);
     public void desactiverCompte(int idUtilisateur);
     public void supprimerCompte(int idUtilisateur);
-    public Categorie creerCategorie();
-    public void supprimerCategorie(int idUtilisateur);
+
 
 }
