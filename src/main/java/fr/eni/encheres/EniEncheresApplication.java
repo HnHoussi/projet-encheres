@@ -12,8 +12,12 @@ public class EniEncheresApplication {
 
         System.out.println("Testing");
 
+
         System.out.println("TestingVF");
         System.out.println("Testing33");
+
+
+        System.out.println("milor");
 
     }
 
