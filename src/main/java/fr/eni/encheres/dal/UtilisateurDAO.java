@@ -7,5 +7,9 @@ import java.util.List;
 public interface UtilisateurDAO {
     public void create(Utilisateur utilisateur);
     public Utilisateur read(int idUtilisateur);
-    List<Utilisateur> findAll();
+    public List<Utilisateur> findAll();
+    public void update(Utilisateur utilisateur);
+    public void delete(Utilisateur utilisateur);
+    public List<Utilisateur> findById(int idUtilisateur);
+
 }
