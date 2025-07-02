@@ -7,10 +7,10 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface ArticleService {
-    void vendreArticle(Article article);
+    void vendreArticle(Article article, long idUtilisateur);
     void annulerVente(int idArticle);
     List<Article> consulterArticles();
-    List<Article> consulterArticlesParNom(String nomArticle);
+    List<Article> consulterArticlesParMotCles(String nomArticle);
     List<Article> consulterArticlesParCategorie(String idCategorie);
     List<Article> consulterArticlesParEtat(String etatVente);
 }
