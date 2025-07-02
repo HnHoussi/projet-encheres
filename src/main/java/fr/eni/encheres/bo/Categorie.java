@@ -17,6 +17,10 @@ public class Categorie {
         this.categorie = categorie;
     }
 
+    public Categorie(int l, String s) {
+    }
+
+
     public int getIdCategorie() {
         return idCategorie;
     }
