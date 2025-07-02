@@ -30,4 +30,9 @@ public class CategorieServiceImpl implements CategorieService {
     public List<Categorie> consulterCategories() {
         return categorieDAO.findAll();
     }
+
+    @Override
+    public void modifierCategorie(Categorie categorie) {
+        categorieDAO.update(categorie);
+    }
 }
