@@ -8,13 +8,11 @@ import fr.eni.encheres.bo.Utilisateur;
 import java.util.List;
 
 public interface UtilisateurService {
-    public void creerCompte();
-    public void supprimerCompte();
-    public void modifierProfil();
-    public Utilisateur consulterSonCompte(int idUtilisateur);
-    public Utilisateur voirProfilUtilisateur(int idUtilisateur);
-    public void desactiverCompte(int idUtilisateur);
-    public void supprimerCompte(int idUtilisateur);
-
-
+    public void creerCompte(Utilisateur utilisateur);
+    public void supprimerCompte(long idUtilisateur);
+    public void modifierProfil(Utilisateur utilisateur);
+    public Utilisateur consulterUtilisateur(long idUtilisateur);
+    public List<Utilisateur> consulterListeUtilisateurs();
+    public void desactiverCompte(long idUtilisateur);
+    public void activerCompte(long idUtilisateur);
 }

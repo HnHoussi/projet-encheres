@@ -7,5 +7,5 @@ import java.util.List;
 public interface CategorieDAO {
     public void create(Categorie categorie);
     public void delete(long idCategorie);
-    public List<Categorie> readAll();
+    public List<Categorie> findAll();
 }

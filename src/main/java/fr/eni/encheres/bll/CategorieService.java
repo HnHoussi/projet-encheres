@@ -5,8 +5,8 @@ import fr.eni.encheres.bo.Categorie;
 import java.util.List;
 
 public interface CategorieService {
-    public Categorie creerCategorie();
-    public void supprimerCategorie(int idUtilisateur);
+    public void creerCategorie(Categorie categorie);
+    public void supprimerCategorie(long idCategorie);
     public List<Categorie> consulterCategories();
 
 }
