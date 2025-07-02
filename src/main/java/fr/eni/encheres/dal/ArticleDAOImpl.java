@@ -20,7 +20,7 @@ public class ArticleDAOImpl implements ArticleDAO{
     }
 
     @Override
-    public void create(Article article, long idUtilisateur) {
+    public void create(Article article) {
         String INSERT = """
                         INSERT INTO Articles(nomArticle, description, dateDebutEnchere, dateFinEnchere, miseAPrix, prixVente, etatVente, idUtilisateur, idCategorie)
                         VALUES (:nomArticle, :description, :dateDebutEnchere, :dateFinEnchere, :miseAPrix, :prixVente, :etatVente, :idUtilisateur, :idCategorie)
@@ -34,7 +34,7 @@ public class ArticleDAOImpl implements ArticleDAO{
         parameterSource.addValue("miseAPrix", article.getMiseAPrix());
         parameterSource.addValue("prixVente", article.getPrixVente());
         parameterSource.addValue("etatVente", article.getEtatVente());
-        parameterSource.addValue("idUtilisateur", idUtilisateur);
+        parameterSource.addValue("idUtilisateur", article.getUtilisateur());
         parameterSource.addValue("idCategorie", article.getCategorie());
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
