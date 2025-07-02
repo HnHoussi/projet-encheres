@@ -5,11 +5,11 @@ import fr.eni.encheres.bo.Article;
 import java.util.List;
 
 public interface ArticleDAO {
-    void create(Article article, int idUtilisateur);
-    void delete(int  idArticle);
+    void create(Article article, long idUtilisateur);
+    void delete(long  idArticle);
     List<Article> findAll();
-    List<Article> findByNom(String nomArticle);
+    List<Article> findByMotCles(String nomArticle);
     List<Article> findByCategorie(String idCategorie);
-    Article findByEtat(int idArticle);
+    List<Article> findByEtat(String etatVente);
 
 }
