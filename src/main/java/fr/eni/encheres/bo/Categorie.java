@@ -3,7 +3,7 @@ package fr.eni.encheres.bo;
 import java.util.Objects;
 
 public class Categorie {
-    private int idCategorie;
+    private long idCategorie;
     private String libelle;
 
     private Categorie categorie;
@@ -21,11 +21,11 @@ public class Categorie {
     }
 
 
-    public int getIdCategorie() {
+    public long getIdCategorie() {
         return idCategorie;
     }
 
-    public void setIdCategorie(int idCategorie) {
+    public void setIdCategorie(long idCategorie) {
         this.idCategorie = idCategorie;
     }
 

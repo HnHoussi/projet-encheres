@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class Utilisateur {
-    private int idUtilisateur;
+    private long idUtilisateur;
     private String pseudo;
     private String nom;
     private String prenom;
@@ -40,11 +40,11 @@ public class Utilisateur {
         this.encheres = encheres;
     }
 
-    public int getIdUtilisateur() {
+    public long getIdUtilisateur() {
         return idUtilisateur;
     }
 
-    public void setIdUtilisateur(int idUtilisateur) {
+    public void setIdUtilisateur(long idUtilisateur) {
         this.idUtilisateur = idUtilisateur;
     }
 

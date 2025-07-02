@@ -5,13 +5,14 @@ import fr.eni.encheres.bo.Article;
 import java.util.List;
 
 public class ArticleDAOImpl implements ArticleDAO{
+
     @Override
-    public void create(Article article, int idUtilisateur) {
+    public void create(Article article, long idUtilisateur) {
 
     }
 
     @Override
-    public void delete(int idArticle) {
+    public void delete(long idArticle) {
 
     }
 
@@ -31,7 +32,7 @@ public class ArticleDAOImpl implements ArticleDAO{
     }
 
     @Override
-    public Article findByEtat(int idArticle) {
+    public Article findByEtat(long idArticle) {
         return null;
     }
 }

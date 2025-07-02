@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class Article {
-    private int idArticle;
+    private long idArticle;
     private String nomArticle;
     private String description;
     private LocalDate dateDebutEnchere;
@@ -38,11 +38,11 @@ public class Article {
         this.retrait = retrait;
     }
 
-    public int getIdArticle() {
+    public long getIdArticle() {
         return idArticle;
     }
 
-    public void setIdArticle(int idArticle) {
+    public void setIdArticle(long idArticle) {
         this.idArticle = idArticle;
     }
 
