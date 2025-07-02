@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <title>Liste des Enchères - ENI-Enchères</title>
+  <link rel="stylesheet" th:href="@{/style-index-connecte.css}" />
+</head>
+<body>
+  <header>
+    <h1>ENI-Enchères</h1>
+    <nav>
+      <a th:href="@{/encheres}">Enchères</a>
+      <a th:href="@{/vente-nouvelle}">Vendre un article</a>
+      <a th:href="@{/profil}">Mon profil</a>
+      <a th:href="@{/logout}">Déconnexion</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="filtres">
+      <h2>Filtres</h2>
+      <input type="text" placeholder="Le nom de l'article contient..." />
+
+      <label for="categorie">Catégorie :</label>
+      <select id="categorie">
+        <option>Toutes</option>
+        <option>Informatique</option>
+        <option>Ameublement</option>
+        <option>Vêtement</option>
+        <option>Sport & Loisirs</option>
+      </select>
+
+      <div class="choix">
+        <label><input type="radio" name="mode" checked /> Achats</label>
+        <label><input type="radio" name="mode" /> Mes ventes</label>
+      </div>
+
+      <ul class="checkboxes">
+        <li><input type="checkbox" /> Enchères ouvertes</li>
+        <li><input type="checkbox" /> Mes ventes en cours</li>
+        <li><input type="checkbox" /> Mes enchères</li>
+        <li><input type="checkbox" /> Ventes non débutées</li>
+        <li><input type="checkbox" /> Mes enchères remportées</li>
+        <li><input type="checkbox" /> Ventes terminées</li>
+      </ul>
+
+      <button>Rechercher</button>
+      <p class="connecte" th:text="${user.username} + ' est connectée'">Utilisateur est connectée</p>
+    </section>
+
+    <div class="auction-list" th:each="auction : ${auctions}">
+      <div class="card">
+        <img width="15" height="15" src="https://img.icons8.com/ios-filled/500/my-computer--v2.png" alt="Article" />
+        <p><strong th:text="${auction.name}">Nom produit</strong> <span th:text="${auction.description}">description</span></p>
+        <p><strong>Prix :</strong> <span th:text="${auction.price}">0</span> points</p>
+        <p><strong>Fin de l’enchère :</strong> <span th:text="${auction.endDate}">Date</span></p>
+        <p><strong>Vendeur :</strong> <span th:text="${auction.seller}">Nom</span></p>
+        <a th:href="@{'/auction/' + ${auction.id}}" th:text="${auction.bidsCount} + ' enchères'">0 enchères</a>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <p>Aide | Conditions d’utilisation</p>
+      <p>Contact e-mail | Mentions légales</p>
+      <p>Suivez-nous : @instagram</p>
+      <p><em>Projet ENI Informatique</em></p>
+    </div>
+  </footer>
+</body>
+</html>
