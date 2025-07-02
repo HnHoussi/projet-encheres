@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Administrateur - gestion des comptes</title>
+
+</head>
+<body>
+	<header> <!--  th:replace="~{fragments/fragment-entete :: entete}"> -->
+	</header>
+	<main>
+		<h1>Liste des Comptes Utilisateurs</h1>
+		<table>
+			<!-- build html table based on users -->
+			<thead>
+				<tr>
+					<th>Pseudo</th>
+					<th>Nom</th>
+					<th>Prénom</th>
+					<th>Email</th>
+					<th>Détail</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="u : ${utilisateurs}">
+					<td th:text="${u.pseudo}"></td>
+					<td th:text="${u.nom}"></td>
+					<td th:text="${u.prenom}"></td>
+					<td th:text="${u.email}"></td>
+					<td>
+						<a th:href="@{/encheres/admin-compte-detail(id=${f.id})}">Détail</a>
+						<!-- <a th:if="${membreEnSession != null && membreEnSession.id > 0}" data-th-href="@{/avis/creer(idFilm=${f.id})}">Avis</a> -->
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</main>
+</body>
+</html>

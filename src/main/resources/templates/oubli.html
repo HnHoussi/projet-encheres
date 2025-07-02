@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org" >
+	<head>
+		<meta charset="UTF-8">
+		<title>S'inscrire - se connecter</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+	
+	    <!-- meta pour le référencement -->
+	    <meta name="description" content="Site enchères ENI">
+		<link rel="stylesheet" data-th-href="@{/css/styleML.css}">
+	    <!-- ressource fontawesome -->
+	    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.15.4/css/all.css">
+	    <!-- ressource bootstrap -->
+	    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+	</head>
+	
+	<main role="main">
+		<section>
+			<form action="/encheres/connexion" method="post">
+				<ul>
+					<li>
+						<label for="identifiant">Identifiant :</label>
+						<!--  2 possibilités connexions : pseudo ou email -->
+						<!--  <input type="email" id="email" name="email" required> -->
+	 					<input type="text" id="identifiant" name="identifiant" required>
+	 				</li>
+					<li>
+						<label for="motDePasse">Mot de passe :</label>
+						<input type="password" id="motDePasse" name="motDePasse" required>
+					</li>
+					<li>
+						<label for="confirmation">Confirmation :</label>
+						<input type="password" id="confirmation" name="confirmation" required>
+					</li>
+				</ul>
+				
+				<button type="submit" class="btn bt-primary">Réinitialiser</button>
+				
+			</form>
+		</section>
+		<section>
+			
+		</section>
+	</main>
+	<footer role="contentinfo">
+	
+	</footer>
+
+
+</body>
+</html>

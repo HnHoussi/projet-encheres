@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org" >
+	<head>
+		<meta charset="UTF-8">
+		<title>S'inscrire - se connecter</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+	
+	    <!-- meta pour le référencement -->
+	    <meta name="description" content="Site enchères ENI">
+		<link rel="stylesheet" data-th-href="@{/css/styleML.css}">
+	    <!-- ressource fontawesome -->
+	    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.15.4/css/all.css">
+	    <!-- ressource bootstrap -->
+	    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+	</head>
+	<body>
+		<header role="banner">
+			<nav role="navigation">
+			<!-- fragment entete -->
+			</nav>
+		</header>
+		<main role="main">
+			<section>
+				<form action="/encheres/connexion" method="post">
+					<ul>
+						<li>
+							<label for="identifiant">Identifiant :</label>
+							<!--  2 possibilités connexions : pseudo ou email -->
+		 					<input type="text" id="pseudo" name="pseudo" required>
+		 				</li>
+						<li>
+							<label for="motDePasse">Mot de passe :</label>
+							<input type="password" id="motDePasse" name="motDePasse" required>
+						</li>
+					</ul>
+					<fieldset>
+					<button class="boutonConnect" type="submit">Connexion</button>
+						<div>
+							<input type="checkbox" id="souvenir" name="souvenir">
+							<label for="souvenir">Se Souvenir de moi</label>
+							<a href="/encheres/oubli">Mot de passe oublié</a>
+						</div>
+					</fieldset>
+				</form>
+			</section>
+			<section>
+				<button class="boutonValider"><a href="/encheres/profil-creer">Créer un compte</a></button>	
+			</section>
+		</main>
+		
+		<footer role="contentinfo">
+			<!-- fragment pied de page -->
+		</footer>
+
+	</body>
+</html>
