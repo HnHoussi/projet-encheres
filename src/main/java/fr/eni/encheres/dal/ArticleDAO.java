@@ -10,6 +10,6 @@ public interface ArticleDAO {
     List<Article> findAll();
     List<Article> findByNom(String nomArticle);
     List<Article> findByCategorie(String idCategorie);
-    Article findByEtat(long idArticle);
+    List<Article> findByEtat(String etatVente);
 
 }

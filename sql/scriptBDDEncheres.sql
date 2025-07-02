@@ -1,6 +1,6 @@
 -- Table: Utilisateurs
 CREATE TABLE Utilisateurs (
-    idUtilisateur INT PRIMARY KEY IDENTITY,
+    idUtilisateur BIGINT PRIMARY KEY IDENTITY,
     pseudo VARCHAR(50),
     nom VARCHAR(50),
     prenom VARCHAR(50),
@@ -16,41 +16,41 @@ CREATE TABLE Utilisateurs (
 
 -- Table: Categories
 CREATE TABLE Categories (
-    idCategorie INT PRIMARY KEY IDENTITY,
+    idCategorie BIGINT PRIMARY KEY IDENTITY,
     libelle VARCHAR(100)
 );
 
 -- Table: Articles
 CREATE TABLE Articles (
-    idArticle INT PRIMARY KEY IDENTITY(1,1),
+    idArticle BIGINT PRIMARY KEY IDENTITY(1,1),
     nomArticle VARCHAR(100),
-    descriptionArticle VARCHAR(MAX),
-    dateDebutEncheres DATE,
-    dateFinEncheres DATE,
+    description VARCHAR(MAX),
+    dateDebutEnchere DATETIME,
+    dateFinEnchere DATETIME,
     miseAPrix INT,
     prixVente INT,
     etatVente VARCHAR(50),
-    noUtilisateur INT,
-    noCategorie INT,
+    idUtilisateur INT,
+    idCategorie INT,
     FOREIGN KEY (idUtilisateur) REFERENCES Utilisateurs(idUtilisateur),
     FOREIGN KEY (idCategorie) REFERENCES Categories(idCategorie)
 );
 
 -- Table: Retraits
 CREATE TABLE Retraits (
-    idArticle INT PRIMARY KEY,
+    idArticle BIGINT PRIMARY KEY,
     rue VARCHAR(100),
-    code_postal VARCHAR(10),
+    codePostal VARCHAR(10),
     ville VARCHAR(50),
     FOREIGN KEY (idArticle) REFERENCES Articles(idArticle)
 );
 
 -- Table: Encheres
 CREATE TABLE Encheres (
-    idUtilisateur INT,
-    idArticle INT,
-    dateEnchere DATE,
-    montant_enchere INT,
+    idUtilisateur BIGINT,
+    idArticle BIGINT,
+    dateEnchere DATETIME,
+    montantEnchere BIGINT,
     PRIMARY KEY (idUtilisateur, idArticle, dateEnchere),
     FOREIGN KEY (idUtilisateur) REFERENCES Utilisateurs(idUtilisateur),
     FOREIGN KEY (idArticle) REFERENCES Articles(idArticle)
