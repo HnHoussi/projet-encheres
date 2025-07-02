@@ -5,8 +5,9 @@ import fr.eni.encheres.bo.Enchere;
 import java.util.List;
 
 public class EnchereDAOImpl implements EnchereDAO{
+
     @Override
-    public void create(int idArticle) {
+    public void create(long idArticle) {
 
     }
 
@@ -21,7 +22,7 @@ public class EnchereDAOImpl implements EnchereDAO{
     }
 
     @Override
-    public void delete(int idEnchere) {
+    public void delete(long idEnchere) {
 
     }
 
@@ -31,7 +32,7 @@ public class EnchereDAOImpl implements EnchereDAO{
     }
 
     @Override
-    public List<Enchere> findByCategorie(int idCategorie) {
+    public List<Enchere> findByCategorie(long idCategorie) {
         return List.of();
     }
 }

@@ -1,10 +1,12 @@
 package fr.eni.encheres.bll;
 
+import fr.eni.encheres.bo.Categorie;
+
 import java.util.List;
 
 public interface CategorieService {
-    public CategorieService creerCategorie();
+    public Categorie creerCategorie();
     public void supprimerCategorie(int idUtilisateur);
-    public List<CategorieService> consulterCategories();
+    public List<Categorie> consulterCategories();
 
 }
