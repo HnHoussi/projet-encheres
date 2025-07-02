@@ -11,7 +11,8 @@ CREATE TABLE Utilisateurs (
     ville VARCHAR(50),
     motDePasse VARCHAR(100),
     credit INT,
-    administrateur BIT
+    administrateur BIT,
+    compteActif BIT
 );
 
 -- Table: Categories
@@ -30,8 +31,8 @@ CREATE TABLE Articles (
     miseAPrix INT,
     prixVente INT,
     etatVente VARCHAR(50),
-    idUtilisateur INT,
-    idCategorie INT,
+    idUtilisateur BIGINT,
+    idCategorie BIGINT,
     FOREIGN KEY (idUtilisateur) REFERENCES Utilisateurs(idUtilisateur),
     FOREIGN KEY (idCategorie) REFERENCES Categories(idCategorie)
 );
