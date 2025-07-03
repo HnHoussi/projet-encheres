@@ -1,5 +1,5 @@
 @charset "UTF-8";
-body {
+* {
   font-family: Arial, sans-serif;
   margin: 0;
   padding: 0;
@@ -21,15 +21,37 @@ footer {
 /***********/
 /*CSS milor*/
 /***********/
+ul,ol,li {
+	font-size : 1em;
+	list-style-type :none;
+}
 
 /*gestion bouton connexion*/
 .boutonconnect {
 	margin : 10px;
-	padding : 5px;
+	padding : 20px;
 }
 
 
+
 /*gestion bouton soumission*/
+button {
+	margin : 10px;
+	padding : 10px;
+}
+
+button:visited {
+	background-color: #008080;
+	color: black;
+	padding: 14px 25px;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+}
+
+button:hover {
+	background-color: #004040;
+}
 
 button a:link, button a:visited {
 	background-color: #008080;
@@ -85,12 +107,6 @@ table a:link, table a:visited {
 table a:hover, table a:active {
 	background-color: #004040;
 }
-
-
-
-
-
-
 
 
 

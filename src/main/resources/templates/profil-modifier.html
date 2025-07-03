@@ -23,7 +23,7 @@
 	<main role="main">
 		<section>
 			<h1 id="nav-title">Mon profil</h1>
-			<form th:action="@{/encheres/profil-modifier}" method="POST">
+			<form th:action="@{/encheres/profil-modifier}" method="post" th:object="@{/}">
 			
 				<ul class="">
 					<li>
@@ -70,18 +70,17 @@
 				</ul>
 				<!-- affichage credit -->
 				<li>
-				<p>Crédit</p> <p th:field="*{credit}">640</p>
+				<label for="credit">Crédit</label> <input type="number" th:field="*{credit}">
 				</li>
 				<li>
 				<!--  si creation de compte  etat non connecté creation profil : Créer / si modif profil etat connecte : Enregistrer -->
-					<button class="boutonValider" type="submit">Modifier</button>		
+					<button class="boutonValider" type="submit">Enregistrer</button>		
 				</li>
 			</form>
 		</section>
 		<section>
 		<!-- si creation profil etat non connecte : Annuler / si modif profil état connecté : Supprimer mon compte -->
-			<!--  <a role="button" class="lienBouton" href="/encheres">Annuler</a> -->
-			<button class=boutonValider><a href="/encheres/">Annuler</a></button>
+			<button class=boutonValider><a th:href="${/encheres}">Supprimer mon compte</a></button>
 			
 			
 			

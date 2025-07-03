@@ -8,7 +8,7 @@
 	
 	    <!-- meta pour le référencement -->
 	    <meta name="description" content="Site enchères ENI">
-		<link rel="stylesheet" data-th-href="@{/css/styleML.css}">
+		<link rel="stylesheet" th:href="@{/css/styleML.css}">
 	    <!-- ressource fontawesome -->
 	    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.15.4/css/all.css">
 	    <!-- ressource bootstrap -->
@@ -73,7 +73,7 @@
 		<section>
 		<!-- si creation profil etat non connecte : Annuler / si modif profil état connecté : Supprimer mon compte -->
 			<!--  <a role="button" class="lienBouton" href="/encheres">Annuler</a> -->
-			<button class=boutonValider><a href="/encheres/">Annuler</a></button>		
+			<button class=boutonValider><a th:href="$/encheres">Annuler</a></button>		
 		</section>
 	</main>
 	

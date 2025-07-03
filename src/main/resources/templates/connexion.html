@@ -8,7 +8,7 @@
 	
 	    <!-- meta pour le référencement -->
 	    <meta name="description" content="Site enchères ENI">
-		<link rel="stylesheet" data-th-href="@{/css/styleML.css}">
+		<link rel="stylesheet" th:href="@{/css/styleML.css}">
 	    <!-- ressource fontawesome -->
 	    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.15.4/css/all.css">
 	    <!-- ressource bootstrap -->
@@ -22,16 +22,16 @@
 		</header>
 		<main role="main">
 			<section>
-				<form action="/encheres/connexion" method="post">
+				<form th:action="@{/encheres/connexion}" method="post" th:object="${utilisateur}">
 					<ul>
 						<li>
 							<label for="identifiant">Identifiant :</label>
 							<!--  2 possibilités connexions : pseudo ou email -->
-		 					<input type="text" id="pseudo" name="pseudo" required>
+		 					<input type="text" id="pseudo" th:field="*{pseudo}" required>
 		 				</li>
 						<li>
 							<label for="motDePasse">Mot de passe :</label>
-							<input type="password" id="motDePasse" name="motDePasse" required>
+							<input type="password" id="motDePasse" th:field="*{motDePasse}" required>
 						</li>
 					</ul>
 					<fieldset>
@@ -39,13 +39,13 @@
 						<div>
 							<input type="checkbox" id="souvenir" name="souvenir">
 							<label for="souvenir">Se Souvenir de moi</label>
-							<a href="/encheres/oubli">Mot de passe oublié</a>
+							<a th:href="@{/encheres/oubli}">Mot de passe oublié</a>
 						</div>
 					</fieldset>
 				</form>
 			</section>
 			<section>
-				<button class="boutonValider"><a href="/encheres/profil-creer">Créer un compte</a></button>	
+				<button class="boutonValider"><a th:href="@{/encheres/profil-creer"}>Créer un compte</a></button>	
 			</section>
 		</main>
 		
