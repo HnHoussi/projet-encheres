@@ -28,20 +28,20 @@ public class UtilisateurServiceImpl implements UtilisateurService {
 
     @Override
     public Utilisateur consulterUtilisateur(long idUtilisateur) {
-        return utilisateurDAO.read(idUtilisateur);
+        return utilisateurDAO.findById(idUtilisateur);
     }
 
     @Override
     public void desactiverCompte(long idUtilisateur) {
 
-        Utilisateur utilisateur = utilisateurDAO.read(idUtilisateur);
+        Utilisateur utilisateur = utilisateurDAO.findById(idUtilisateur);
         utilisateur.setCompteActif(false);
         utilisateurDAO.update(utilisateur);
     }
 
     @Override
     public void activerCompte(long idUtilisateur) {
-        Utilisateur utilisateur = utilisateurDAO.read(idUtilisateur);
+        Utilisateur utilisateur = utilisateurDAO.findById(idUtilisateur);
         utilisateur.setCompteActif(true);
         utilisateurDAO.update(utilisateur);
     }
