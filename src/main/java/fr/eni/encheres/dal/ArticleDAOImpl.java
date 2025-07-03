@@ -60,6 +60,15 @@ public class ArticleDAOImpl implements ArticleDAO{
     }
 
     @Override
+    public Article findById(long idArticle) {
+        String FIND_BY_ID = "SELECT * FROM Articles WHERE idArticle = :idArticle";
+        MapSqlParameterSource parameterSource = new MapSqlParameterSource();
+        parameterSource.addValue("idArticle", idArticle);
+
+        return namedParameterJdbcTemplate.queryForObject(FIND_BY_ID, parameterSource, new BeanPropertyRowMapper<>(Article.class));
+    }
+
+    @Override
     public List<Article> findByMotCles(String nomArticle) {
         String FIND_BY_MOT_CLES = "SELECT * FROM Articles WHERE nomArticle LIKE :nomArticle";
         MapSqlParameterSource parameterSource = new MapSqlParameterSource();

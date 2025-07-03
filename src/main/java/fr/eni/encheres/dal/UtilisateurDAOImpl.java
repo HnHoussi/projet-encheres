@@ -59,7 +59,7 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
     }
 
     @Override
-    public Utilisateur read(long idUtilisateur) {
+    public Utilisateur findById(long idUtilisateur) {
         MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
         mapSqlParameterSource.addValue("id", idUtilisateur);
         return jdbcTemplate.queryForObject(FIND_BY_ID, mapSqlParameterSource, new BeanPropertyRowMapper<>(Utilisateur.class));
