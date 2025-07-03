@@ -1,39 +1,48 @@
 package fr.eni.encheres.bll;
 
 import fr.eni.encheres.bo.Enchere;
+import fr.eni.encheres.dal.EnchereDAO;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 public class EnchereServiceImpl implements EnchereService {
+
+    private EnchereDAO enchereDAO;
+
+    public EnchereServiceImpl(EnchereDAO enchereDAO) {
+        this.enchereDAO = enchereDAO;
+    }
+
     @Override
-    public Enchere faireEnchere(int idArticle) {
-        return null;
+    public void faireEnchere(Enchere enchere,long idArticle) {
+        enchereDAO.create(enchere, idArticle);
     }
 
     @Override
     public List<Enchere> consulterEncheres() {
-        return List.of();
+        return enchereDAO.findAll();
     }
 
     @Override
     public List<Enchere> consulterEncheresParEtat(String etatVente) {
-        return List.of();
+        return enchereDAO.findByEtat(etatVente);
     }
 
     @Override
-    public void annulerEnchere(Enchere enchere) {
+    public void annulerEnchere(long idArticle) {
+        enchereDAO.delete(idArticle);
 
     }
 
     @Override
-    public Enchere consulterEnchereparNom(String nomArticle) {
-        return null;
+    public List<Enchere> consulterEnchereparMotCles(String nomArticle) {
+        return enchereDAO.findByMotCles(nomArticle);
     }
 
     @Override
-    public Enchere consulterEnchereparCategorie(int idCategorie) {
-        return null;
+    public List<Enchere> consulterEnchereparCategorie(long idCategorie) {
+        return enchereDAO.findByCategorie(idCategorie);
     }
 }

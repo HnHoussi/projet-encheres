@@ -1,42 +1,58 @@
 package fr.eni.encheres.bll;
 
 import fr.eni.encheres.bo.Utilisateur;
+import fr.eni.encheres.dal.UtilisateurDAO;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class UtilisateurServiceImpl implements UtilisateurService {
-    @Override
-    public void creerCompte() {
+    private UtilisateurDAO utilisateurDAO;
 
+    public UtilisateurServiceImpl(UtilisateurDAO utilisateurDAO) {
+        this.utilisateurDAO = utilisateurDAO;
+    }
+
+
+    @Override
+    public void creerCompte(Utilisateur utilisateur) {
+        utilisateurDAO.create(utilisateur);
     }
 
     @Override
-    public void supprimerCompte() {
+    public void modifierProfil(Utilisateur utilisateur) {
+        utilisateurDAO.update(utilisateur);
+    }
 
+
+    @Override
+    public Utilisateur consulterUtilisateur(long idUtilisateur) {
+        return utilisateurDAO.read(idUtilisateur);
     }
 
     @Override
-    public void modifierProfil() {
+    public void desactiverCompte(long idUtilisateur) {
 
+        Utilisateur utilisateur = utilisateurDAO.read(idUtilisateur);
+        utilisateur.setCompteActif(false);
+        utilisateurDAO.update(utilisateur);
     }
 
     @Override
-    public Utilisateur consulterSonCompte(int idUtilisateur) {
-        return null;
+    public void activerCompte(long idUtilisateur) {
+        Utilisateur utilisateur = utilisateurDAO.read(idUtilisateur);
+        utilisateur.setCompteActif(true);
+        utilisateurDAO.update(utilisateur);
     }
 
     @Override
-    public Utilisateur voirProfilUtilisateur(int idUtilisateur) {
-        return null;
+    public void supprimerCompte(long idUtilisateur) {
+        utilisateurDAO.delete(idUtilisateur);
     }
 
     @Override
-    public void desactiverCompte(int idUtilisateur) {
-
-    }
-
-    @Override
-    public void supprimerCompte(int idUtilisateur) {
-
+    public List<Utilisateur> consulterListeUtilisateurs() {
+        return utilisateurDAO.findAll();
     }
 }

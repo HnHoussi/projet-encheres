@@ -16,13 +16,13 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public void vendreArticle(Article article, long idUtilisateur) {
-        articleDAO.create(article, idUtilisateur);
+    public void vendreArticle(Article article) {
+        articleDAO.create(article);
 
     }
 
     @Override
-    public void annulerVente(int idArticle) {
+    public void annulerVente(long idArticle) {
         articleDAO.delete(idArticle);
     }
 

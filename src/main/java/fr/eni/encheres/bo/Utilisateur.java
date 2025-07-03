@@ -16,6 +16,7 @@ public class Utilisateur {
     private String motDePasse;
     private int credit;
     private boolean administrateur;
+    private boolean compteActif;
 
     private List<Article> articles;
     private List<Enchere> encheres;
@@ -23,7 +24,7 @@ public class Utilisateur {
     public Utilisateur() {
     }
 
-    public Utilisateur(int idUtilisateur, String pseudo, String nom, String prenom, String email, String telephone, String rue, String codePostal, String ville, String motDePasse, int credit, boolean administrateur, List<Article> articles, List<Enchere> encheres) {
+    public Utilisateur(long idUtilisateur, String pseudo, String nom, String prenom, String email, String telephone, String rue, String codePostal, String ville, String motDePasse, int credit, boolean administrateur, boolean compteActif, List<Article> articles, List<Enchere> encheres) {
         this.idUtilisateur = idUtilisateur;
         this.pseudo = pseudo;
         this.nom = nom;
@@ -36,6 +37,7 @@ public class Utilisateur {
         this.motDePasse = motDePasse;
         this.credit = credit;
         this.administrateur = administrateur;
+        this.compteActif = compteActif;
         this.articles = articles;
         this.encheres = encheres;
     }
@@ -134,6 +136,14 @@ public class Utilisateur {
 
     public void setAdministrateur(boolean administrateur) {
         this.administrateur = administrateur;
+    }
+
+    public boolean isCompteActif() {
+        return compteActif;
+    }
+
+    public void setCompteActif(boolean compteActif) {
+        this.compteActif = compteActif;
     }
 
     public List<Article> getArticles() {
