@@ -9,18 +9,24 @@ public class UtilisateurController {
 //DEPENDANCE
 	
 	//attribut de dependance
-	private UtilisateurService utilisateurService;
+	//private UtilisateurService utilisateurService;
 	
-	//controller : injection de dependance
-	public UtilisateurController(UtilisateurService utilisateurService) {
-		this.utilisateurService = utilisateurService;
+	//constructeur defaut
+	public UtilisateurController() {
+		
 	}
+	//constructeur : injection de dependance
+	//public UtilisateurController(UtilisateurService utilisateurService) {
+	//	this.utilisateurService = utilisateurService;
+	//}
 	
 	
 	//gestion de validation du formulaire creation profil
 	@PostMapping("/encheres/profil-creer")
-	public String 
-	
+	public String creerProfil() {
+		System.out.println("Appel de la methode creerprofil");
+		return "profil-creer";
+	}
 
 
 }
