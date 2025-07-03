@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Nouvelle vente - ENI-Enchères</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>Nouvelle vente</h1>
+  <form>
+    <label for="article">Article :</label>
+    <input type="text" id="article" name="article" value="Fauteuil">
+
+    <label for="description">Description :</label>
+    <textarea id="description" name="description">Fauteuil en cuir</textarea>
+
+    <label for="categorie">Catégorie :</label>
+    <select id="categorie" name="categorie">
+      <option selected>Maison</option>
+      <option>Informatique</option>
+      <option>Livres</option>
+    </select>
+
+    <label for="photo">Photo de l'article :</label>
+    <input type="file" id="photo" name="photo">
+
+    <label for="prix">Mise à prix (€) :</label>
+    <input type="number" id="prix" name="prix" value="310">
+
+    <label for="debut">Début de l'enchère :</label>
+    <input type="date" id="debut" name="debut" value="2018-08-10">
+
+    <label for="fin">Fin de l'enchère :</label>
+    <input type="date" id="fin" name="fin" value="2018-09-01">
+
+    <fieldset>
+
+      <label for="rue">Rue :</label>
+      <input type="text" id="rue" name="rue">
+
+      <label for="codePostal">Code postal :</label>
+      <input type="text" id="codePostal" name="codePostal">
+
+      <label for="ville">Ville :</label>
+      <input type="text" id="ville" name="ville">
+    </fieldset>
+
+    <div class="buttons">
+      <button type="submit">Enregistrer</button>
+      <button type="reset">Annuler</button>
+      <button type="button" class="danger">Annuler la vente</button>
+    </div>
+
+    <p class="note">📌 Date du jour : 05/08/2018</p>
+  </form>
+</body>
+</html>

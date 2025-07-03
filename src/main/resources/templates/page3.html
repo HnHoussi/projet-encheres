@@ -1,0 +1,206 @@
+
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <title>Liste des Enchères - ENI-Enchères</title>
+  <link rel="stylesheet" th:href="@{/css/style-index-connecte.css}" />
+</head>
+<body>
+  <header>
+    <h1>ENI-Enchères</h1>
+    <nav>
+     <button><a th:href="@{/encheres}">Enchères</a></button>
+     <button><a th:href="@{/vente-nouvelle}">Vendre un article</a></button>
+     <button><a th:href="@{/profil}">Mon profil</a></button>
+     <button><a th:href="@{/logout}">Déconnexion</a></button>
+    </nav>
+  </header>
+  <main>
+    <section class="filtres">
+      <h2>Filtres</h2>
+      <form th:action="@{/encheres}" method="get">
+        <input type="text" name="recherche" th:value="${recherche}" placeholder="Le nom de l'article contient..." />
+        
+        <label for="categorie">Catégorie :</label>
+        <select id="categorie" name="categorie">
+          <option value="">Toutes</option>
+          <option th:each="cat : ${categories}" 
+                  th:value="${cat.id}" 
+                  th:text="${cat.libelle}"
+                  th:selected="${cat.id == categorieSelectionnee}">
+            Catégorie
+          </option>
+        </select>
+        
+        <div class="choix">
+          <label><input type="radio" name="mode" value="achats" th:checked="${mode == 'achats'}" /> Achats</label>
+          <label><input type="radio" name="mode" value="ventes" th:checked="${mode == 'ventes'}" /> Mes ventes</label>
+        </div>
+        
+        <ul class="checkboxes">
+          <li><input type="checkbox" name="filtres" value="ouvertes" th:checked="${#lists.contains(filtres, 'ouvertes')}" /> Enchères ouvertes</li>
+          <li><input type="checkbox" name="filtres" value="en-cours" th:checked="${#lists.contains(filtres, 'en-cours')}" /> Mes ventes en cours</li>
+          <li><input type="checkbox" name="filtres" value="mes-encheres" th:checked="${#lists.contains(filtres, 'mes-encheres')}" /> Mes enchères</li>
+          <li><input type="checkbox" name="filtres" value="non-debutees" th:checked="${#lists.contains(filtres, 'non-debutees')}" /> Ventes non débutées</li>
+          <li><input type="checkbox" name="filtres" value="remportees" th:checked="${#lists.contains(filtres, 'remportees')}" /> Mes enchères remportées</li>
+          <li><input type="checkbox" name="filtres" value="terminees" th:checked="${#lists.contains(filtres, 'terminees')}" /> Ventes terminées</li>
+        </ul>
+        
+        <button type="submit">Rechercher</button>
+      </form>
+    </section>
+    
+    <div class="action-list">
+      <!-- Boucle sur les articles -->
+      <div class="card" th:each="article : ${articles}">
+        <img width="150" height="150" 
+             th:src="${article.image != null ? article.image : 'https://via.placeholder.com/150'}" 
+             th:alt="${article.nomArticle}" />
+        <p><strong th:text="${article.nomArticle}">Nom de l'article</strong> 
+           <span th:text="${article.categorie.libelle}">Catégorie</span></p>
+        <p><strong>Prix :</strong> 
+           <span th:text="${article.prixVente}">0</span> points</p>
+        <p><strong>Fin de l'enchère :</strong> 
+           <span th:text="${#temporals.format(article.dateFinEncheres, 'dd/MM/yyyy')}">Date</span></p>
+        <p><strong>Vendeur :</strong> 
+           <span th:text="${article.utilisateur.pseudo}">Vendeur</span></p>
+        <a th:href="@{/encheres/{id}(id=${article.noArticle})}" 
+           th:text="${article.nbEncheres + ' enchères'}">Enchères</a>
+      </div>
+      
+      <!-- Message si aucun article -->
+      <div th:if="${articles == null or articles.isEmpty()}" class="no-articles">
+        <p>Aucun article trouvé avec ces critères.</p>
+      </div>
+    </div>
+  </main>
+  
+  <footer class="footer">
+    <div class="container">
+      <p>Aide | Conditions d'utilisation</p>
+      <p>Contact e-mail | Mentions légales</p>
+      <p>Suivez-nous : @instagram</p>
+      <p><em>Projet ENI Informatique</em></p>
+    </div>
+  </footer>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <title>Liste des Enchères - ENI-Enchères</title>
+  <link rel="stylesheet" th:href="@{/style-index-connecte.css}" />
+</head>
+<body>
+  <header>
+    <h1>ENI-Enchères</h1>
+    <nav>
+    <button><a th:href="@{/encheres}">Enchères</a></button>
+    <button><a th:href="@{/vente-nouvelle}">Vendre un article</a></button>
+    <button><a th:href="@{/profil}">Mon profil</a></button>
+    <button><a th:href="@{/logout}">Déconnexion</a></button>
+    </nav>
+  </header>
+
+  <main>
+    <section class="filtres">
+      <h2>Filtres</h2>
+      <input type="text" placeholder="Le nom de l'article contient..." />
+
+      <label for="categorie">Catégorie :</label>
+      <select id="categorie">
+        <option>Toutes</option>
+        <option>Informatique</option>
+        <option>Ameublement</option>
+        <option>Vêtement</option>
+        <option>Sport & Loisirs</option>
+      </select>
+
+      <div class="choix">
+        <label><input type="radio" name="mode" checked /> Achats</label>
+        <label><input type="radio" name="mode" /> Mes ventes</label>
+      </div>
+
+      <ul class="checkboxes">
+        <li><input type="checkbox" /> Enchères ouvertes</li>
+        <li><input type="checkbox" /> Mes ventes en cours</li>
+        <li><input type="checkbox" /> Mes enchères</li>
+        <li><input type="checkbox" /> Ventes non débutées</li>
+        <li><input type="checkbox" /> Mes enchères remportées</li>
+        <li><input type="checkbox" /> Ventes terminées</li>
+      </ul>
+
+      <button>Rechercher</button>
+      <p class="connecte" th:text="${user.username} + ' est connectée'">Utilisateur est connectée</p>
+    </section>
+
+    <div class="auction-list">
+      <div th:each="auction : ${auctions}" class="card">
+        <img width="15" height="15" src="https://img.icons8.com/ios-filled/5000/my-computer--v2.png"
+             alt="Image de l’article"/>
+       
+        <p><strong>Description :</strong> <span th:text="${auction.description}">PC Gamer pour jouer</span></p>but
+        <p><strong>Prix :</strong> <span th:text="${auction.price}">750</span> points</p>
+        <p><strong>Fin de l’enchère :</strong> <span th:text="${auction.endDate}">Date</span></p>
+        <p><strong>Vendeur :</strong> <span th:text="${auction.seller}">Vendeur</span></p>
+        <a th:href="@{'/auction/' + ${auction.id}}" th:text="${auction.bidsCount} + ' enchères'">2 enchères</a>
+      </div>
+      
+      
+      <div class="action-list">
+    <div class="card">
+     <img width="15" height="150"src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fnews-cdn.softpedia.
+     com%2Fimages%2Fnews2%2Fapple-officially-launches-the-iphone-x-517717-2.jpg&f=1&nofb=1&ipt=2e2f28c594eb8fb8a04104f7c31d25ab3bd0d00993e2e47cd84686ffc28401d7" alt="my-computer--v2"/>
+      <p><strong>ipphone X </strong> Loisir</p>
+      <p><strong>Prix :</strong> 620 points</p>
+      <p><strong>Fin de l’enchère :</strong> 01/05/09</p>
+      <p><strong>Vendeur :</strong> km07</p>
+      <a href="#"> 5 enchères</a>
+    </div>
+      
+      
+    </div>
+  </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <p>Aide | Conditions d’utilisation</p>
+      <p>Contact e-mail | Mentions légales</p>
+      <p>Suivez-nous : @instagram</p>
+      <p><em>Projet ENI Informatique</em></p>
+    </div>
+  </footer>
+</body>
+</html>

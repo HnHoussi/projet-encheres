@@ -10,6 +10,9 @@ public class EniEncheresApplication {
         SpringApplication.run(EniEncheresApplication.class, args);
         System.out.println("Testing");
 
+        System.out.println("Testjassim");
+
+
         System.out.println("Testing");
 
 
@@ -18,6 +21,7 @@ public class EniEncheresApplication {
 
 
         System.out.println("milor");
+
 
     }
 
