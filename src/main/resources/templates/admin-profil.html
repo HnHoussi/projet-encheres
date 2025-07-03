@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org" >
+	<head>
+		<meta charset="UTF-8">
+		<title>Administrateur - Détail compte</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+	
+	    <!-- meta pour le référencement -->
+	    <meta name="description" content="Site enchères ENI">
+		<link rel="stylesheet" data-th-href="@{/css/styleML.css}">
+	    <!-- ressource fontawesome -->
+	    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.15.4/css/all.css">
+	    <!-- ressource bootstrap -->
+	    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+	</head>
+	<body>
+		<header role="banner">
+			<nav role="navigation">
+				<!-- fragment entete -->
+			</nav>
+		</header>
+		<main role="main">
+			<section>
+				<!--  <h1 id="nav-title">Mon profil</h1> -->
+	
+				<form action="" method="" th:object="${utilisateur}">
+				<!--  affichage profil d'un utilisateur -->
+				<h1>Détail du compte Utilisateur</h1>
+					<ul class="">
+						<li>
+							<label for="pseudo">Pseudo :</label>
+							<input type="text" id="pseudo" th:field="*{pseudo}" readOnly>	
+						</li>
+						<li>
+							<label for="nom">Nom :</label>
+							<input type="text" id="nom" th:field="*{nom}" readOnly>
+						</li>
+						<li>
+							<label for="prenom">Prénom :</label>
+							<input type="text" id="prenom" th:field="*{prenom}" readOnly>
+						</li>
+						<li>
+							<label for="email">Email :</label>	
+							<input type="email" id="email" th:field="*{email}" readOnly>
+		 				</li>
+						<li>
+							<label for="tel">Téléphone :</label>
+							<input type="tel" id="tel" th:field="*{telephone}" pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}" readOnly>
+						</li>
+						
+						<li>
+							<label for="rue">Rue :</label>
+							<input type="text" id="rue" th:field="*{rue}" required>
+						</li>
+						<li>
+							<label for="codePostal">Code Postal :</label>
+							<input type="number" id="codePostal" th:field="*{codePostal}" minlength="5" minlength="5" maxlength="5"placeholder="75000" readOnly>
+						</li>
+						<li>
+							<label for="ville">Ville :</label>
+							<input type="text" id="ville" th:field="*{ville}" readOnly>
+						</li>	
+					</ul>		
+				</form>
+			</section>
+			<section>
+		
+			<button class=boutonValider><a th:href="/encheres/admin-comptes">Désactiver</a></button>
+			<button class=boutonValider><a th:href="/encheres/admin-comptes">Supprimer</a></button>
+			
+			<!--  <a th:href="@{/formateurs/detail(email=${item.email})}">Détail</a>	--> 	
+		</section>
+		</main>
+		
+		<footer role="contentinfo">
+			<!-- fragment pied de page -->
+		</footer>
+	
+	
+	</body>
+</html>
