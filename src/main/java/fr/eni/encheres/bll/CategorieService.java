@@ -8,6 +8,7 @@ public interface CategorieService {
     public void creerCategorie(Categorie categorie);
     public void supprimerCategorie(long idCategorie);
     public void modifierCategorie(Categorie categorie);
+    public Categorie consulterCategorieParID(long idCategorie);
     public List<Categorie> consulterCategories();
 
 }
