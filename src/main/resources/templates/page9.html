@@ -1,4 +1,130 @@
 <!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Nouvelle vente - ENI-Enchères</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+  <h1>Créer une nouvelle vente</h1>
+  
+  
+  <form th:action="@{/vente-nouvelle}" th:object="${articleForm}" method="post" enctype="multipart/form-data">
+    
+    <!-- Champ nom de l'article -->
+    <label for="article">Nom de l'article :</label>
+    <input type="text" id="article" th:field="*{nomArticle}" required>
+  
+      <span th:errors="*{nomArticle}"></span>
+    </div>
+    
+    <!-- Champ description -->
+    <label for="description">Description :</label>
+    <textarea id="description" th:field="*{description}" rows="4" required></textarea>
+      <span th:errors="*{description}"></span>
+    </div>
+    
+    <!-- Champ prix de départ -->
+    <label for="prix">Prix de départ (€) :</label>
+    <input type="number" id="prix" th:field="*{prixInitial}" min="1" required>
+ 
+      <span th:errors="*{prixInitial}"></span>
+    </div>
+    
+    <!-- Champ image (optionnel) -->
+    <label for="image">Image de l'article :</label>
+    <input type="file" id="image" name="image" accept="image/*">
+    
+    <!-- Sélection de catégorie -->
+    <label for="categorie">Catégorie :</label>
+    <select id="categorie" th:field="*{categorieId}" required>
+      <option value="">-- Sélectionner une catégorie --</option>
+      <option th:each="cat : ${categories}" 
+              th:value="${cat.id}" 
+              th:text="${cat.libelle}">
+        Catégorie
+      </option>
+    </select>
+    <div th:if="${#fields.hasErrors('categorieId')}" class="error">
+      <span th:errors="*{categorieId}"></span>
+    </div>
+    
+    <!-- Date de fin d'enchère -->
+    <label for="dateFin">Date de fin d'enchère :</label>
+    <input type="datetime-local" id="dateFin" th:field="*{dateFinEncheres}" required>
+   
+      <span th:errors="*{dateFinEncheres}"></span>
+    </div>
+    
+    <!-- Section retrait -->
+    <fieldset>
+      <legend>Lieu de retrait</legend>
+      
+      <label for="rue">Rue :</label>
+      <input type="text" id="rue" th:field="*{rue}" required>
+      <div th:if="${#fields.hasErrors('rue')}" class="error">
+        <span th:errors="*{rue}"></span>
+      </div>
+      
+      <label for="codePostal">Code postal :</label>
+      <input type="text" id="codePostal" th:field="*{codePostal}" pattern="[0-9]{5}" required>
+      <div th:if="${#fields.hasErrors('codePostal')}" class="error">
+        <span th:errors="*{codePostal}"></span>
+      </div>
+      
+      <label for="ville">Ville :</label>
+      <input type="text" id="ville" th:field="*{ville}" required>
+      <div th:if="${#fields.hasErrors('ville')}" class="error">
+        <span th:errors="*{ville}"></span>
+      </div>
+    </fieldset>
+    
+    <!-- Boutons d'action -->
+    <div class="buttons">
+      <button type="submit">Valider</button>
+      <button type="button" class="cancel" th:onclick="'location.href=\'' + @{/encheres} + '\''">Annuler</button>
+    </div>
+  </form>
+  
+  <!-- Navigation -->
+  <nav class="navigation">
+    <a th:href="@{/encheres}">← Retour aux enchères</a>
+  </nav>
+  
+  <script th:inline="javascript">
+    // Validation côté client
+    document.querySelector('form').addEventListener('submit', function(e) {
+      const dateFin = new Date(document.getElementById('dateFin').value);
+      const maintenant = new Date();
+      
+      if (dateFin <= maintenant) {
+        alert('La date de fin doit être postérieure à maintenant');
+        e.preventDefault();
+      }
+    });
+  </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--<!DOCTYPE html>
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
