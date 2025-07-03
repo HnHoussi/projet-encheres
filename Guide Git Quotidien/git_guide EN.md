@@ -17,7 +17,7 @@ This guide explains what to do each day, while working on your own branch, and w
 git checkout houcine
 
 # Update your local branch from the remote (in case you pushed yesterday)
-git pull
+git pull origin houcine
 
 # Bring latest team changes from develop into your branch
 git pull origin develop
