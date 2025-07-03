@@ -1,3 +1,9 @@
+Drop table if exists Retraits;
+Drop table if exists Encheres;
+Drop table if exists Articles;
+Drop table if exists Categories;
+Drop table if exists Utilisateurs;
+
 -- Table: Utilisateurs
 CREATE TABLE Utilisateurs (
     idUtilisateur BIGINT PRIMARY KEY IDENTITY,
