@@ -4,6 +4,7 @@ import fr.eni.encheres.bo.Enchere;
 import fr.eni.encheres.dal.EnchereDAO;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -31,9 +32,8 @@ public class EnchereServiceImpl implements EnchereService {
     }
 
     @Override
-    public void annulerEnchere(long idArticle) {
-        enchereDAO.delete(idArticle);
-
+    public void annulerEnchere(long idArticle, long idUtilisateur, LocalDateTime dateEnchere) {
+        enchereDAO.delete(idArticle, idUtilisateur, dateEnchere);
     }
 
     @Override
