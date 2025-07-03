@@ -4,104 +4,22 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ENI-Enchères</title>
-  <link rel="stylesheet" th:href="@{/styles.css}" />
+  <link rel="stylesheet" th:href="@{.../}" />
 </head>
 <body>
-  <header>
-    <h1>ENI-Enchères</h1>
-    <nav>
-      <div class="user-actions">
-        <div class="credit-display">
-          <span th:text="'💰 ' + ${user.points} + ' points'">💰 100 points</span>
-        </div>
-
-        <button th:if="${user == null}">Inscription / Connexion</button>
-       <!-- <button th:if="${user != null}" th:text="'Bienvenue, ' + ${user.username}"></button>-->
-      </div>
-    </nav>
-  </header>
-
-  <div class="container">
-    <h2>Liste des enchères</h2>
-
-    <div class="filters">
-      <input type="text" placeholder="Le nom de l’article contient…" />
-      <select>
-        <option>Toutes</option>
-        <option>Informatique</option>
-        <option>Sport</option>
-        <option>Vêtements</option>
-        <option>Véhicules</option>
-        <option>Mode</option>
-      </select>
-      <div class="search-bar">
-        <input type="text" placeholder="Rechercher…" />
-        <button>🔍</button>
-      </div>
-    </div>
-
-    <div class="auction-list">
-      <div th:each="auction : ${auctions}" class="card">
-        <img width="15" height="15" src="https://img.icons8.com/ios-filled/5000/my-computer--v2.png"
-             alt="Image de l’article"/>
-        <p><strong th:text="${auction.name}">Nom</strong></p>
-        <p><strong>Description :</strong> <span th:text="${auction.description}">PC Gamer pour jouer</span></p>
-        <p><strong>Prix :</strong> <span th:text="${auction.price}">750</span> points</p>
-        <p><strong>Fin de l’enchère :</strong> <span th:text="${auction.endDate}">Date</span></p>
-        <p><strong>Vendeur :</strong> <span th:text="${auction.seller}">Vendeur</span></p>
-        <a th:href="@{'/auction/' + ${auction.id}}" th:text="${auction.bidsCount} + ' enchères'">2 enchères</a>
-      </div>
-    </div>
-  </div>
-
-  <footer class="footer">
-    <div class="container">
-      <p>Aide | Conditions d’utilisation</p>
-      <p>Contact e-mail | Mentions légales</p>
-      <p>Suivez-nous : @instagram</p>
-      <p><em>Projet ENI Informatique</em></p>
-    </div>
-  </footer>
-</body>
-</html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<!--<!DOCTYPE html>
-<html lang="fr">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ENI-Enchères</title>
-  <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-
 <header>
-  <div>
-    <img width="25" height="25" src="https://img.icons8.com/ios-filled/50/home.png" alt="home"/>ENI-Enchères</div>
-  
-  <div class="user-actions">
-                <div class="credit-display">💰 100 points</div>
-  
-  <div>
-    <button>Inscription / Connexion</button>
-  </div>
+  <h1>ENI-Enchères</h1>
+  <nav>
+    <div class="user-actions">
+      <div class="credit-display">
+        <span th:if="${utilisateur != null}" th:text="'💰 ' + ${utilisateur.credit} + ' points'">💰</span>
+        <span th:unless="${utilisateur != null}">💰 0 point</span>
+      </div>
+
+      <button th:if="${utilisateur == null}">Inscription / Connexion</button>
+      <button th:if="${utilisateur != null}" th:text="'Bienvenue, ' + ${utilisateur.pseudo}"></button>
+    </div>
+  </nav>
 </header>
 
 <div class="container">
@@ -123,37 +41,26 @@
     </div>
   </div>
 
-  <div class="auction-list">
-    <div class="card">
-      <img width="15" height="15" src="https://img.icons8.com/ios-filled/50/my-computer--v2.png" alt="my-computer--v2"/>
-      <p><strong>PC Gamer</strong> pour travailler</p>
-      <p><strong>Prix :</strong> 810 points</p>
-      <p><strong>Fin de l’enchère :</strong> 10/02/09</p>
-      <p><strong>Vendeur :</strong> jp44</p>
-      <a href="#">2 enchères</a>
+  <div class="enchere-list">
+    <div th:each="enchere : ${encheres}" class="card">
+      <img width="15" height="15" src="https://img.icons8.com/ios-filled/5000/my-computer--v2.png"
+           alt="Image de l’article"/>
+      <p><strong th:text="${enchere.utilisateur.nom}">Nom</strong></p>
+      <p><strong>Description :</strong> <span th:text="${enchere.article.nomArticle}">PC Gamer pour jouer</span></p>
+      <p><strong>Prix :</strong> <span th:text="${enchere.montantEnchere}">750</span> points</p>
+      <p><strong>Fin de l’enchère :</strong> <span th:text="${enchere.dateEnchere}">Date</span></p>
+      <p><strong>Vendeur :</strong> <span th:text="${enchere.utilisateur}">Vendeur</span></p>
     </div>
-    
-  <div class="auction-list">
-    <div class="card">
-      <img width="15" height="15" src="https://img.icons8.com/ios-filled/50/my-computer--v2.png" alt="my-computer--v2"/>
-      <p><strong>PC Gamer</strong> pour travailler</p>
-      <p><strong>Prix :</strong> 810 points</p>
-      <p><strong>Fin de l’enchère :</strong> 10/02/09</p>
-      <p><strong>Vendeur :</strong> jp44</p>
-      <a href="#">2 enchères</a>
-    </div>
-    <!-- Répéter pour chaque produit -->
   </div>
 </div>
 
-<footer>
-   <footer class="footer">
-        <div class="container">
-  <p>Aide | Conditions d’utilisation</p>
-  <p>Contact e-mail | Mentions légales</p>
-  <p>Suivez-nous : @instagram</p>
-  <p><em>Projet ENI Informatique</em></p>
+<footer class="footer">
+  <div class="container">
+    <p>Aide | Conditions d’utilisation</p>
+    <p>Contact e-mail | Mentions légales</p>
+    <p>Suivez-nous : @instagram</p>
+    <p><em>Projet ENI Informatique</em></p>
+  </div>
 </footer>
-
 </body>
 </html>
