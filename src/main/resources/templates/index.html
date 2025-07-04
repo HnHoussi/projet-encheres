@@ -11,7 +11,7 @@
   <div class="header-bar">
     <h1>ENI-Enchères</h1>
     <div class="user-actions">
-      <a th:if="${utilisateur == null}" th:href="@{/encheres/creerCompte}" class="btn-link">Inscription / Connexion</a>
+      <a th:if="${utilisateur == null}" th:href="@{/encheres/connexion}" class="btn-link">Inscription / Connexion</a>
      <button th:if="${utilisateur != null}" th:text="'Bienvenue, ' + ${utilisateur.pseudo}"></button>
     </div>
   </div>
