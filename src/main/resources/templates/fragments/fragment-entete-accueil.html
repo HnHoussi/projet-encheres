@@ -1,0 +1,12 @@
+<!-- entete page d'accueil - utilisateur non connecté -->
+<header th:fragment="entete-accueil">
+    <h1><a th:href="@{/encheres}">ENI-Enchères</a></h1>
+    <nav>
+      <div class="user-actions">
+        <div class="credit-display">
+          <span th:text="'💰 ' + ${user.points} + ' points'">💰 0 point(s)</span>
+        </div>
+		<button><a th:href="@{/encheres/profil-creer}">Inscription / Connexion</a></button>
+      </div>
+    </nav>
+  </header>

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<!-- Déclaration du fragment principal – le layout layout-filmotheque -->
+<!-- Paramétrer le layout pour des valeurs dynamiques -->
+<!-- Rendre variable le contenu de la page -->
+<!-- Rendre variable le titre de la page -->
+
+<html xmlns:th="http://www.thymeleaf.org"
+	th:fragment="layout-encheres(titrePage, contenuPage)">
+
+	<head>
+		<meta charset="UTF-8">
+		<title th:replace="${titrePage}"th:text="#{nom-application}"></title>
+		
+		<!-- Déclaration des CSS par défaut : -->
+		<link rel="stylesheet" th:href="@{/css/style.css}">
+	</head>
+	
+	<body>
+		<!-- Intégration du fragment d'entête -->
+		<!-- varie en fonction de utilisateur connecté ou pas -->
+		<div th:replace="~{fragments/fragment-entete :: entete}"></div>
+		<div th:replace="~{fragments/fragment-entete-accueil :: entete-accueil}"></div>
+	
+		<!-- Rendre variable le contenu de la page -->
+		<main th:replace="${contenuPage} ?: ~{}">Contenu de la page
+		</main>
+	
+		<!-- Intégration du fragment de pied de page -->
+		<div th:replace="~{fragments/fragment-piedDePage :: piedDePage}"></div>
+	</body>
+	
+</html>

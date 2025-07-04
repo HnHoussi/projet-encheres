@@ -1,24 +1,22 @@
 <!DOCTYPE html>
-<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<html lang="fr" xmlns:th="http://www.thymeleaf.org"
+th:replace="~{layouts/layout :: layout-encheres(
+titrePage=~{:: title},
+contenuPage=~{::main})">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ENI-Enchères</title>
+  
+<!-- ENI-Enchères comme titre de page-->
+<title th:text="#{index.title}"></title>
+ 
+  <!-- Ajout de CSS style.css -->
   <link rel="stylesheet" th:href="@{/styles.css}" />
 </head>
+
 <body>
-  <header>
-    <h1><a th:href="@{/encheres}">ENI-Enchères</a></h1>
-    <nav>
-      <div class="user-actions">
-        <div class="credit-display">
-          <span th:text="'💰 ' + ${user.points} + ' points'">💰 0 point(s)</span>
-        </div>
-		<button><a th:href="@{/encheres/page2}">Inscription / Connexion</a></button>
-        <!-- <button th:if="${user == null}">Inscription / Connexion</button>-->
-       <!-- <button th:if="${user != null}" th:text="'Bienvenue, ' + ${user.username}"></button>-->
-      </div>
-    </nav>
+  <header th:replace="~{fragments/fragment-entete-accueil :: entete-accueil}">
+   <!--  insertion entete page d'accueil - utilisateur non connecté -->
   </header>
 
   <div class="container">
@@ -55,12 +53,7 @@
   </div>
 
   <footer th:replace="~{fragments/fragment-piedDePage :: piedDePage}">
-    <!--  <div class="container">
-      <p>Aide | Conditions d’utilisation</p>
-      <p>Contact e-mail | Mentions légales</p>
-      <p>Suivez-nous : @instagram</p>
-      <p><em>Projet ENI Informatique</em></p>
-    </div> -->
+    <!-- insertion pied de page -->
   </footer>
 </body>
 </html>

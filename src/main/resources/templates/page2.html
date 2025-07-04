@@ -5,15 +5,10 @@
   <title>Liste des Enchères - ENI-Enchères</title>
   <link rel="stylesheet" th:href="@{/style-index-connecte.css}" />
 </head>
+
 <body>
-  <header>
-    <h1>ENI-Enchères</h1>
-    <nav>
-    <button><a th:href="@{/encheres}">Enchères</a></button>
-    <button><a th:href="@{/vente-nouvelle}">Vendre un article</a></button>
-    <button><a th:href="@{/profil}">Mon profil</a></button>
-    <button><a th:href="@{/logout}">Déconnexion</a></button>
-    </nav>
+  <header th:replace="~{fragments/fragment-entete :: entete}">
+    <!-- insertion entete utilisateur connecté -->
   </header>
 
   <main>
@@ -61,28 +56,22 @@
       
       
       <div class="action-list">
-    <div class="card">
-     <img width="15" height="150"src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fnews-cdn.softpedia.com%2Fimages%2Fnews2%2Fapple-officially-launches-the-iphone-x-517717-2.jpg&f=1&nofb=1&ipt
-     =2e2f28c594eb8fb8a04104f7c31d25ab3bd0d00993e2e47cd84686ffc28401d7" alt="my-computer--v2"/>
-      <p><strong>ipphone X </strong> Loisir</p>
-      <p><strong>Prix :</strong> 620 points</p>
-      <p><strong>Fin de l’enchère :</strong> 01/05/09</p>
-      <p><strong>Vendeur :</strong> km07</p>
-      <a href="#"> 5 enchères</a>
-    </div>
-      
-      
+    	<div class="card">
+	     <img width="15" height="150"src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fnews-cdn.softpedia.com%2Fimages%2Fnews2%2Fapple-officially-launches-the-iphone-x-517717-2.jpg&f=1&nofb=1&ipt
+	     =2e2f28c594eb8fb8a04104f7c31d25ab3bd0d00993e2e47cd84686ffc28401d7" alt="my-computer--v2"/>
+	      <p><strong>iphone X </strong> Loisir</p>
+	      <p><strong>Prix :</strong> 620 points</p>
+	      <p><strong>Fin de l’enchère :</strong> 01/05/09</p>
+	      <p><strong>Vendeur :</strong> km07</p>
+	      <a href="#"> 5 enchères</a>
+	    </div> 
     </div>
   </div>
   </main>
-
-  <footer class="footer">
-    <div class="container">
-      <p>Aide | Conditions d’utilisation</p>
-      <p>Contact e-mail | Mentions légales</p>
-      <p>Suivez-nous : @instagram</p>
-      <p><em>Projet ENI Informatique</em></p>
-    </div>
+  
+<footer th:replace="~{fragments/fragment-piedDePage :: piedDePage}">
+    <!-- insertion pied de page -->
   </footer>
+  
 </body>
 </html>
