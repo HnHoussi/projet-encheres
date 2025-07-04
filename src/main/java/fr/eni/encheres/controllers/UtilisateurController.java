@@ -46,6 +46,10 @@ public class UtilisateurController {
         return "index";
 
     }
+    @GetMapping("/affcherAccueil")
+    public String afficherAccueil() {
+        return "redirect:/encheres";
+    }
 
     @GetMapping("/connexion")
     public String afficherConnexion(Model model) {
