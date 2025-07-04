@@ -24,12 +24,9 @@
   <div class="filters">
     <input type="text" placeholder="Le nom de l’article contient…" />
     <select>
-      <option>Toutes</option>
-      <option>Informatique</option>
-      <option>Sport</option>
-      <option>Vêtements</option>
-      <option>Véhicules</option>
-      <option>Mode</option>
+      <option value="" selected>Toutes les catégories</option>
+      <option th:each="categorie : ${categories}" th:text="${categorie.libelle}"></option>
+
     </select>
     <div class="search-bar">
       <button>🔍</button>

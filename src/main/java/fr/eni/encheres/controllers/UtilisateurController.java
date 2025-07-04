@@ -1,7 +1,9 @@
 package fr.eni.encheres.controllers;
 
+import fr.eni.encheres.bll.CategorieService;
 import fr.eni.encheres.bll.EnchereService;
 import fr.eni.encheres.bll.UtilisateurService;
+import fr.eni.encheres.bo.Categorie;
 import fr.eni.encheres.bo.Enchere;
 import fr.eni.encheres.bo.Utilisateur;
 import org.springframework.stereotype.Controller;
@@ -20,10 +22,13 @@ public class UtilisateurController {
 
     private UtilisateurService utilisateurService;
     private EnchereService enchereService;
+    private CategorieService categorieService;
 
-    public UtilisateurController(UtilisateurService utilisateurService, EnchereService enchereService) {
+
+    public UtilisateurController(UtilisateurService utilisateurService, EnchereService enchereService, CategorieService categorieService) {
         this.utilisateurService = utilisateurService;
         this.enchereService = enchereService;
+        this.categorieService = categorieService;
     }
 
     @GetMapping
@@ -31,9 +36,11 @@ public class UtilisateurController {
 
         List<Utilisateur> utilisateurs=utilisateurService.consulterListeUtilisateurs();
         List<Enchere> encheres=enchereService.consulterEncheres();
+        List<Categorie> categories=categorieService.consulterCategories();
 
         model.addAttribute("utilisateurs",utilisateurs);
         model.addAttribute("encheres",encheres);
+        model.addAttribute("categories",categories);
         System.out.println("Nombre d'enchères récupérées : " + encheres.size());
 
         return "index";
@@ -46,16 +53,29 @@ public class UtilisateurController {
         return "view-connexion";
     }
 
+
+
+    @GetMapping("/creer-profil")
+    public String afficherCreationProfil(@ModelAttribute Utilisateur utilisateur, Model model) {
+
+        utilisateurService.creerCompte(utilisateur);
+        model.addAttribute("utilisateur", utilisateur);
+        return "view-creer-profil";
+    }
+
+
     @PostMapping("/profil-creer")
     public String creationCompte(@ModelAttribute Utilisateur utilisateur, Model model) {
         try {
             utilisateurService.creerCompte(utilisateur);
             model.addAttribute("utilisateur", utilisateur);
-            return "redirect:/encheres";
+            return "redirect:/encheres/connexion";
+
         } catch (Exception e) {
             e.printStackTrace();
             model.addAttribute("messageErreur", "Erreur lors de la création du compte");
-            return "view-profil-creer";
+            return "redirect:/encheres/connexion";
+
         }
     }
 

@@ -6,14 +6,14 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	    <meta http-equiv="X-UA-Compatible" content="IE=edge">
 	    <meta name="description" content="Site enchères ENI">
-		<link rel="stylesheet" th:href="@{css/view-connexion.css}" />
+		<link rel="stylesheet" th:href="@{/css/view-connexion.css}" />
 	</head>
 	<body>
-		<header role="banner">
-			<nav role="navigation">
-			<!-- fragment entete -->
-			</nav>
-		</header>
+	<header>
+		<div class="header-bar">
+			<h1>ENI-Enchères</h1>
+		</div>
+	</header>
 		<main role="main">
 			<section>
 				<form action="/encheres/connexion" method="post">
@@ -39,13 +39,18 @@
 				</form>
 			</section>
 			<section>
-				<button class="boutonValider"><a href="/encheres/profil-creer">Créer un compte</a></button>	
+				<button class="boutonValider"><a href="/encheres/creer-profil">Créer un compte</a></button>
 			</section>
 		</main>
-		
-		<footer role="contentinfo">
-			<!-- fragment pied de page -->
-		</footer>
+
+	<footer class="footer">
+		<div class="container">
+			<p>Aide | Conditions d’utilisation</p>
+			<p>Contact e-mail | Mentions légales</p>
+			<p>Suivez-nous : @instagram</p>
+			<p><em>Projet ENI Informatique</em></p>
+		</div>
+	</footer>
 
 	</body>
 </html>
