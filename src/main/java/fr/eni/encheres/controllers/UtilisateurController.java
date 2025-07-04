@@ -35,4 +35,9 @@ public class UtilisateurController {
         return "index";
 
     }
+
+    @GetMapping("/creerCompte")
+    public String afficherCreationCompte(Model model) {
+        return "view-profil-creer";
+    }
 }

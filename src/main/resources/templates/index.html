@@ -4,23 +4,19 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ENI-Enchères</title>
-  <link rel="stylesheet" th:href="@{.../}" />
+  <link rel="stylesheet" th:href="@{css/index.css}" />
 </head>
 <body>
 <header>
-  <h1>ENI-Enchères</h1>
-  <nav>
+  <div class="header-bar">
+    <h1>ENI-Enchères</h1>
     <div class="user-actions">
-      <div class="credit-display">
-        <span th:if="${utilisateur != null}" th:text="'💰 ' + ${utilisateur.credit} + ' points'">💰</span>
-        <span th:unless="${utilisateur != null}">💰 0 point</span>
-      </div>
-
-      <button th:if="${utilisateur == null}">Inscription / Connexion</button>
-      <button th:if="${utilisateur != null}" th:text="'Bienvenue, ' + ${utilisateur.pseudo}"></button>
+      <a th:if="${utilisateur == null}" th:href="@{/encheres/creerCompte}" class="btn-link">Inscription / Connexion</a>
+     <button th:if="${utilisateur != null}" th:text="'Bienvenue, ' + ${utilisateur.pseudo}"></button>
     </div>
-  </nav>
+  </div>
 </header>
+
 
 <div class="container">
   <h2>Liste des enchères</h2>
@@ -36,7 +32,6 @@
       <option>Mode</option>
     </select>
     <div class="search-bar">
-      <input type="text" placeholder="Rechercher…" />
       <button>🔍</button>
     </div>
   </div>
@@ -45,11 +40,10 @@
     <div th:each="enchere : ${encheres}" class="card">
       <img width="15" height="15" src="https://img.icons8.com/ios-filled/5000/my-computer--v2.png"
            alt="Image de l’article"/>
-      <p><strong th:text="${enchere.utilisateur.nom}">Nom</strong></p>
-      <p><strong>Description :</strong> <span th:text="${enchere.article.nomArticle}">PC Gamer pour jouer</span></p>
+      <a href="/view-article-detail"><p th:text="${enchere.article.nomArticle}"></p></a>
       <p><strong>Prix :</strong> <span th:text="${enchere.montantEnchere}">750</span> points</p>
       <p><strong>Fin de l’enchère :</strong> <span th:text="${enchere.dateEnchere}">Date</span></p>
-      <p><strong>Vendeur :</strong> <span th:text="${enchere.utilisateur}">Vendeur</span></p>
+      <p><strong>Vendeur :</strong> <span th:text="${enchere.utilisateur.pseudo}">Vendeur</span></p>
     </div>
   </div>
 </div>
