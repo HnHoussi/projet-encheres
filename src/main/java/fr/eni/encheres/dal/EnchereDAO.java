@@ -13,4 +13,5 @@ public interface EnchereDAO {
     void delete(long idEnchere, long idUtilisateur, LocalDateTime dateEnchere);
     List<Enchere> findByMotCles(String nomArticle);
     List<Enchere> findByCategorie(long idCategorie);
+    List<Enchere> findByCategorieEtMotCles(long idCategorie, String nomArticle);
 }

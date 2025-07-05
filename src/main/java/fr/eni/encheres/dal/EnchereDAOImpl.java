@@ -109,6 +109,27 @@ public class EnchereDAOImpl implements EnchereDAO{
         return namedParameterJdbcTemplate.query(FIND_BY_CATEGORIE, paramSource, new EnchereRowMapper(utilisateurDAO, articleDAO));
     }
 
+    @Override
+    public List<Enchere> findByCategorieEtMotCles(long idCategorie, String nomArticle) {
+        String FIND_BY_CATEGORIE_ET_MOTS_CLES = """
+                        SELECT e.*
+                        FROM Encheres e
+                        JOIN Articles a ON e.idArticle = a.idArticle
+                        WHERE a.idCategorie = :idCategorie
+                        AND a.nomArticle LIKE :nomArticle
+                        """;
+
+        MapSqlParameterSource paramSource = new MapSqlParameterSource();
+        paramSource.addValue("idCategorie", idCategorie);
+        paramSource.addValue("nomArticle", "%" + nomArticle + "%");
+
+        return namedParameterJdbcTemplate.query(
+                FIND_BY_CATEGORIE_ET_MOTS_CLES,
+                paramSource,
+                new EnchereRowMapper(utilisateurDAO, articleDAO)
+        );
+    }
+
     public static class EnchereRowMapper implements RowMapper<Enchere> {
 
         private final UtilisateurDAO  utilisateurDAO;

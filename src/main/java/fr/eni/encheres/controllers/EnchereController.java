@@ -22,46 +22,45 @@ public class EnchereController {
         this.categorieService = categorieService;
     }
 
-    @GetMapping("/")
-    public String afficherEncheres(
+    // Charger la liste des catégories
+    @ModelAttribute("categoriesEnSession")
+    public List<Categorie> chargerCategoriesEnSession() {
+        return this.categorieService.consulterCategories();
+    }
+
+    //afficher la page d'acceuil avant la connection d'utilisateur
+    @GetMapping
+    public String rechercherEncheres(
+            @RequestParam(required = false) String motClesEnchere,
+            @RequestParam(required = false) Long idCategorie,
             Model model,
             @ModelAttribute("categoriesEnSession") List<Categorie> categoriesEnSession) {
 
-        List<Enchere> encheres = enchereService.consulterEncheres();
-        encheres.forEach(System.out::println);
+        List<Enchere> encheres;
+
+        // Recherche par mots clés et catégorie
+        if ((motClesEnchere != null && !motClesEnchere.isBlank()) && idCategorie != null) {
+            encheres = enchereService.consulterEnchereparCategorieEtMotCles(idCategorie, motClesEnchere);
+
+        // Recherche par mots clés seulement
+        } else if (motClesEnchere != null && !motClesEnchere.isBlank()) {
+            encheres = enchereService.consulterEnchereparMotCles(motClesEnchere);
+
+        // Recherche par catégorie seulement
+        } else if (idCategorie != null) {
+            encheres = enchereService.consulterEnchereparCategorie(idCategorie);
+
+        // Lister tous les enchéres sans filtre
+        } else {
+            encheres = enchereService.consulterEncheres();
+        }
 
         model.addAttribute("listEncheres", encheres);
         model.addAttribute("categoriesEnSession", categoriesEnSession);
-        return "view-encheres";
-    }
-
-    @GetMapping("/recherche")
-    public String rechercheEncheres(
-            @RequestParam String motClesEnchere,
-            Model model,
-            @ModelAttribute("categoriesEnSession") List<Categorie> categoriesEnSession) {
-
-        List<Enchere> encheres = enchereService.consulterEnchereparMotCles(motClesEnchere);
-
         model.addAttribute("motClesEnchere", motClesEnchere);
-        model.addAttribute("categoriesEnSession", categoriesEnSession);
-        model.addAttribute("listEncheres", encheres);
+        model.addAttribute("idCategorie", idCategorie);
 
-        return  "view-encheres";
+        return "view-acceuil-encheres";
     }
 
-    @GetMapping("/categorie")
-    public String afficherEncheresParCategorie(
-            @RequestParam long idCategorie,
-            Model model,
-            @ModelAttribute("categoriesEnSession") List<Categorie> categoriesEnSession) {
-
-        List<Enchere> encheres = enchereService.consulterEnchereparCategorie(idCategorie);
-
-        model.addAttribute("categoriesEnSession", categoriesEnSession);
-        model.addAttribute("listEncheres", encheres);
-
-        return "view-encheres";
-
-    }
 }

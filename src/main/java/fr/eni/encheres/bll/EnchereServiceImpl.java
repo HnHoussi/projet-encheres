@@ -10,7 +10,7 @@ import java.util.List;
 @Service
 public class EnchereServiceImpl implements EnchereService {
 
-    private EnchereDAO enchereDAO;
+    private final EnchereDAO enchereDAO;
 
     public EnchereServiceImpl(EnchereDAO enchereDAO) {
         this.enchereDAO = enchereDAO;
@@ -44,5 +44,10 @@ public class EnchereServiceImpl implements EnchereService {
     @Override
     public List<Enchere> consulterEnchereparCategorie(long idCategorie) {
         return enchereDAO.findByCategorie(idCategorie);
+    }
+
+    @Override
+    public List<Enchere> consulterEnchereparCategorieEtMotCles(long idCategorie, String nomArticle) {
+        return enchereDAO.findByCategorieEtMotCles(idCategorie, nomArticle);
     }
 }

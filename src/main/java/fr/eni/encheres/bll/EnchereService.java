@@ -11,6 +11,7 @@ public interface EnchereService {
     List<Enchere> consulterEncheres();
     List<Enchere> consulterEnchereparMotCles(String nomArticle);
     List<Enchere> consulterEnchereparCategorie(long idCategorie);
+    List<Enchere> consulterEnchereparCategorieEtMotCles(long idCategorie, String nomArticle);
     List<Enchere> consulterEncheresParEtat(String etatVente);
 
 

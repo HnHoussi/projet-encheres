@@ -1,0 +1,38 @@
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.filters-section {
+    margin-bottom: 2rem;
+}
+
+.encheres-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1rem;
+}
+
+.enchere-card {
+    padding: 1rem;
+    background: #fff;
+}
+
+.enchere-image {
+    display: flex;
+    flex-direction: column;
+    font-size: 48px;
+    text-align: center;
+    margin-bottom: 1rem;
+    align-items: center;
+}
+
+.no-encheres {
+    margin-top: 5rem;
+    padding: 1rem;
+    text-align: center;
+    border: 1px dashed #000;
+    box-shadow: 3px 3px 0 rgba(0,0,0,0.3);
+}

@@ -1,10 +1,11 @@
 package fr.eni.encheres.bo;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 
-public class Article {
+public class Article implements Serializable {
     private long idArticle;
     private String nomArticle;
     private String description;
