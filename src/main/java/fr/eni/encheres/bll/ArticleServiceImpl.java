@@ -45,4 +45,9 @@ public class ArticleServiceImpl implements ArticleService {
     public List<Article> consulterArticlesParEtat(String etatVente) {
         return articleDAO.findByEtat(etatVente);
     }
+
+    @Override
+    public Article consulterArticle(long idArticle) {
+        return articleDAO.findById(idArticle);
+    }
 }

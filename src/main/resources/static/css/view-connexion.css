@@ -25,6 +25,11 @@ header {
     color: white;
 }
 
+.header-bar a{
+    color: white;
+    text-decoration: none;
+}
+
 /* MAIN PRINCIPAL */
 main {
     flex: 1;

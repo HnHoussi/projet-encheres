@@ -19,6 +19,11 @@ header {
     color: white;
 }
 
+.header-bar a{
+    color: white;
+    text-decoration: none;
+}
+
 /* MAIN STRUCTURE */
 body {
     display: flex;

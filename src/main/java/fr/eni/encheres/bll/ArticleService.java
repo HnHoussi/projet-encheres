@@ -9,6 +9,7 @@ import java.util.List;
 public interface ArticleService {
     void vendreArticle(Article article);
     void annulerVente(long idArticle);
+    Article consulterArticle(long idArticle);
     List<Article> consulterArticles();
     List<Article> consulterArticlesParMotCles(String nomArticle);
     List<Article> consulterArticlesParCategorie(String idCategorie);
