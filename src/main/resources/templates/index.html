@@ -5,68 +5,151 @@
     <title>ENI-Enchères</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.3/dist/sketchy/bootstrap.min.css">
     <link rel="stylesheet" th:href="@{/css/view-acceuil-encheres.css}">
-
 </head>
 <body class="container mt-4">
 
-    <!-- Header -->
-    <div class="header-container">
-        <a th:href="@{/encheres}" class="text-decoration-none text-dark"><h1>ENI-Enchères</h1></a>
-        <a th:href="@{utilisateur/connexion}" class="btn btn btn-outline-dark">S'inscrire - Se connecter</a>
-    </div>
 
-    <h2 style="text-align: center">Liste des enchères</h2>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary header-container mb-4">
+        <div class="container-fluid">
+            <a th:href="@{/encheres}" class="navbar-brand">ENI-Enchères</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor04"
+                    aria-controls="navbarColor04" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarColor04">
+                <div th:if="${!true}" class="navbar-nav ms-auto">
+                    <a th:href="@{/utilisateur/connexion}" class="btn btn-outline-dark">S'inscrire - Se connecter</a>
+                </div>
+                <ul th:if="${true}" class="navbar-nav ms-auto">
+                    <li class="nav-item"><a th:href="@{/encheres}" class="nav-link">Enchères</a></li>
+                    <li class="nav-item"><a th:href="@{/vendre-article}" class="nav-link">Vendre un article</a></li>
+                    <li class="nav-item"><a th:href="@{/mon-profil}" class="nav-link">Mon profil</a></li>
+                    <li class="nav-item"><a th:href="@{/deconnexion}" class="nav-link">Déconnexion</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <h2 class="text-center mb-4">Liste des enchères</h2>
 
     <!-- Formulaire de recherche -->
-    <div class="filters-section">
-        <h3>Filtres :</h3>
-        <form th:action="@{/encheres}" method="get" class="row g-2">
-            <div class="col-md-4">
-                <div class="input-group">
-                    <span class="input-group-text">🔍</span>
-                    <input type="text" id="motClesEnchere" name="motClesEnchere"
-                           class="form-control"
-                           placeholder="Le nom de l'article contient"
-                           th:value="${motClesEnchere}">
+    <form th:action="@{/encheres}" method="get" class="row g-5 align-items-start mb-5">
+
+        <!-- Left part: search and filters -->
+        <div class="col-md-8">
+
+            <div class="row mb-3">
+                <div class="col-md-6 mb-2">
+                    <div class="input-group">
+                        <span class="input-group-text">🔍</span>
+                        <input type="text" id="motClesEnchere" name="motClesEnchere"
+                               class="form-control"
+                               placeholder="Le nom de l'article contient"
+                               th:value="${motClesEnchere}">
+                    </div>
+                </div>
+                <div class="col-md-6 mb-2">
+                    <select name="idCategorie" class="form-select d-inline-block w-auto">
+                        <option value="">Toutes les catégorie</option>
+                        <option th:each="cat : ${categoriesEnSession}"
+                                th:value="${cat.idCategorie}"
+                                th:text="${cat.libelle}"
+                                th:selected="${idCategorie} == ${cat.idCategorie}">
+                        </option>
+                    </select>
                 </div>
             </div>
 
-            <div class="col-md-3">
-                <select id="idCategorie" name="idCategorie" class="form-select">
-                    <option value="">Toutes les catégories</option>
-                    <option th:each="cat : ${categoriesEnSession}"
-                            th:value="${cat.idCategorie}"
-                            th:text="${cat.libelle}"
-                            th:selected="${idCategorie} == ${cat.idCategorie}">
-                    </option>
-                </select>
-            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-check mb-2">
+                        <input class="form-check-input" type="radio" name="typeRecherche" id="achats" value="achats" checked>
+                        <label class="form-check-label" for="achats"><strong>Achats</strong></label>
+                    </div>
+                    <div class="ms-3" id="achatsCheckboxes">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="filtreAchats" id="encheresOuvertes" value="encheresOuvertes" checked>
+                            <label class="form-check-label" for="encheresOuvertes">enchères ouvertes</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="filtreAchats" id="mesEncheres" value="mesEncheres">
+                            <label class="form-check-label" for="mesEncheres">mes enchères</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="filtreAchats" id="mesEncheresRemportees" value="mesEncheresRemportees">
+                            <label class="form-check-label" for="mesEncheresRemportees">mes enchères remportées</label>
+                        </div>
+                    </div>
+                </div>
 
-            <div class="col-md-2">
-                <button type="submit" class="btn btn-primary">Rechercher</button>
+                <div class="col-md-6">
+                    <div class="form-check mb-2">
+                        <input class="form-check-input" type="radio" name="typeRecherche" id="mesVentes" value="mesVentes">
+                        <label class="form-check-label" for="mesVentes"><strong>Mes ventes</strong></label>
+                    </div>
+                    <div class="ms-3" id="ventesCheckboxes">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="filtreVentes" id="mesVentesEnCours" value="mesVentesEnCours">
+                            <label class="form-check-label" for="mesVentesEnCours">mes ventes en cours</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="filtreVentes" id="ventesNonDebutees" value="ventesNonDebutees">
+                            <label class="form-check-label" for="ventesNonDebutees">ventes non débutées</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="filtreVentes" id="ventesTerminees" value="ventesTerminees">
+                            <label class="form-check-label" for="ventesTerminees">ventes terminées</label>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </form>
-    </div>
+        </div>
+
+        <div class="col-md-1 d-flex justify-content-center">
+            <button type="submit" class="btn btn-primary px-5 py-3">Rechercher</button>
+        </div>
+
+    </form>
 
     <!-- Liste des enchères -->
-    <div class="encheres-grid" th:if="${listEncheres != null and !listEncheres.isEmpty()}">
-        <div class="enchere-card card border-primary" th:each="enchere : ${listEncheres}">
+    <div class="encheres-grid" th:if="${listArticles != null and !listArticles.isEmpty()}">
+        <div class="enchere-card card border-primary" th:each="article : ${listArticles}">
             <div class="enchere-image">
-                <img th:src="@{'/images/' + ${#strings.toLowerCase(#strings.replace(enchere.article.nomArticle, ' ', '-'))} + '.jpg'}"
-                                            th:alt="${enchere.article.nomArticle}"
-                                            class="img-fluid">
+                <img th:src="@{'/images/' + ${#strings.toLowerCase(#strings.replace(article.nomArticle, ' ', '-'))} + '.jpg'}"
+                     th:alt="${article.nomArticle}"
+                     class="img-fluid">
             </div>
-            <h5 th:text="${enchere.article.nomArticle}">Nom Article</h5>
-            <p>Prix : <span th:text="${enchere.montantEnchere}">0</span> points</p>
-            <p>Fin de l'enchère : <span th:text="${#temporals.format(enchere.dateEnchere, 'dd/MM/yyyy')}">Date</span></p>
-            <p>Vendeur : <span th:text="${enchere.utilisateur.pseudo}">Pseudo</span></p>
+            <h5 th:text="${article.nomArticle}">Nom Article</h5>
+            <p>Prix : <span th:text="${article.miseAPrix}">0</span> points</p>
+            <p>Fin de l'enchère : <span th:text="${#temporals.format(article.dateDebutEnchere, 'dd/MM/yyyy')}">Date</span></p>
+            <p>Vendeur : <span th:text="${article.utilisateur.pseudo}">Pseudo</span></p>
         </div>
     </div>
 
-    <!-- Alerte si aucune enchère -->
-    <div class=" no-encheres alert alert-warning" th:if="${listEncheres == null or listEncheres.isEmpty()}">
+    <!-- Message si aucune enchère -->
+    <div class="no-encheres alert alert-warning" th:if="${listArticles == null or listArticles.isEmpty()}">
         Aucun résultat pour cette recherche.
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const achatsRadio = document.getElementById('achats');
+            const ventesRadio = document.getElementById('mesVentes');
+
+            const achatsCheckboxes = document.querySelectorAll('#achatsCheckboxes input[type="checkbox"]');
+            const ventesCheckboxes = document.querySelectorAll('#ventesCheckboxes input[type="checkbox"]');
+
+            function toggleCheckboxes() {
+                const achatsSelected = achatsRadio.checked;
+                achatsCheckboxes.forEach(cb => cb.disabled = !achatsSelected);
+                ventesCheckboxes.forEach(cb => cb.disabled = achatsSelected);
+            }
+
+            toggleCheckboxes();
+
+            achatsRadio.addEventListener('change', toggleCheckboxes);
+            ventesRadio.addEventListener('change', toggleCheckboxes);
+        });
+    </script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>

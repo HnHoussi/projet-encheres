@@ -57,7 +57,7 @@ CREATE TABLE Encheres (
     idUtilisateur BIGINT,
     idArticle BIGINT,
     dateEnchere DATETIME,
-    montantEnchere BIGINT,
+    montantEnchere INT,
     PRIMARY KEY (idUtilisateur, idArticle, dateEnchere),
     FOREIGN KEY (idUtilisateur) REFERENCES Utilisateurs(idUtilisateur),
     FOREIGN KEY (idArticle) REFERENCES Articles(idArticle)

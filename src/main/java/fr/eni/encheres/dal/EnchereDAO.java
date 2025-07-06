@@ -7,11 +7,31 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public interface EnchereDAO {
-    void create(Enchere enchere, long idArticle);
+
+    //Retourner tous les enchéres
     List<Enchere> findAll();
-    List<Enchere> findByEtat(String etatVente);
-    void delete(long idEnchere, long idUtilisateur, LocalDateTime dateEnchere);
+
+    //Retourner les enchéres par mots clés
     List<Enchere> findByMotCles(String nomArticle);
+
+    // Retourner les enchéres par catégorie
     List<Enchere> findByCategorie(long idCategorie);
+
+    //Retourner les enchéres par mots clés et catégories
     List<Enchere> findByCategorieEtMotCles(long idCategorie, String nomArticle);
+
+    // Retourner les enchéres faites par un utilisateur
+    List<Enchere> findMesEncheres(long idUtilisateur);
+
+    //Retourner les enchére remportés par un utilisateur
+    List<Enchere> findMesEncheresRemportees(long idUtilisateur);
+
+    // Encherir un article
+    void create(Enchere enchere, long idArticle);
+
+    //Supprimer un enchére
+    void delete(long idEnchere, long idUtilisateur, LocalDateTime dateEnchere);
+
+    //List<Enchere> findByEtat(String etatVente, long idUtilisateur);
 }
+

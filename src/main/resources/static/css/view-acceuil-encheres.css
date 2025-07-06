@@ -3,10 +3,7 @@ body {
 }
 
 .header-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 2rem;
+    background-color: #ece9e9;
 }
 
 .filters-section {
@@ -21,7 +18,7 @@ body {
 
 .enchere-card {
     padding: 1rem;
-    background: #ece9e9;
+    background-color: #ece9e9;
 }
 
 .enchere-image {

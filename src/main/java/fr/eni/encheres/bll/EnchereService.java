@@ -12,7 +12,10 @@ public interface EnchereService {
     List<Enchere> consulterEnchereparMotCles(String nomArticle);
     List<Enchere> consulterEnchereparCategorie(long idCategorie);
     List<Enchere> consulterEnchereparCategorieEtMotCles(long idCategorie, String nomArticle);
-    List<Enchere> consulterEncheresParEtat(String etatVente);
 
+    // Rechercher les enchéres d'un utilisateur
+    List<Enchere> consulterMesEncheres(long idUtilisateur);
 
+    //Rechercher les enchéres gagnées par un utilisateur
+    List<Enchere> consulterMesEncheresRemportees(long idUtilisateur);
 }
