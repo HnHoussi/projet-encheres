@@ -45,35 +45,33 @@
       </ul>
 
       <button>Rechercher</button>
- 
 
-    <div class="auction-list">
-      <div th:each="auction : ${auctions}" class="card">
-        <img width="15" height="15" src="https://img.icons8.com/ios-filled/5000/my-computer--v2.png"
-             alt="Image de l’article"/>
-       
-        <p><strong>Description :</strong> <span th:text="${auction.description}">PC Gamer pour jouer</span></p>but
-        <p><strong>Prix :</strong> <span th:text="${auction.price}">750</span> points</p>
-        <p><strong>Fin de l’enchère :</strong> <span th:text="${auction.endDate}">Date</span></p>
-        <p><strong>Vendeur :</strong> <span th:text="${auction.seller}">Vendeur</span></p>
-        <a th:href="@{'/auction/' + ${auction.id}}" th:text="${auction.bidsCount} + ' enchères'">2 enchères</a>
+      <div class="auction-list">
+        <div th:each="auction : ${auctions}" class="card">
+          <img width="15" height="15" src="https://img.icons8.com/ios-filled/5000/my-computer--v2.png"
+               alt="Image de l’article"/>
+
+          <p><strong>Description :</strong> <span th:text="${auction.description}">PC Gamer pour jouer</span></p>but
+          <p><strong>Prix :</strong> <span th:text="${auction.price}">750</span> points</p>
+          <p><strong>Fin de l’enchère :</strong> <span th:text="${auction.endDate}">Date</span></p>
+          <p><strong>Vendeur :</strong> <span th:text="${auction.seller}">Vendeur</span></p>
+          <a th:href="@{'/auction/' + ${auction.id}}" th:text="${auction.bidsCount} + ' enchères'">2 enchères</a>
+        </div>
+
+
+        <div class="action-list">
+          <div class="card">
+           <img width="15" height="150" src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fnews-cdn.softpedia.com%2Fimages%2Fnews2%2Fapple-officially-launches-the-iphone-x-517717-2.jpg&f=1&nofb=1&ipt
+           =2e2f28c594eb8fb8a04104f7c31d25ab3bd0d00993e2e47cd84686ffc28401d7" alt="my-computer--v2"/>
+            <p><strong>iphone X </strong> Loisir</p>
+            <p><strong>Prix :</strong> 620 points</p>
+            <p><strong>Fin de l’enchère :</strong> 01/05/09</p>
+            <p><strong>Vendeur :</strong> km07</p>
+            <a href="#"> 5 enchères</a>
+          </div>
+        </div>
       </div>
-      
-      
-      <div class="action-list">
-    <div class="card">
-     <img width="15" height="150"src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fnews-cdn.softpedia.com%2Fimages%2Fnews2%2Fapple-officially-launches-the-iphone-x-517717-2.jpg&f=1&nofb=1&ipt
-     =2e2f28c594eb8fb8a04104f7c31d25ab3bd0d00993e2e47cd84686ffc28401d7" alt="my-computer--v2"/>
-      <p><strong>ipphone X </strong> Loisir</p>
-      <p><strong>Prix :</strong> 620 points</p>
-      <p><strong>Fin de l’enchère :</strong> 01/05/09</p>
-      <p><strong>Vendeur :</strong> km07</p>
-      <a href="#"> 5 enchères</a>
-    </div>
-      
-      
-    </div>
-  </div>
+    </section>
   </main>
 
   <footer class="footer">
