@@ -1,3 +1,7 @@
+body {
+    padding-bottom: 15px;
+}
+
 .header-container {
     display: flex;
     justify-content: space-between;
@@ -17,7 +21,7 @@
 
 .enchere-card {
     padding: 1rem;
-    background: #fff;
+    background: #ece9e9;
 }
 
 .enchere-image {

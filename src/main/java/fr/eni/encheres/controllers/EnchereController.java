@@ -60,7 +60,7 @@ public class EnchereController {
         model.addAttribute("motClesEnchere", motClesEnchere);
         model.addAttribute("idCategorie", idCategorie);
 
-        return "view-acceuil-encheres";
+        return "index";
     }
 
 }
