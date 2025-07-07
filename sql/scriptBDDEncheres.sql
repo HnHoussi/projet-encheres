@@ -3,6 +3,7 @@ Drop table if exists Encheres;
 Drop table if exists Articles;
 Drop table if exists Categories;
 Drop table if exists Utilisateurs;
+Drop table if exists Roles;
 
 -- Table: Utilisateurs
 CREATE TABLE Utilisateurs (
@@ -20,6 +21,16 @@ CREATE TABLE Utilisateurs (
     administrateur BIT,
     compteActif BIT
 );
+
+--Crée la table ROLES
+CREATE TABLE Roles (
+                       idUtilisateur BIGINT NOT NULL,
+                       role VARCHAR(50) NOT NULL,
+                       PRIMARY KEY (idUtilisateur, role),
+                       FOREIGN KEY (idUtilisateur) REFERENCES Utilisateurs(idUtilisateur)
+);
+
+
 
 -- Table: Categories
 CREATE TABLE Categories (
