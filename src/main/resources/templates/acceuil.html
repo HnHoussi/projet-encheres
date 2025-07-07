@@ -1,159 +1,156 @@
 <!DOCTYPE html>
-<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ENI-Enchères</title>
-  <link rel="stylesheet" th:href="@{../templates/ressources/static/style/index.css}" />
+    <meta charset="UTF-8">
+    <title>ENI-Enchères</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.3/dist/sketchy/bootstrap.min.css">
+    <link rel="stylesheet" th:href="@{/css/view-acceuil-encheres.css}">
 </head>
-<body>
-  <header>
-    <h1>ENI-Enchères</h1>
-    <nav>
-      <div class="user-actions">
-        <div class="credit-display">
-          <span th:text="'💰 ' + ${user.points} + ' points'">💰 100 points</span>
+<body class="container mt-4">
+
+
+    <nav class="navbar navbar-expand-lg bg-body-tertiary header-container mb-4">
+        <div class="container-fluid">
+            <a th:href="@{/encheres}" class="navbar-brand">ENI-Enchères</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor04"
+                    aria-controls="navbarColor04" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarColor04">
+                <div th:if="${!true}" class="navbar-nav ms-auto">
+                    <a th:href="@{/utilisateur/connexion}" class="btn btn-outline-dark">S'inscrire - Se connecter</a>
+                </div>
+                <ul th:if="${true}" class="navbar-nav ms-auto">
+                    <li class="nav-item"><a th:href="@{/encheres}" class="nav-link">Enchères</a></li>
+                    <li class="nav-item"><a th:href="@{/vendre-article}" class="nav-link">Vendre un article</a></li>
+                    <li class="nav-item"><a th:href="@{/mon-profil}" class="nav-link">Mon profil</a></li>
+                    <li class="nav-item"><a th:href="@{/deconnexion}" class="nav-link">Déconnexion</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <h2 class="text-center mb-4">Liste des enchères</h2>
+
+    <!-- Formulaire de recherche -->
+    <form th:action="@{/encheres}" method="get" class="row g-5 align-items-start mb-5">
+
+        <!-- Left part: search and filters -->
+        <div class="col-md-8">
+
+            <div class="row mb-3">
+                <div class="col-md-6 mb-2">
+                    <div class="input-group">
+                        <span class="input-group-text">🔍</span>
+                        <input type="text" id="motClesEnchere" name="motClesEnchere"
+                               class="form-control"
+                               placeholder="Le nom de l'article contient"
+                               th:value="${motClesEnchere}">
+                    </div>
+                </div>
+                <div class="col-md-6 mb-2">
+                    <select name="idCategorie" class="form-select d-inline-block w-auto">
+                        <option value="">Toutes les catégorie</option>
+                        <option th:each="cat : ${categoriesEnSession}"
+                                th:value="${cat.idCategorie}"
+                                th:text="${cat.libelle}"
+                                th:selected="${idCategorie} == ${cat.idCategorie}">
+                        </option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-check mb-2">
+                        <input class="form-check-input" type="radio" name="typeRecherche" id="achats" value="achats" checked>
+                        <label class="form-check-label" for="achats"><strong>Achats</strong></label>
+                    </div>
+                    <div class="ms-3" id="achatsCheckboxes">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="filtreAchats" id="encheresOuvertes" value="encheresOuvertes" checked>
+                            <label class="form-check-label" for="encheresOuvertes">enchères ouvertes</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="filtreAchats" id="mesEncheres" value="mesEncheres">
+                            <label class="form-check-label" for="mesEncheres">mes enchères</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="filtreAchats" id="mesEncheresRemportees" value="mesEncheresRemportees">
+                            <label class="form-check-label" for="mesEncheresRemportees">mes enchères remportées</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-check mb-2">
+                        <input class="form-check-input" type="radio" name="typeRecherche" id="mesVentes" value="mesVentes">
+                        <label class="form-check-label" for="mesVentes"><strong>Mes ventes</strong></label>
+                    </div>
+                    <div class="ms-3" id="ventesCheckboxes">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="filtreVentes" id="mesVentesEnCours" value="mesVentesEnCours">
+                            <label class="form-check-label" for="mesVentesEnCours">mes ventes en cours</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="filtreVentes" id="ventesNonDebutees" value="ventesNonDebutees">
+                            <label class="form-check-label" for="ventesNonDebutees">ventes non débutées</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="filtreVentes" id="ventesTerminees" value="ventesTerminees">
+                            <label class="form-check-label" for="ventesTerminees">ventes terminées</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <button th:if="${user == null}">Inscription / Connexion</button>
-       <!-- <button th:if="${user != null}" th:text="'Bienvenue, ' + ${user.username}"></button>-->
-      </div>
-    </nav>
-  </header>
+        <div class="col-md-1 d-flex justify-content-center">
+            <button type="submit" class="btn btn-primary px-5 py-3">Rechercher</button>
+        </div>
 
-  <div class="container">
-    <h2>Liste des enchères</h2>
+    </form>
 
-    <div class="filters">
-      <input type="text" placeholder="Le nom de l’article contient…" />
-      <select>
-        <option>Toutes</option>
-        <option>Informatique</option>
-        <option>Sport</option>
-        <option>Vêtements</option>
-        <option>Véhicules</option>
-        <option>Mode</option>
-      </select>
-      <div class="search-bar">
-        <input type="text" placeholder="Rechercher…" />
-        <button>🔍</button>
-      </div>
+    <!-- Liste des enchères -->
+    <div class="encheres-grid" th:if="${listArticles != null and !listArticles.isEmpty()}">
+        <div class="enchere-card card border-primary" th:each="article : ${listArticles}">
+            <div class="enchere-image">
+                <img th:src="@{'/images/' + ${#strings.toLowerCase(#strings.replace(article.nomArticle, ' ', '-'))} + '.jpg'}"
+                     th:alt="${article.nomArticle}"
+                     class="img-fluid">
+            </div>
+            <h5 th:text="${article.nomArticle}">Nom Article</h5>
+            <p>Prix : <span th:text="${article.miseAPrix}">0</span> points</p>
+            <p>Fin de l'enchère : <span th:text="${#temporals.format(article.dateDebutEnchere, 'dd/MM/yyyy')}">Date</span></p>
+            <p>Vendeur : <span th:text="${article.utilisateur.pseudo}">Pseudo</span></p>
+        </div>
     </div>
 
-    <div class="auction-list">
-      <div th:each="auction : ${auctions}" class="card">
-        <img width="15" height="15" src="https://img.icons8.com/ios-filled/5000/my-computer--v2.png"
-             alt="Image de l’article"/>
-        <p><strong th:text="${auction.name}">Nom</strong></p>
-        <p><strong>Description :</strong> <span th:text="${auction.description}">PC Gamer pour jouer</span></p>
-        <p><strong>Prix :</strong> <span th:text="${auction.price}">750</span> points</p>
-        <p><strong>Fin de l’enchère :</strong> <span th:text="${auction.endDate}">Date</span></p>
-        <p><strong>Vendeur :</strong> <span th:text="${auction.seller}">Vendeur</span></p>
-        <a th:href="@{'/auction/' + ${auction.id}}" th:text="${auction.bidsCount} + ' enchères'">2 enchères</a>
-      </div>
+    <!-- Message si aucune enchère -->
+    <div class="no-encheres alert alert-warning" th:if="${listArticles == null or listArticles.isEmpty()}">
+        Aucun résultat pour cette recherche.
     </div>
-  </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const achatsRadio = document.getElementById('achats');
+            const ventesRadio = document.getElementById('mesVentes');
 
-  <footer class="footer">
-    <div class="container">
-      <p>Aide | Conditions d’utilisation</p>
-      <p>Contact e-mail | Mentions légales</p>
-      <p>Suivez-nous : @instagram</p>
-      <p><em>Projet ENI Informatique</em></p>
-    </div>
-  </footer>
-</body>
-</html>
+            const achatsCheckboxes = document.querySelectorAll('#achatsCheckboxes input[type="checkbox"]');
+            const ventesCheckboxes = document.querySelectorAll('#ventesCheckboxes input[type="checkbox"]');
 
+            function toggleCheckboxes() {
+                const achatsSelected = achatsRadio.checked;
+                achatsCheckboxes.forEach(cb => cb.disabled = !achatsSelected);
+                ventesCheckboxes.forEach(cb => cb.disabled = achatsSelected);
+            }
 
+            toggleCheckboxes();
 
+            achatsRadio.addEventListener('change', toggleCheckboxes);
+            ventesRadio.addEventListener('change', toggleCheckboxes);
+        });
+    </script>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<!--<!DOCTYPE html>
-<html lang="fr">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ENI-Enchères</title>
-  <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-
-<header>
-  <div>
-    <img width="25" height="25" src="https://img.icons8.com/ios-filled/50/home.png" alt="home"/>ENI-Enchères</div>
-  
-  <div class="user-actions">
-                <div class="credit-display">💰 100 points</div>
-  
-  <div>
-    <button>Inscription / Connexion</button>
-  </div>
-</header>
-
-<div class="container">
-  <h2>Liste des enchères</h2>
-
-  <div class="filters">
-    <input type="text" placeholder="Le nom de l’article contient…" />
-    <select>
-      <option>Toutes</option>
-      <option>Informatique</option>
-      <option>Sport</option>
-      <option>Vêtements</option>
-      <option>Véhicules</option>
-      <option>Mode</option>
-    </select>
-    <div class="search-bar">
-      <input type="text" placeholder="Rechercher…" />
-      <button>🔍</button>
-    </div>
-  </div>
-
-  <div class="auction-list">
-    <div class="card">
-      <img width="15" height="15" src="https://img.icons8.com/ios-filled/50/my-computer--v2.png" alt="my-computer--v2"/>
-      <p><strong>PC Gamer</strong> pour travailler</p>
-      <p><strong>Prix :</strong> 810 points</p>
-      <p><strong>Fin de l’enchère :</strong> 10/02/09</p>
-      <p><strong>Vendeur :</strong> jp44</p>
-      <a href="#">2 enchères</a>
-    </div>
-    
-  <div class="auction-list">
-    <div class="card">
-      <img width="15" height="15" src="https://img.icons8.com/ios-filled/50/my-computer--v2.png" alt="my-computer--v2"/>
-      <p><strong>PC Gamer</strong> pour travailler</p>
-      <p><strong>Prix :</strong> 810 points</p>
-      <p><strong>Fin de l’enchère :</strong> 10/02/09</p>
-      <p><strong>Vendeur :</strong> jp44</p>
-      <a href="#">2 enchères</a>
-    </div>
-    <!-- Répéter pour chaque produit -->
-  </div>
-</div>
-
-<footer>
-   <footer class="footer">
-        <div class="container">
-  <p>Aide | Conditions d’utilisation</p>
-  <p>Contact e-mail | Mentions légales</p>
-  <p>Suivez-nous : @instagram</p>
-  <p><em>Projet ENI Informatique</em></p>
-</footer>
-
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

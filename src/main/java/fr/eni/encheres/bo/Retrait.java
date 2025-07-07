@@ -1,8 +1,9 @@
 package fr.eni.encheres.bo;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public class Retrait {
+public class Retrait implements Serializable {
     private String rue;
     private String codePostal;
     private String ville;

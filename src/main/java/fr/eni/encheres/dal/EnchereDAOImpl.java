@@ -4,7 +4,6 @@ import fr.eni.encheres.bo.Article;
 import fr.eni.encheres.bo.Enchere;
 import fr.eni.encheres.bo.Utilisateur;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -30,6 +29,97 @@ public class EnchereDAOImpl implements EnchereDAO{
         this.articleDAO = articleDAO;
     }
 
+    // Retourner tous les enchéres
+    @Override
+    public List<Enchere> findAll() {
+        String FIND_ALL = "SELECT * FROM Encheres";
+        return namedParameterJdbcTemplate.query(FIND_ALL, new EnchereRowMapper(utilisateurDAO, articleDAO));
+    }
+
+    // Retourner les enchéres par mots clés
+    @Override
+    public List<Enchere> findByMotCles(String nomArticle) {
+        String FIND_BY_MOT_CLES = """
+                                  SELECT e.* 
+                                  FROM Encheres e
+                                  JOIN Articles a ON e.idArticle = a.idArticle
+                                  WHERE a.nomArticle LIKE :nomArticle
+                                  """;
+        MapSqlParameterSource paramSource = new MapSqlParameterSource();
+        paramSource.addValue("nomArticle", "%" + nomArticle + "%");
+        return namedParameterJdbcTemplate.query(FIND_BY_MOT_CLES, paramSource, new EnchereRowMapper(utilisateurDAO, articleDAO));
+    }
+
+    // Retourner les enchéres par catégorie
+    @Override
+    public List<Enchere> findByCategorie(long idCategorie) {
+        String FIND_BY_CATEGORIE = """
+                                   SELECT e.* 
+                                   FROM Encheres e
+                                   JOIN Articles a ON e.idArticle = a.idArticle
+                                   WHERE a.idCategorie = :idCategorie
+                                   """;
+        MapSqlParameterSource  paramSource = new MapSqlParameterSource();
+        paramSource.addValue("idCategorie", idCategorie);
+
+        return namedParameterJdbcTemplate.query(FIND_BY_CATEGORIE, paramSource, new EnchereRowMapper(utilisateurDAO, articleDAO));
+    }
+
+    // Retourner les enchéres par mots clés et catégorie
+    @Override
+    public List<Enchere> findByCategorieEtMotCles(long idCategorie, String nomArticle) {
+        String FIND_BY_CATEGORIE_ET_MOTS_CLES = """
+                        SELECT e.*
+                        FROM Encheres e
+                        JOIN Articles a ON e.idArticle = a.idArticle
+                        WHERE a.idCategorie = :idCategorie
+                        AND a.nomArticle LIKE :nomArticle
+                        """;
+
+        MapSqlParameterSource paramSource = new MapSqlParameterSource();
+        paramSource.addValue("idCategorie", idCategorie);
+        paramSource.addValue("nomArticle", "%" + nomArticle + "%");
+
+        return namedParameterJdbcTemplate.query(
+                FIND_BY_CATEGORIE_ET_MOTS_CLES,
+                paramSource,
+                new EnchereRowMapper(utilisateurDAO, articleDAO)
+        );
+    }
+
+    //Méthodes de filtre ACHATS
+
+    // Retourner les enchére faites par un utilisateur
+    @Override
+    public List<Enchere> findMesEncheres(long idUtilisateur) {
+        String FIND_MES_ENCHERES = """
+                               SELECT *
+                               FROM Encheres
+                               WHERE idUtilisateur = :idUtilisateur
+                               """;
+        MapSqlParameterSource paramSource = new MapSqlParameterSource();
+        paramSource.addValue("idUtilisateur", idUtilisateur);
+        return namedParameterJdbcTemplate.query(FIND_MES_ENCHERES, paramSource, new EnchereRowMapper(utilisateurDAO, articleDAO));
+    }
+
+    //Retourner les enchére remportés par un utilisateur
+    @Override
+    public List<Enchere> findMesEncheresRemportees(long idUtilisateur) {
+        String FIND_MES_ENCHERES_REMPORTEES = """
+                                          SELECT e.*
+                                          FROM Encheres e
+                                          JOIN Articles a ON e.idArticle = a.idArticle
+                                          WHERE e.idUtilisateur = :idUtilisateur
+                                          AND a.etatVente = 'TERMINEE'
+                                          AND e.montantEnchere = a.prixVente
+                                          """;
+        MapSqlParameterSource paramSource = new MapSqlParameterSource();
+        paramSource.addValue("idUtilisateur", idUtilisateur);
+        return namedParameterJdbcTemplate.query(FIND_MES_ENCHERES_REMPORTEES, paramSource, new EnchereRowMapper(utilisateurDAO, articleDAO));
+    }
+
+
+    // Création d'un enchére
     @Override
     public void create(Enchere enchere, long idArticle) {
         String INSERT = """
@@ -46,26 +136,7 @@ public class EnchereDAOImpl implements EnchereDAO{
 
     }
 
-    @Override
-    public List<Enchere> findAll() {
-        String FIND_ALL = "SELECT * FROM Encheres";
-        return namedParameterJdbcTemplate.query(FIND_ALL, new EnchereRowMapper(utilisateurDAO, articleDAO));
-    }
-
-    @Override
-    public List<Enchere> findByEtat(String etatVente) {
-        String FIND_BY_ETAT = """
-                              SELECT e.*
-                              FROM Encheres e
-                              JOIN Articles a 
-                              ON e.idArticle = a.idArticle
-                              WHERE a.etatVente = :etatVente
-                              """;
-        MapSqlParameterSource paramSource = new MapSqlParameterSource();
-        paramSource.addValue("etatVente", etatVente);
-        return namedParameterJdbcTemplate.query(FIND_BY_ETAT, paramSource, new EnchereRowMapper(utilisateurDAO, articleDAO));
-    }
-
+    // supprimer un enchére
     @Override
     public void delete(long idArticle, long idUtilisateur, LocalDateTime dateEnchere) {
         String DELETE = """
@@ -82,33 +153,8 @@ public class EnchereDAOImpl implements EnchereDAO{
 
     }
 
-    @Override
-    public List<Enchere> findByMotCles(String nomArticle) {
-        String FIND_BY_MOT_CLES = """
-                                  SELECT e.* 
-                                  FROM Encheres e
-                                  JOIN Articles a ON e.idArticle = a.idArticle
-                                  WHERE a.nomArticle LIKE :nomArticle
-                                  """;
-        MapSqlParameterSource paramSource = new MapSqlParameterSource();
-        paramSource.addValue("nomArticle", "%" + nomArticle + "%");
-        return namedParameterJdbcTemplate.query(FIND_BY_MOT_CLES, paramSource, new EnchereRowMapper(utilisateurDAO, articleDAO));
-    }
 
-    @Override
-    public List<Enchere> findByCategorie(long idCategorie) {
-        String FIND_BY_CATEGORIE = """
-                                   SELECT e.* 
-                                   FROM Encheres e
-                                   JOIN Articles a ON e.idArticle = a.idArticle
-                                   WHERE a.idCategorie = :idCategorie
-                                   """;
-        MapSqlParameterSource  paramSource = new MapSqlParameterSource();
-        paramSource.addValue("idCategorie", idCategorie);
-
-        return namedParameterJdbcTemplate.query(FIND_BY_CATEGORIE, paramSource, new EnchereRowMapper(utilisateurDAO, articleDAO));
-    }
-
+    // RowMapper costum
     public static class EnchereRowMapper implements RowMapper<Enchere> {
 
         private final UtilisateurDAO  utilisateurDAO;

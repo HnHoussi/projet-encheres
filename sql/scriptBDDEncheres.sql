@@ -1,3 +1,9 @@
+Drop table if exists Retraits;
+Drop table if exists Encheres;
+Drop table if exists Articles;
+Drop table if exists Categories;
+Drop table if exists Utilisateurs;
+
 -- Table: Utilisateurs
 CREATE TABLE Utilisateurs (
     idUtilisateur BIGINT PRIMARY KEY IDENTITY,
@@ -51,7 +57,7 @@ CREATE TABLE Encheres (
     idUtilisateur BIGINT,
     idArticle BIGINT,
     dateEnchere DATETIME,
-    montantEnchere BIGINT,
+    montantEnchere INT,
     PRIMARY KEY (idUtilisateur, idArticle, dateEnchere),
     FOREIGN KEY (idUtilisateur) REFERENCES Utilisateurs(idUtilisateur),
     FOREIGN KEY (idArticle) REFERENCES Articles(idArticle)

@@ -35,4 +35,9 @@ public class CategorieServiceImpl implements CategorieService {
     public void modifierCategorie(Categorie categorie) {
         categorieDAO.update(categorie);
     }
+
+    @Override
+    public Categorie consulterCategorieParID(long idCategorie) {
+        return categorieDAO.findById(idCategorie);
+    }
 }
