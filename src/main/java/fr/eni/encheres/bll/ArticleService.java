@@ -12,6 +12,8 @@ public interface ArticleService {
     Article consulterArticle(long idArticle);
     List<Article> consulterArticles();
     List<Article> consulterArticlesParMotCles(String nomArticle);
-    List<Article> consulterArticlesParCategorie(String idCategorie);
-    List<Article> consulterArticlesParEtat(String etatVente);
+    List<Article> consulterArticlesParCategorie(long idCategorie);
+
+    // Recherche par mots clés et catégorie
+    List<Article> consulterArticleParCategorieEtMotCles(long idCategorie, String nomArticle);
 }

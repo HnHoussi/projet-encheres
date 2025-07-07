@@ -15,11 +15,11 @@ import java.util.List;
 @Repository
 public class CategorieDAOImpl implements CategorieDAO {
 
-    private final String INSERT = "INSERT INTO Categories(LIBELLE) VALUES (:LIBELLE)";
-    private final String FIND_BY_ID = "SELECT IDCATEGORIE, LIBELLE FROM CATEGORIES WHERE IDCATEGORIE=:IDCATEGORIE";
-    private final String DELETE = "DELETE FROM Categories WHERE IDCATEGORIE = :IDCATEGORIE";
-    private final String FIND_ALL = "SELECT IDCATEGORIE, LIBELLE FROM CATEGORIES";
-    private static final String UPDATE = "UPDATE CATEGORIES SET LIBELLE =:LIBELLE WHERE IDCATEGORIE = :IDCATEGORIE";
+    private final String INSERT = "INSERT INTO Categories(libelle) VALUES (:libelle)";
+    private final String FIND_BY_ID = "SELECT * FROM CATEGORIES WHERE idCategorie=:idCategorie";
+    private final String DELETE = "DELETE FROM Categories WHERE idCategorie = :idCategorie";
+    private final String FIND_ALL = "SELECT idCategorie, libelle FROM CATEGORIES";
+    private static final String UPDATE = "UPDATE CATEGORIES SET libelle =:libelle WHERE idCategorie = :idCategorie";
 
     private NamedParameterJdbcTemplate jdbcTemplate;
 
@@ -57,7 +57,7 @@ public class CategorieDAOImpl implements CategorieDAO {
     @Override
     public Categorie findById(long idCategorie) {
         MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
-        mapSqlParameterSource.addValue("id", idCategorie);
+        mapSqlParameterSource.addValue("idCategorie", idCategorie);
         return jdbcTemplate.queryForObject(FIND_BY_ID, mapSqlParameterSource, new BeanPropertyRowMapper<>(Categorie.class));
 
     }

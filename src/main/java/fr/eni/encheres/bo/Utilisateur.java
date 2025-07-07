@@ -1,9 +1,10 @@
 package fr.eni.encheres.bo;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 
-public class Utilisateur {
+public class Utilisateur implements Serializable {
     private long idUtilisateur;
     private String pseudo;
     private String nom;

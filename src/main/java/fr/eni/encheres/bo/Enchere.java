@@ -1,10 +1,11 @@
 package fr.eni.encheres.bo;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-public class Enchere {
+public class Enchere implements Serializable {
     private LocalDateTime dateEnchere;
     private int montantEnchere;
 

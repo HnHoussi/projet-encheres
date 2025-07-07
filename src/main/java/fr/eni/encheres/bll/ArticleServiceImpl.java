@@ -37,17 +37,15 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public List<Article> consulterArticlesParCategorie(String idCategorie) {
+    public List<Article> consulterArticlesParCategorie(long idCategorie) {
         return articleDAO.findByCategorie(idCategorie);
     }
 
+    // Recherche par mots clés et catégorie
     @Override
-    public List<Article> consulterArticlesParEtat(String etatVente) {
-        return articleDAO.findByEtat(etatVente);
+    public List<Article> consulterArticleParCategorieEtMotCles(long idCategorie, String nomArticle) {
+        return articleDAO.findByCategorieEtMotCles(idCategorie, nomArticle);
+
     }
 
-    @Override
-    public Article consulterArticle(long idArticle) {
-        return articleDAO.findById(idArticle);
-    }
 }
