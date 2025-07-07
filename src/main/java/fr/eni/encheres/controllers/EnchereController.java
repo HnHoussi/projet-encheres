@@ -42,19 +42,19 @@ public class EnchereController {
 
         // Recherche par mots clés et catégorie
         if ((motClesEnchere != null && !motClesEnchere.isBlank()) && idCategorie != null) {
-            articles = articleService.consulterArticleParCategorieEtMotCles(idCategorie, motClesEnchere);
+            articles = articleService.consulterArticlesOuvertsParCategorieEtMotCles(idCategorie, motClesEnchere);
 
         // Recherche par mots clés seulement
         } else if (motClesEnchere != null && !motClesEnchere.isBlank()) {
-            articles = articleService.consulterArticlesParMotCles(motClesEnchere);
+            articles = articleService.consulterArticlesOuvertsParMotCles(motClesEnchere);
 
         // Recherche par catégorie seulement
         } else if (idCategorie != null) {
-            articles = articleService.consulterArticlesParCategorie(idCategorie);
+            articles = articleService.consulterArticlesOuvertsParCategorie(idCategorie);
 
         // Lister tous les enchéres sans filtre
         } else {
-            articles = articleService.consulterArticles();
+            articles = articleService.consulterArticlesOuverts();
         }
 
         model.addAttribute("listArticles", articles);
@@ -64,5 +64,7 @@ public class EnchereController {
 
         return "index";
     }
+
+
 
 }

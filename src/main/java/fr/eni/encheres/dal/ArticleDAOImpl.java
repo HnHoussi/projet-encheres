@@ -99,6 +99,56 @@ public class ArticleDAOImpl implements ArticleDAO{
         return namedParameterJdbcTemplate.query(FIND_ARTICLES_OUVERTS, new ArticleRowMapper(utilisateurDAO, categorieDAO));
     }
 
+    @Override
+    public List<Article> findArticlesOuvertsParMotCles(String nomArticle) {
+        String FIND_ARTICLES_OUVERTS_PAR_MOTS_CLES = """
+                                                    SELECT *
+                                                    FROM Articles
+                                                    WHERE dateFinEnchere > GETDATE()
+                                                      AND dateDebutEnchere <= GETDATE()
+                                                      AND etatVente = 'EN_COURS'
+                                                      AND nomArticle LIKE :nomArticle
+                                                    """;
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("nomArticle", "%" + nomArticle + "%");
+        return namedParameterJdbcTemplate.query(
+                FIND_ARTICLES_OUVERTS_PAR_MOTS_CLES,
+                params,
+                new ArticleRowMapper(utilisateurDAO, categorieDAO));
+    }
+
+    @Override
+    public List<Article> findArticlesOuvertsParCategorie(long idCategorie) {
+        String sql = """
+        SELECT *
+        FROM Articles
+        WHERE dateFinEnchere > GETDATE()
+          AND dateDebutEnchere <= GETDATE()
+          AND etatVente = 'EN_COURS'
+          AND idCategorie = :idCategorie
+    """;
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("idCategorie", idCategorie);
+        return namedParameterJdbcTemplate.query(sql, params, new ArticleRowMapper(utilisateurDAO, categorieDAO));
+    }
+
+    @Override
+    public List<Article> findArticlesOuvertsParCategorieEtMotCles(long idCategorie, String nomArticle) {
+        String sql = """
+        SELECT *
+        FROM Articles
+        WHERE dateFinEnchere > GETDATE()
+          AND dateDebutEnchere <= GETDATE()
+          AND etatVente = 'EN_COURS'
+          AND idCategorie = :idCategorie
+          AND nomArticle LIKE :nomArticle
+    """;
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("idCategorie", idCategorie);
+        params.addValue("nomArticle", "%" + nomArticle + "%");
+        return namedParameterJdbcTemplate.query(sql, params, new ArticleRowMapper(utilisateurDAO, categorieDAO));
+    }
+
     //Retourner les ventes en cours d'un utilisateur
     @Override
     public List<Article> findMesVentesEnCours(long idUtilisateur) {
@@ -114,6 +164,66 @@ public class ArticleDAOImpl implements ArticleDAO{
         return namedParameterJdbcTemplate.query(FIND_MES_VENTES_EN_COURS, paramSource, new ArticleRowMapper(utilisateurDAO, categorieDAO));
     }
 
+    @Override
+    public List<Article> findMesVentesEnCoursParMotCles(long idUtilisateur, String nomArticle) {
+        String FIND_MES_VENTES_EN_COURS_PAR_MOTS_CLES = """
+                                    SELECT *
+                                    FROM Articles
+                                    WHERE idUtilisateur = :idUtilisateur
+                                      AND etatVente = 'EN_COURS'
+                                      AND dateFinEnchere > GETDATE()
+                                      AND nomArticle LIKE :nomArticle
+                                    """;
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("idUtilisateur", idUtilisateur);
+        params.addValue("nomArticle", "%" + nomArticle + "%");
+        return namedParameterJdbcTemplate.query(
+                FIND_MES_VENTES_EN_COURS_PAR_MOTS_CLES,
+                params,
+                new ArticleRowMapper(utilisateurDAO, categorieDAO));
+    }
+
+    @Override
+    public List<Article> findMesVentesEnCoursParCategorie(long idUtilisateur, long idCategorie) {
+        String FIND_MES_VENTES_EN_COURS_PAR_CATEGORIE = """
+                                    SELECT *
+                                    FROM Articles
+                                    WHERE idUtilisateur = :idUtilisateur
+                                      AND etatVente = 'EN_COURS'
+                                      AND dateFinEnchere > GETDATE()
+                                      AND idCategorie = :idCategorie
+                                    """;
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("idUtilisateur", idUtilisateur);
+        params.addValue("idCategorie", idCategorie);
+        return namedParameterJdbcTemplate.query(
+                FIND_MES_VENTES_EN_COURS_PAR_CATEGORIE,
+                params,
+                new ArticleRowMapper(utilisateurDAO, categorieDAO));
+    }
+
+    @Override
+    public List<Article> findMesVentesEnCoursParCategorieEtMotCles(long idUtilisateur, long idCategorie, String nomArticle) {
+        String FIND_MES_VENTES_EN_COURS_PAR_CATEGORIE_ET_MOTS_CLES = """
+                                    SELECT *
+                                    FROM Articles
+                                    WHERE idUtilisateur = :idUtilisateur
+                                      AND etatVente = 'EN_COURS'
+                                      AND dateFinEnchere > GETDATE()
+                                      AND idCategorie = :idCategorie
+                                      AND nomArticle LIKE :nomArticle
+                                    """;
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("idUtilisateur", idUtilisateur);
+        params.addValue("idCategorie", idCategorie);
+        params.addValue("nomArticle", "%" + nomArticle + "%");
+        return namedParameterJdbcTemplate.query(
+                FIND_MES_VENTES_EN_COURS_PAR_CATEGORIE_ET_MOTS_CLES,
+                params,
+                new ArticleRowMapper(utilisateurDAO, categorieDAO));
+    }
+
+
     //Retourner les ventes non débutées d'un utilisateur
     @Override
     public List<Article> findVentesNonDebutees(long idUtilisateur) {
@@ -128,6 +238,65 @@ public class ArticleDAOImpl implements ArticleDAO{
         return namedParameterJdbcTemplate.query(FIND_VENTES_NON_DEBUTEES, paramSource, new ArticleRowMapper(utilisateurDAO, categorieDAO));
     }
 
+    @Override
+    public List<Article> findVentesNonDebuteesParMotCles(long idUtilisateur, String nomArticle) {
+        String FIND_VENTES_NON_DEBUTEES_PAR_MOTS_CLES = """
+                                                    SELECT *
+                                                    FROM Articles
+                                                    WHERE idUtilisateur = :idUtilisateur
+                                                      AND dateDebutEnchere > GETDATE()
+                                                      AND nomArticle LIKE :nomArticle
+                                                """;
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("idUtilisateur", idUtilisateur);
+        params.addValue("nomArticle", "%" + nomArticle + "%");
+        return namedParameterJdbcTemplate.query(
+                FIND_VENTES_NON_DEBUTEES_PAR_MOTS_CLES,
+                params,
+                new ArticleRowMapper(utilisateurDAO, categorieDAO));
+    }
+
+    @Override
+    public List<Article> findVentesNonDebuteesParCategorie(long idUtilisateur, long idCategorie) {
+        String FIND_VENTES_NON_DEBUTEES_PAR_CATEGORIE = """
+                                            SELECT *
+                                            FROM Articles
+                                            WHERE idUtilisateur = :idUtilisateur
+                                              AND dateDebutEnchere > GETDATE()
+                                              AND idCategorie = :idCategorie
+                                            """;
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("idUtilisateur", idUtilisateur);
+        params.addValue("idCategorie", idCategorie);
+        return namedParameterJdbcTemplate.query(
+                FIND_VENTES_NON_DEBUTEES_PAR_CATEGORIE,
+                params,
+                new ArticleRowMapper(utilisateurDAO, categorieDAO));
+    }
+
+    @Override
+    public List<Article> findVentesNonDebuteesParCategorieEtMotCles(long idUtilisateur, long idCategorie, String nomArticle) {
+        String FIND_VENTES_NON_DEBUTEES_PAR_CATEGORIE_ET_MOTS_CLES = """
+                                            SELECT *
+                                            FROM Articles
+                                            WHERE idUtilisateur = :idUtilisateur
+                                              AND dateDebutEnchere > GETDATE()
+                                              AND idCategorie = :idCategorie
+                                              AND nomArticle LIKE :nomArticle
+                                            """;
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("idUtilisateur", idUtilisateur);
+        params.addValue("idCategorie", idCategorie);
+        params.addValue("nomArticle", "%" + nomArticle + "%");
+        return namedParameterJdbcTemplate.query(
+                FIND_VENTES_NON_DEBUTEES_PAR_CATEGORIE_ET_MOTS_CLES,
+                params,
+                new ArticleRowMapper(utilisateurDAO, categorieDAO));
+    }
+
+
+
+
     //Retourner les ventes terminées d'un utilisateur
     @Override
     public List<Article> findVentesTerminees(long idUtilisateur) {
@@ -140,6 +309,62 @@ public class ArticleDAOImpl implements ArticleDAO{
         MapSqlParameterSource paramSource = new MapSqlParameterSource();
         paramSource.addValue("idUtilisateur", idUtilisateur);
         return namedParameterJdbcTemplate.query(FIND_VENTES_TERMINEES, paramSource, new ArticleRowMapper(utilisateurDAO, categorieDAO));
+    }
+
+    @Override
+    public List<Article> findVentesTermineesParMotCles(long idUtilisateur, String nomArticle) {
+        String FIND_VENTES_TERMINEES_PAR_MOTS_CLES = """
+                                                    SELECT *
+                                                    FROM Articles
+                                                    WHERE idUtilisateur = :idUtilisateur
+                                                      AND etatVente = 'TERMINEE'
+                                                      AND nomArticle LIKE :nomArticle
+                                                    """;
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("idUtilisateur", idUtilisateur);
+        params.addValue("nomArticle", "%" + nomArticle + "%");
+        return namedParameterJdbcTemplate.query(
+                FIND_VENTES_TERMINEES_PAR_MOTS_CLES,
+                params,
+                new ArticleRowMapper(utilisateurDAO, categorieDAO));
+    }
+
+    @Override
+    public List<Article> findVentesTermineesParCategorie(long idUtilisateur, long idCategorie) {
+        String FIND_VENTES_TERMINEES_PAR_CATEGORIE = """
+                                                    SELECT *
+                                                    FROM Articles
+                                                    WHERE idUtilisateur = :idUtilisateur
+                                                      AND etatVente = 'TERMINEE'
+                                                      AND idCategorie = :idCategorie
+                                                    """;
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("idUtilisateur", idUtilisateur);
+        params.addValue("idCategorie", idCategorie);
+        return namedParameterJdbcTemplate.query(
+                FIND_VENTES_TERMINEES_PAR_CATEGORIE,
+                params,
+                new ArticleRowMapper(utilisateurDAO, categorieDAO));
+    }
+
+    @Override
+    public List<Article> findVentesTermineesParCategorieEtMotCles(long idUtilisateur, long idCategorie, String nomArticle) {
+        String FIND_VENTES_TERMINEES_PAR_CATEGORIE_ET_MOTS_CLES = """
+                                                                SELECT *
+                                                                FROM Articles
+                                                                WHERE idUtilisateur = :idUtilisateur
+                                                                  AND etatVente = 'TERMINEE'
+                                                                  AND idCategorie = :idCategorie
+                                                                  AND nomArticle LIKE :nomArticle
+                                                                """;
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("idUtilisateur", idUtilisateur);
+        params.addValue("idCategorie", idCategorie);
+        params.addValue("nomArticle", "%" + nomArticle + "%");
+        return namedParameterJdbcTemplate.query(
+                FIND_VENTES_TERMINEES_PAR_CATEGORIE_ET_MOTS_CLES,
+                params,
+                new ArticleRowMapper(utilisateurDAO, categorieDAO));
     }
 
 

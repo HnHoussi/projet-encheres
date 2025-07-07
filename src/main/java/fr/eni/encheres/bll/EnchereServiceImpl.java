@@ -18,14 +18,8 @@ public class EnchereServiceImpl implements EnchereService {
 
     // Encherer sur un article
     @Override
-    public void faireEnchere(Enchere enchere,long idArticle) {
+    public void faireEnchere(Enchere enchere, long idArticle) {
         enchereDAO.create(enchere, idArticle);
-    }
-
-    // Consulter tous les enchéres
-    @Override
-    public List<Enchere> consulterEncheres() {
-        return enchereDAO.findAll();
     }
 
     // Supprimer un enchére
@@ -34,34 +28,44 @@ public class EnchereServiceImpl implements EnchereService {
         enchereDAO.delete(idArticle, idUtilisateur, dateEnchere);
     }
 
-    // Recherche par mot clé
     @Override
-    public List<Enchere> consulterEnchereparMotCles(String nomArticle) {
-        return enchereDAO.findByMotCles(nomArticle);
+    public List<Enchere> consulterMesEncheresEnCours(long idUtilisateur) {
+        return enchereDAO.findMesEncheresEnCours(idUtilisateur);
     }
 
-    // Recherche par catégorie
     @Override
-    public List<Enchere> consulterEnchereparCategorie(long idCategorie) {
-        return enchereDAO.findByCategorie(idCategorie);
+    public List<Enchere> consulterMesEncheresEnCoursParMotCles(long idUtilisateur, String motCles) {
+        return enchereDAO.findMesEncheresEnCoursParMotCles(idUtilisateur, motCles);
     }
 
-    // Recherche par mots clés et catégorie
     @Override
-    public List<Enchere> consulterEnchereparCategorieEtMotCles(long idCategorie, String nomArticle) {
-        return enchereDAO.findByCategorieEtMotCles(idCategorie, nomArticle);
-
+    public List<Enchere> consulterMesEncheresEnCoursParCategorie(long idUtilisateur, long idCategorie) {
+        return enchereDAO.findMesEncheresEnCoursParCategorie(idUtilisateur, idCategorie);
     }
 
-    // Rechercher les enchéres d'un utilisateur
     @Override
-    public List<Enchere> consulterMesEncheres(long idUtilisateur) {
-        return enchereDAO.findMesEncheres(idUtilisateur);
+    public List<Enchere> consulterMesEncheresEnCoursParCategorieEtMotCles(long idUtilisateur, long idCategorie, String motCles) {
+        return enchereDAO.findMesEncheresEnCoursParCategorieEtMotCles(idUtilisateur, idCategorie, motCles);
     }
 
-    //Rechercher les enchéres gagnées par un utilisateur
     @Override
     public List<Enchere> consulterMesEncheresRemportees(long idUtilisateur) {
         return enchereDAO.findMesEncheresRemportees(idUtilisateur);
     }
+
+    @Override
+    public List<Enchere> consulterMesEncheresRemporteesParMotCles(long idUtilisateur, String motCles) {
+        return enchereDAO.findMesEncheresRemporteesParMotCles(idUtilisateur, motCles);
+    }
+
+    @Override
+    public List<Enchere> consulterMesEncheresRemporteesParCategorie(long idUtilisateur, long idCategorie) {
+        return enchereDAO.findMesEncheresRemporteesParCategorie(idUtilisateur, idCategorie);
+    }
+
+    @Override
+    public List<Enchere> consulterMesEncheresRemporteesParCategorieEtMotCles(long idUtilisateur, long idCategorie, String motCles) {
+        return enchereDAO.findMesEncheresRemporteesParCategorieEtMotCles(idUtilisateur, idCategorie, motCles);
+    }
+
 }

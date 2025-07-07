@@ -87,20 +87,85 @@ public class EnchereDAOImpl implements EnchereDAO{
         );
     }
 
-    //Méthodes de filtre ACHATS
-
-    // Retourner les enchére faites par un utilisateur
+    // Retourner les enchères en cours faites par un utilisateur
     @Override
-    public List<Enchere> findMesEncheres(long idUtilisateur) {
-        String FIND_MES_ENCHERES = """
-                               SELECT *
-                               FROM Encheres
-                               WHERE idUtilisateur = :idUtilisateur
-                               """;
-        MapSqlParameterSource paramSource = new MapSqlParameterSource();
-        paramSource.addValue("idUtilisateur", idUtilisateur);
-        return namedParameterJdbcTemplate.query(FIND_MES_ENCHERES, paramSource, new EnchereRowMapper(utilisateurDAO, articleDAO));
+    public List<Enchere> findMesEncheresEnCours(long idUtilisateur) {
+        String sql = """
+        SELECT e.*
+        FROM Encheres e
+        JOIN Articles a ON e.idArticle = a.idArticle
+        WHERE e.idUtilisateur = :idUtilisateur
+          AND a.dateDebutEnchere <= GETDATE()
+          AND a.dateFinEnchere > GETDATE()
+    """;
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("idUtilisateur", idUtilisateur);
+        return namedParameterJdbcTemplate.query(sql, params, new EnchereRowMapper(utilisateurDAO, articleDAO));
     }
+
+    @Override
+    public List<Enchere> findMesEncheresEnCoursParMotCles(long idUtilisateur, String motCles) {
+        String FIND_MES_ENCHERES_EN_COURS_PAR_MOTS_CLES = """
+                            SELECT e.*
+                            FROM Encheres e
+                            JOIN Articles a ON e.idArticle = a.idArticle
+                            WHERE e.idUtilisateur = :idUtilisateur
+                              AND a.dateDebutEnchere <= GETDATE()
+                              AND a.dateFinEnchere > GETDATE()
+                              AND a.nomArticle LIKE :motCles
+                            """;
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("idUtilisateur", idUtilisateur);
+        params.addValue("motCles", "%" + motCles + "%");
+        return namedParameterJdbcTemplate.query(
+                FIND_MES_ENCHERES_EN_COURS_PAR_MOTS_CLES,
+                params,
+                new EnchereRowMapper(utilisateurDAO, articleDAO));
+    }
+
+    @Override
+    public List<Enchere> findMesEncheresEnCoursParCategorie(long idUtilisateur, long idCategorie) {
+        String FIND_MES_ENCHERES_EN_COURS_PAR_CATEGORIE = """
+                            SELECT e.*
+                            FROM Encheres e
+                            JOIN Articles a ON e.idArticle = a.idArticle
+                            WHERE e.idUtilisateur = :idUtilisateur
+                              AND a.dateDebutEnchere <= GETDATE()
+                              AND a.dateFinEnchere > GETDATE()
+                              AND a.idCategorie = :idCategorie
+                            """;
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("idUtilisateur", idUtilisateur);
+        params.addValue("idCategorie", idCategorie);
+        return namedParameterJdbcTemplate.query(
+                FIND_MES_ENCHERES_EN_COURS_PAR_CATEGORIE,
+                params,
+                new EnchereRowMapper(utilisateurDAO, articleDAO));
+    }
+
+    @Override
+    public List<Enchere> findMesEncheresEnCoursParCategorieEtMotCles(long idUtilisateur, long idCategorie, String motCles) {
+        String FIND_MES_ENCHERES_EN_COURS_PAR_CATEGORIE_ET_MOTS_CLES = """
+                        SELECT e.*
+                        FROM Encheres e
+                        JOIN Articles a ON e.idArticle = a.idArticle
+                        WHERE e.idUtilisateur = :idUtilisateur
+                          AND a.dateDebutEnchere <= GETDATE()
+                          AND a.dateFinEnchere > GETDATE()
+                          AND a.idCategorie = :idCategorie
+                          AND a.nomArticle LIKE :motCles
+                        """;
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("idUtilisateur", idUtilisateur);
+        params.addValue("idCategorie", idCategorie);
+        params.addValue("motCles", "%" + motCles + "%");
+        return namedParameterJdbcTemplate.query(
+                FIND_MES_ENCHERES_EN_COURS_PAR_CATEGORIE_ET_MOTS_CLES,
+                params,
+                new EnchereRowMapper(utilisateurDAO, articleDAO));
+    }
+
+
 
     //Retourner les enchére remportés par un utilisateur
     @Override
@@ -116,6 +181,68 @@ public class EnchereDAOImpl implements EnchereDAO{
         MapSqlParameterSource paramSource = new MapSqlParameterSource();
         paramSource.addValue("idUtilisateur", idUtilisateur);
         return namedParameterJdbcTemplate.query(FIND_MES_ENCHERES_REMPORTEES, paramSource, new EnchereRowMapper(utilisateurDAO, articleDAO));
+    }
+
+    @Override
+    public List<Enchere> findMesEncheresRemporteesParMotCles(long idUtilisateur, String motCles) {
+        String FIND_MES_ENCHERES_REMPORTEES_PAR_MOTS_CLES = """
+                        SELECT e.*
+                        FROM Encheres e
+                        JOIN Articles a ON e.idArticle = a.idArticle
+                        WHERE e.idUtilisateur = :idUtilisateur
+                          AND a.etatVente = 'TERMINEE'
+                          AND e.montantEnchere = a.prixVente
+                          AND a.nomArticle LIKE :motCles
+                        """;
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("idUtilisateur", idUtilisateur);
+        params.addValue("motCles", "%" + motCles + "%");
+        return namedParameterJdbcTemplate.query(
+                FIND_MES_ENCHERES_REMPORTEES_PAR_MOTS_CLES,
+                params,
+                new EnchereRowMapper(utilisateurDAO, articleDAO));
+    }
+
+    @Override
+    public List<Enchere> findMesEncheresRemporteesParCategorie(long idUtilisateur, long idCategorie) {
+        String FIND_MES_ENCHERES_REMPORTEES_PAR_CATEGORIE = """
+                            SELECT e.*
+                            FROM Encheres e
+                            JOIN Articles a ON e.idArticle = a.idArticle
+                            WHERE e.idUtilisateur = :idUtilisateur
+                              AND a.etatVente = 'TERMINEE'
+                              AND e.montantEnchere = a.prixVente
+                              AND a.idCategorie = :idCategorie
+                            """;
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("idUtilisateur", idUtilisateur);
+        params.addValue("idCategorie", idCategorie);
+        return namedParameterJdbcTemplate.query(
+                FIND_MES_ENCHERES_REMPORTEES_PAR_CATEGORIE,
+                params,
+                new EnchereRowMapper(utilisateurDAO, articleDAO));
+    }
+
+    @Override
+    public List<Enchere> findMesEncheresRemporteesParCategorieEtMotCles(long idUtilisateur, long idCategorie, String motCles) {
+        String FIND_MES_ENCHERES_REMPORTEES_PAR_CATEGORIE_ET_MOTS_CLES = """
+                            SELECT e.*
+                            FROM Encheres e
+                            JOIN Articles a ON e.idArticle = a.idArticle
+                            WHERE e.idUtilisateur = :idUtilisateur
+                              AND a.etatVente = 'TERMINEE'
+                              AND e.montantEnchere = a.prixVente
+                              AND a.idCategorie = :idCategorie
+                              AND a.nomArticle LIKE :motCles
+                            """;
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("idUtilisateur", idUtilisateur);
+        params.addValue("idCategorie", idCategorie);
+        params.addValue("motCles", "%" + motCles + "%");
+        return namedParameterJdbcTemplate.query(
+                FIND_MES_ENCHERES_REMPORTEES_PAR_CATEGORIE_ET_MOTS_CLES,
+                params,
+                new EnchereRowMapper(utilisateurDAO, articleDAO));
     }
 
 
@@ -138,7 +265,7 @@ public class EnchereDAOImpl implements EnchereDAO{
 
     // supprimer un enchére
     @Override
-    public void delete(long idArticle, long idUtilisateur, LocalDateTime dateEnchere) {
+    public void delete(long idEnchere, long idUtilisateur, LocalDateTime dateEnchere) {
         String DELETE = """
                         DELETE FROM Encheres 
                         WHERE idArticle = :idArticle
@@ -146,7 +273,7 @@ public class EnchereDAOImpl implements EnchereDAO{
                         AND dateEnchere = :dateEnchere
                         """;
         MapSqlParameterSource paramSource = new MapSqlParameterSource();
-        paramSource.addValue("idArticle", idArticle);
+        paramSource.addValue("idEnchere", idEnchere);
         paramSource.addValue("idUtilisateur", idUtilisateur);
         paramSource.addValue("dateEnchere", Timestamp.valueOf(dateEnchere));
         namedParameterJdbcTemplate.update(DELETE, paramSource);
