@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Nouvelle vente - ENI-Enchères</title>
+    <!-- Bootswatch Sketchy Theme -->
+    <link href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.3/dist/sketchy/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+</head>
+<body>
+<div class="container my-5">
+    <!-- Top Row: Logo left aligned -->
+    <div class="row mb-4">
+        <div class="col-12 text-start">
+            <h1>
+                <a href="/encheres" class="text-decoration-none text-dark">ENI-Enchères</a>
+            </h1>
+        </div>
+    </div>
+
+    <!-- Main Row: Image left, form right -->
+    <div class="row">
+        <!-- Left Column - Image -->
+        <div class="col-md-3 text-center mb-4 mb-md-0">
+            <div class="border rounded overflow-hidden mt-3" style="width: 200px; height: 150px; margin-left: auto; margin-right: auto;">
+                <img th:src="@{/images/clavier-mécanique.jpg}" alt="Image de l'article" id="articleImage" class="img-fluid h-100 w-100 object-fit-cover" />
+            </div>
+        </div>
+
+        <!-- Right Column - Form -->
+        <div class="col-md-6">
+            <h2 class="mb-4 text-center">Nouvelle vente</h2>
+            <form th:action="@{/nouvelle-vente}" th:object="${article}" method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
+                <!-- Article Name -->
+                <div class="mb-3 row align-items-center">
+                    <label for="nom" class="col-sm-4 col-form-label text-sm-end">Article :</label>
+                    <div class="col-sm-8">
+                        <input type="text" id="nom" class="form-control" th:field="*{nomArticle}" required />
+                        <div class="invalid-feedback">Veuillez saisir le nom de l'article.</div>
+                    </div>
+                </div>
+
+                <!-- Description -->
+                <div class="mb-3 row align-items-start">
+                    <label for="description" class="col-sm-4 col-form-label text-sm-end">Description :</label>
+                    <div class="col-sm-8">
+                        <textarea id="description" class="form-control" rows="4" th:field="*{description}" required></textarea>
+                        <div class="invalid-feedback">Veuillez saisir une description.</div>
+                    </div>
+                </div>
+
+                <!-- Category -->
+                <div class="mb-3 row align-items-center">
+                    <label for="categorie" class="col-sm-4 col-form-label text-sm-end">Catégorie :</label>
+                    <div class="col-sm-8">
+                        <select id="categorie" class="form-select" th:field="*{categorie}" required>
+                            <option value="">Sélectionner une catégorie</option>
+                            <option th:each="cat : ${categories}" th:value="${cat.idCategorie}" th:text="${cat.libelle}"></option>
+                        </select>
+                        <div class="invalid-feedback">Veuillez sélectionner une catégorie.</div>
+                    </div>
+                </div>
+
+                <!-- Photo Upload -->
+                <div class="mb-3 row align-items-center">
+                    <label for="imageFile" class="col-sm-4 col-form-label text-sm-end">Photo de l'article :</label>
+                    <div class="col-sm-8">
+                        <input type="file" id="imageFile" class="form-control" name="imageFile" accept="image/*" onchange="previewImage(event)" />
+                    </div>
+                </div>
+
+                <!-- Price -->
+                <div class="mb-3 row align-items-center">
+                    <label for="miseAPrix" class="col-sm-4 col-form-label text-sm-end">Mise à prix :</label>
+                    <div class="col-sm-8 position-relative">
+                        <input type="number" id="miseAPrix" class="form-control pe-5" th:field="*{miseAPrix}" min="0" step="1" required />
+                        <span class="position-absolute top-50 end-0 translate-middle-y pe-3 text-muted">€</span>
+                        <div class="invalid-feedback">Veuillez saisir une mise à prix valide.</div>
+                    </div>
+                </div>
+
+                <!-- Start Date -->
+                <div class="mb-3 row align-items-center">
+                    <label for="dateDebutEncheres" class="col-sm-4 col-form-label text-sm-end">Début de l'enchère :</label>
+                    <div class="col-sm-8 position-relative">
+                        <input type="date" id="dateDebutEncheres" class="form-control" th:field="*{dateDebutEnchere}" required />
+                        <div class="invalid-feedback">Veuillez sélectionner la date de début.</div>
+                    </div>
+                </div>
+
+                <!-- End Date -->
+                <div class="mb-3 row align-items-center">
+                    <label for="dateFinEncheres" class="col-sm-4 col-form-label text-sm-end">Fin de l'enchère :</label>
+                    <div class="col-sm-8 position-relative">
+                        <input type="date" id="dateFinEncheres" class="form-control" th:field="*{dateFinEnchere}" required />
+                        <div class="invalid-feedback">Veuillez sélectionner la date de fin.</div>
+                    </div>
+                </div>
+
+                <!-- Retrait Section -->
+                <fieldset class="border rounded p-3 mb-4">
+                    <legend class="float-none w-auto px-2">Retrait</legend>
+
+                    <div class="mb-3 row align-items-center">
+                        <label for="rue" class="col-sm-4 col-form-label text-sm-end">Rue :</label>
+                        <div class="col-sm-8">
+                            <input type="text" id="rue" class="form-control" th:field="*{retrait.rue}" th:value="${utilisateur.rue}" />
+                        </div>
+                    </div>
+
+                    <div class="mb-3 row align-items-center">
+                        <label for="codePostal" class="col-sm-4 col-form-label text-sm-end">Code postal :</label>
+                        <div class="col-sm-8">
+                            <input type="text" id="codePostal" class="form-control" th:field="*{retrait.codePostal}" th:value="${utilisateur.codePostal}" />
+                        </div>
+                    </div>
+
+                    <div class="mb-3 row align-items-center">
+                        <label for="ville" class="col-sm-4 col-form-label text-sm-end">Ville :</label>
+                        <div class="col-sm-8">
+                            <input type="text" id="ville" class="form-control" th:field="*{retrait.ville}" th:value="${utilisateur.ville}" />
+                        </div>
+                    </div>
+                </fieldset>
+
+                <!-- Buttons -->
+                <div class="d-flex justify-content-center gap-3">
+                    <button type="submit" class="btn btn-outline-dark px-4">Enregistrer</button>
+                    <a href="/" class="btn btn-outline-dark px-4">Annuler</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

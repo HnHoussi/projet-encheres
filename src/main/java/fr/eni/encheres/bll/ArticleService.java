@@ -12,6 +12,8 @@ public interface ArticleService {
             String filtrePrincipal,
             List<String> sousFiltres
     );
+
+    Article consulterArticleById(long idArticle);
     void vendreArticle(Article article);
     void annulerVente(long idArticle);
 

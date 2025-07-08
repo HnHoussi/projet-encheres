@@ -32,6 +32,11 @@ public class ArticleServiceImpl implements ArticleService {
         );
     }
 
+    @Override
+    public Article consulterArticleById(long idArticle) {
+        return articleDAO.findById(idArticle);
+    }
+
 
     // Creation d'article
     @Override

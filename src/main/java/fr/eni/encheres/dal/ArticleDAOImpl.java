@@ -19,9 +19,9 @@ import java.util.List;
 @Repository
 public class ArticleDAOImpl implements ArticleDAO {
 
-    private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
-    private UtilisateurDAO utilisateurDAO;
-    private CategorieDAO categorieDAO;
+    private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+    private final UtilisateurDAO utilisateurDAO;
+    private final CategorieDAO categorieDAO;
 
     @Autowired
     public ArticleDAOImpl(NamedParameterJdbcTemplate namedParameterJdbcTemplate,
@@ -44,7 +44,7 @@ public class ArticleDAOImpl implements ArticleDAO {
         MapSqlParameterSource params = new MapSqlParameterSource();
 
         if (motCle != null && !motCle.isBlank()) {
-            sql.append("AND LOWER(a.nomArticle) LIKE LOWER(CONCAT('%', :motCle, '%')) ");
+            sql.append("AND LOWER(a.nomArticle) LIKE LOWER('%' + :motCle + '%') ");
             params.addValue("motCle", motCle);
         }
 
@@ -54,14 +54,13 @@ public class ArticleDAOImpl implements ArticleDAO {
         }
 
         if (idUtilisateur == null) {
-            // No user connected -> show only open auctions
+            // Not connected: only open auctions
             sql.append("AND CAST(GETDATE() AS DATE) BETWEEN a.dateDebutEnchere AND a.dateFinEnchere ");
         } else {
             if ("achats".equalsIgnoreCase(filtrePrincipal)) {
-                sql.append("AND (");
-                List<String> conditions = new ArrayList<>();
+                if (sousFiltres != null && !sousFiltres.isEmpty()) {
+                    List<String> conditions = new ArrayList<>();
 
-                if (sousFiltres != null) {
                     if (sousFiltres.contains("ouvertes")) {
                         conditions.add("CAST(GETDATE() AS DATE) BETWEEN a.dateDebutEnchere AND a.dateFinEnchere");
                     }
@@ -71,16 +70,21 @@ public class ArticleDAOImpl implements ArticleDAO {
                     if (sousFiltres.contains("mesEncheresRemportees")) {
                         conditions.add("(a.idUtilisateur <> :idUtilisateur AND CAST(GETDATE() AS DATE) > a.dateFinEnchere)");
                     }
+
+                    if (!conditions.isEmpty()) {
+                        sql.append("AND (");
+                        sql.append(String.join(" OR ", conditions));
+                        sql.append(") ");
+                    }
+                    params.addValue("idUtilisateur", idUtilisateur);
+                } else {
+                    // No subfilters: by default, show open auctions
+                    sql.append("AND CAST(GETDATE() AS DATE) BETWEEN a.dateDebutEnchere AND a.dateFinEnchere ");
                 }
-
-                sql.append(String.join(" OR ", conditions));
-                sql.append(") ");
-                params.addValue("idUtilisateur", idUtilisateur);
             } else if ("ventes".equalsIgnoreCase(filtrePrincipal)) {
-                sql.append("AND a.idUtilisateur = :idUtilisateur AND (");
-                List<String> conditions = new ArrayList<>();
+                if (sousFiltres != null && !sousFiltres.isEmpty()) {
+                    List<String> conditions = new ArrayList<>();
 
-                if (sousFiltres != null) {
                     if (sousFiltres.contains("mesVentesEnCours")) {
                         conditions.add("CAST(GETDATE() AS DATE) BETWEEN a.dateDebutEnchere AND a.dateFinEnchere");
                     }
@@ -90,16 +94,26 @@ public class ArticleDAOImpl implements ArticleDAO {
                     if (sousFiltres.contains("ventesTerminees")) {
                         conditions.add("CAST(GETDATE() AS DATE) > a.dateFinEnchere");
                     }
-                }
 
-                sql.append(String.join(" OR ", conditions));
-                sql.append(") ");
-                params.addValue("idUtilisateur", idUtilisateur);
+                    if (!conditions.isEmpty()) {
+                        sql.append("AND a.idUtilisateur = :idUtilisateur AND (");
+                        sql.append(String.join(" OR ", conditions));
+                        sql.append(") ");
+                    } else {
+                        sql.append("AND a.idUtilisateur = :idUtilisateur ");
+                    }
+                    params.addValue("idUtilisateur", idUtilisateur);
+                } else {
+                    // No subfilters: show all user's articles
+                    sql.append("AND a.idUtilisateur = :idUtilisateur ");
+                    params.addValue("idUtilisateur", idUtilisateur);
+                }
             }
         }
 
         return namedParameterJdbcTemplate.query(sql.toString(), params, new ArticleRowMapper(utilisateurDAO, categorieDAO));
     }
+
 
     @Override
     public List<Article> findAll() {

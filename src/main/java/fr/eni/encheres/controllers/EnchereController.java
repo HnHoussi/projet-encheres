@@ -3,10 +3,8 @@ package fr.eni.encheres.controllers;
 import fr.eni.encheres.bll.ArticleService;
 import fr.eni.encheres.bll.CategorieService;
 import fr.eni.encheres.bll.EnchereService;
-import fr.eni.encheres.bo.Article;
-import fr.eni.encheres.bo.Categorie;
-import fr.eni.encheres.bo.Enchere;
-import fr.eni.encheres.bo.Utilisateur;
+import fr.eni.encheres.bll.UtilisateurService;
+import fr.eni.encheres.bo.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -20,12 +18,14 @@ public class EnchereController {
 
     private ArticleService articleService;
     private CategorieService  categorieService;
+    UtilisateurService utilisateurService;
     // Simulated connected user ID
     private static final Long CONNECTED_USER_ID = 1L;
 
-    public EnchereController(ArticleService articleService, CategorieService categorieService) {
+    public EnchereController(ArticleService articleService, CategorieService categorieService, UtilisateurService utilisateurService) {
         this.articleService = articleService;
         this.categorieService = categorieService;
+        this.utilisateurService = utilisateurService;
     }
 
     // Charger la liste des catégories
@@ -68,6 +68,56 @@ public class EnchereController {
 
         return "index";
     }
+
+    @GetMapping("/utilisateur")
+    public String afficherProfilVendeur(@RequestParam("idUtilisateur") Long idUtilisateur, Model model) {
+        Utilisateur vendeur = utilisateurService.consulterUtilisateur(idUtilisateur);
+        model.addAttribute("vendeur", vendeur);
+        return "view-vendeur-details"; // The Thymeleaf view to show vendeur details
+    }
+
+    @GetMapping("/article")
+    public String afficherDetailsArticle(@RequestParam("idArticle") Long idArticle, Model model) {
+        // Fetch the article from the service
+        Article article = articleService.consulterArticleById(idArticle);
+
+        if (article == null) {
+            // handle the case where article is not found
+            return "redirect:/encheres";
+        }
+
+        // Add the article to the model
+        model.addAttribute("article", article);
+
+        return "view-detail-article";
+    }
+
+
+
+    @GetMapping("/vendre-article")
+    public String showNouvelleVenteForm(Model model,
+                                        @ModelAttribute("categoriesEnSession") List<Categorie> categoriesEnSession) {
+        Article article = new Article();
+
+        // Simulated connected user
+        Utilisateur utilisateurConnecte = utilisateurService.consulterUtilisateur(CONNECTED_USER_ID);
+
+        // Create default retrait object with user's address
+        Retrait retrait = new Retrait();
+        retrait.setRue(utilisateurConnecte.getRue());
+        retrait.setCodePostal(utilisateurConnecte.getCodePostal());
+        retrait.setVille(utilisateurConnecte.getVille());
+
+        article.setRetrait(retrait);
+
+        model.addAttribute("article", article);
+        model.addAttribute("categories", categoriesEnSession);
+        model.addAttribute("utilisateur", utilisateurConnecte);
+
+        return "view-nouvelle-vente";
+    }
+
+
 
 
 }
