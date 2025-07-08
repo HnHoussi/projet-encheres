@@ -3,8 +3,6 @@ package fr.eni.encheres.controllers;
 import fr.eni.encheres.bll.CategorieService;
 import fr.eni.encheres.bll.EnchereService;
 import fr.eni.encheres.bll.UtilisateurService;
-import fr.eni.encheres.bo.Categorie;
-import fr.eni.encheres.bo.Enchere;
 import fr.eni.encheres.bo.Utilisateur;
 import org.springframework.stereotype.Controller;
 
@@ -14,18 +12,16 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.util.List;
-
-@Controller
-@RequestMapping("/utilisateur")
-public class UtilisateurController {
+//@Controller
+//@RequestMapping("/utilisateur")
+public class UtilisateurControllers {
 
     private UtilisateurService utilisateurService;
     private EnchereService enchereService;
     private CategorieService categorieService;
 
 
-    public UtilisateurController(UtilisateurService utilisateurService, EnchereService enchereService, CategorieService categorieService) {
+    public UtilisateurControllers(UtilisateurService utilisateurService, EnchereService enchereService, CategorieService categorieService) {
         this.utilisateurService = utilisateurService;
         this.enchereService = enchereService;
         this.categorieService = categorieService;

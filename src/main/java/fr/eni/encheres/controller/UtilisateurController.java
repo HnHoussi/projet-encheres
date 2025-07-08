@@ -1,8 +1,10 @@
 package fr.eni.encheres.controller;
 
+import fr.eni.encheres.bll.CategorieService;
+import fr.eni.encheres.bll.EnchereService;
 import fr.eni.encheres.bll.UtilisateurService;
+import fr.eni.encheres.bll.UtilisateurServiceImpl;
 import fr.eni.encheres.bo.Utilisateur;
-import fr.eni.encheres.session.*; // adapte le package ici
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -12,13 +14,19 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/utilisateur")
-@SessionAttributes("membreSession")
+@SessionAttributes("utilisateurSession")
 public class UtilisateurController {
 
     private final UtilisateurService utilisateurService;
+    private final EnchereService enchereService;
+    private final CategorieService categorieService;
+    private final UtilisateurServiceImpl utilisateurServiceImpl;
 
-    public UtilisateurController(UtilisateurService utilisateurService) {
+    public UtilisateurController(UtilisateurService utilisateurService, EnchereService enchereService, CategorieService categorieService, UtilisateurServiceImpl utilisateurServiceImpl) {
         this.utilisateurService = utilisateurService;
+        this.enchereService = enchereService;
+        this.categorieService = categorieService;
+        this.utilisateurServiceImpl = utilisateurServiceImpl;
     }
 
     @GetMapping("/liste")
@@ -43,21 +51,26 @@ public class UtilisateurController {
     @PostMapping("/inscription")
     public String inscrireUtilisateur(@ModelAttribute Utilisateur utilisateur, Model model) {
         utilisateurService.creerCompte(utilisateur);
-        MembreSession membre = new MembreSession(utilisateur);
-        model.addAttribute("membreSession", membre);
-        return "redirect:/accueil";
+        model.addAttribute("utilisateurSession", utilisateur);
+        return "redirect:utilisateur/connexion";
     }
 
     @GetMapping("/modifier")
-    public String formulaireModification(Model model, @SessionAttribute("membreSession") MembreSession membre) {
-        model.addAttribute("utilisateur", membre.getUtilisateur());
-        return "modifier";
+    public String formulaireModification(Model model, @SessionAttribute("utilisateurSession") Utilisateur utilisateur) {
+        model.addAttribute("utilisateur", utilisateur);
+        return "redirect:modifier";
+    }
+
+    @GetMapping("/mon-profil")
+    public String afficherMonProfil(Model model, @SessionAttribute("utilisateurSession") Utilisateur utilisateur) {
+        model.addAttribute("utilisateur", utilisateur);
+        return "mon-profil";
     }
 
     @PostMapping("/modifier")
     public String modifierProfil(@ModelAttribute Utilisateur utilisateur, Model model) {
         utilisateurService.modifierProfil(utilisateur);
-        model.addAttribute("membreSession", new MembreSession(utilisateur));
+        model.addAttribute("utilisateurSession", utilisateur);
         return "redirect:/monCompte";
     }
 
@@ -76,16 +89,17 @@ public class UtilisateurController {
     @PostMapping("/login")
     public String connecterUtilisateur(
             @RequestParam String email,
+            @RequestParam String pseudo,
             @RequestParam String motDePasse,
             Model model) {
 
-        Utilisateur utilisateur = utilisateurService.connexion(email, motDePasse); // à implémenter si ca marche pas
+        Utilisateur utilisateur = utilisateurServiceImpl.connexion(email, motDePasse, pseudo);
 
         if (utilisateur != null) {
-            model.addAttribute("membreSession", new MembreSession(utilisateur));
+            model.addAttribute("utilisateurSession", utilisateur);
             return "redirect:/accueil";
         } else {
-            model.addAttribute("error", "Email ou mot de passe incorrect.");
+            model.addAttribute("error", "Email, pseudo ou mot de passe incorrect alors ciao.");
             return "seConnecter";
         }
     }

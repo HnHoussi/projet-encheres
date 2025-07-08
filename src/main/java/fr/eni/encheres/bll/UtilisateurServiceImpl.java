@@ -55,4 +55,11 @@ public class UtilisateurServiceImpl implements UtilisateurService {
     public List<Utilisateur> consulterListeUtilisateurs() {
         return utilisateurDAO.findAll();
     }
+
+    public Utilisateur connexion(String email, String motDePasse, String pseudo) {
+
+        return null;
+    }
+
+
 }
