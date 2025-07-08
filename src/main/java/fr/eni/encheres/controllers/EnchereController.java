@@ -5,12 +5,15 @@ import fr.eni.encheres.bll.CategorieService;
 import fr.eni.encheres.bo.Article;
 import fr.eni.encheres.bo.Categorie;
 import fr.eni.encheres.bo.Retrait;
+import fr.eni.encheres.bo.Utilisateur;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 @Controller
 @SessionAttributes({ "categoriesEnSession" })
@@ -76,7 +79,8 @@ public class EnchereController {
                                 @ModelAttribute("categoriesEnSession") List<Categorie> categoriesEnSession) {
 
         //recuperer l'utilisateur qui crée la vente par son id
-        //Utilisateur utilisateurConnecte =
+        Utilisateur utilisateurConnecte = new Utilisateur(); //valeur pour test : à revoir
+        utilisateurConnecte.setIdUtilisateur(1);
 
         //initialisation d'une nouvelle vente = nouvel article
         Article nouvelleVente = new Article();
@@ -84,9 +88,9 @@ public class EnchereController {
 
         //initialisation d'un retrait avec adresse utilisateur par défaut
         Retrait lieuRetrait = new Retrait();
-        lieuRetrait.setRue(UtilisateurConnecte.getRue());
-        lieuRetrait.setCodePostal(UtilisateurConnecte.getCodePostal());
-        lieuRetrait.setVille(UtilisateurConnecte.getVille());
+        lieuRetrait.setRue(utilisateurConnecte.getRue());
+        lieuRetrait.setCodePostal(utilisateurConnecte.getCodePostal());
+        lieuRetrait.setVille(utilisateurConnecte.getVille());
 
         model.addAttribute("retrait", lieuRetrait);
         model.addAttribute("utilisateurConnecte", utilisateurConnecte);
@@ -103,6 +107,9 @@ public class EnchereController {
                                 @RequestParam("idCategorie") Long idCategorie,
                                 Model model
     ) {
+    	//recuperer l'utilisateur qui crée la vente par son id
+        Utilisateur utilisateurConnecte = new Utilisateur(); //valeur pour test : à revoir
+        utilisateurConnecte.setIdUtilisateur(1);//valeur pour test : à revoir
 
         if(bindingResult.hasErrors()) {
             model.addAttribute("article", article);
@@ -115,7 +122,7 @@ public class EnchereController {
 
         this.articleService.vendreArticle(article);//enregistrement de l'article
 
-        lieuRetrait.setArticle(article.getArticle());
+        //lieuRetrait.setArticle(article.getArticle());
 
         return "page10"; //envoie vers la page nouvelle vente avec bouton annuler la vente
     }
