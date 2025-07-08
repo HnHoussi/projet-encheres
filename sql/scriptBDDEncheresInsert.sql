@@ -21,7 +21,10 @@ VALUES
 ('Ordinateur portable', 'PC gamer avec RTX 3070', '2025-07-01 10:00:00', '2025-07-10 10:00:00', 500, 750, 'EN_COURS', 1, 1),
 ('Roman fantasy', 'Roman d''heroic fantasy en excellent état', '2025-07-02 12:00:00', '2025-07-09 12:00:00', 10, 25, 'EN_COURS', 2, 2),
 ('Canapé 3 places', 'Canapé en tissu gris, très confortable', '2025-07-03 09:00:00', '2025-07-12 09:00:00', 100, 150, 'EN_COURS', 1, 3),
-('Jeu vidéo PS5', 'Jeu neuf sous blister', '2025-07-04 14:00:00', '2025-07-08 14:00:00', 30, 45, 'EN_COURS', 3, 4);
+('Jeu vidéo PS5', 'Jeu neuf sous blister', '2025-07-04 14:00:00', '2025-07-10 14:00:00', 30, 45, 'EN_COURS', 3, 4),
+('Fauteuil vintage', 'A vendre plus tard', '2025-07-20 10:00:00', '2025-07-25 10:00:00', 80, NULL, 'NON_DEBUTE', 1, 3), -- id=5
+('Clavier mécanique', 'En parfait état', '2025-06-20 10:00:00', '2025-06-25 10:00:00', 40, 55, 'TERMINE', 1, 1), -- id=6
+('BD collection', 'Rare et recherchée', '2025-06-18 10:00:00', '2025-06-22 10:00:00', 20, 35, 'TERMINE', 2, 2); -- id=7
 
 ---------------------------------------------------
 -- Insert into Retraits (use article IDs starting from 1)
@@ -41,4 +44,7 @@ VALUES
 (2, 3, '2025-07-01 13:00:00', 650),
 (1, 2, '2025-07-02 13:00:00', 15),
 (3, 2, '2025-07-02 14:00:00', 20),
-(1, 4, '2025-07-02 15:00:00', 25);
+(1, 4, '2025-07-02 15:00:00', 25),
+(1, 6, '2025-06-25 09:00:00', 55),
+(3, 6, '2025-06-24 15:00:00', 50),
+(2, 7, '2025-06-21 15:00:00', 30);
