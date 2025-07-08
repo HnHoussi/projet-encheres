@@ -22,6 +22,8 @@ public class EnchereController {
 
     private ArticleService articleService;
     private CategorieService  categorieService;
+    
+   // private long idUtilisateur = 1L; //valeur pour test a la place de utilisateurConnecte
 
     public EnchereController(ArticleService articleService, CategorieService categorieService) {
         this.articleService = articleService;
@@ -81,19 +83,24 @@ public class EnchereController {
         //recuperer l'utilisateur qui crée la vente par son id
         Utilisateur utilisateurConnecte = new Utilisateur(); //valeur pour test : à revoir
         utilisateurConnecte.setIdUtilisateur(1);
-
-        //initialisation d'une nouvelle vente = nouvel article
-        Article nouvelleVente = new Article();
-        model.addAttribute("article", nouvelleVente);
+        utilisateurConnecte.setRue("1 rue de Paris");
+        utilisateurConnecte.setCodePostal("44000");
+        utilisateurConnecte.setVille("NANTES");
+       
+        //initialisation d'une nouvelle vente = nouvel article et ajout dans le model
+        //Article nouvelleVente = new Article();
+        //nouvelleVente.setUtilisateur(utilisateurConnecte);
+        model.addAttribute("article", new Article());
 
         //initialisation d'un retrait avec adresse utilisateur par défaut
-        Retrait lieuRetrait = new Retrait();
-        lieuRetrait.setRue(utilisateurConnecte.getRue());
-        lieuRetrait.setCodePostal(utilisateurConnecte.getCodePostal());
-        lieuRetrait.setVille(utilisateurConnecte.getVille());
-
-        model.addAttribute("retrait", lieuRetrait);
-        model.addAttribute("utilisateurConnecte", utilisateurConnecte);
+        Retrait retrait = new Retrait();
+        retrait.setRue(utilisateurConnecte.getRue());
+        retrait.setCodePostal(utilisateurConnecte.getCodePostal());
+        retrait.setVille(utilisateurConnecte.getVille());
+        
+        //ajout dans le model
+        model.addAttribute("retrait", retrait);
+        //model.addAttribute("utilisateurConnecte", utilisateurConnecte);
 
         return "page9";
     }
@@ -102,29 +109,17 @@ public class EnchereController {
     //ETAPE 3 : lecture des données du formulaire avec @ModelAttribute
     //creation d'une nouvelle vente - nouvel article
     @PostMapping("/vendreArticle")
-    public String vendreArticle(@Valid @ModelAttribute("article") Article article, BindingResult bindingResult,
-                                @ModelAttribute("retrait") Retrait lieuRetrait,
-                                @RequestParam("idCategorie") Long idCategorie,
-                                Model model
-    ) {
-    	//recuperer l'utilisateur qui crée la vente par son id
-        Utilisateur utilisateurConnecte = new Utilisateur(); //valeur pour test : à revoir
-        utilisateurConnecte.setIdUtilisateur(1);//valeur pour test : à revoir
-
-        if(bindingResult.hasErrors()) {
-            model.addAttribute("article", article);
-            model.addAttribute("retrait", lieuRetrait);
-            model.addAttribute("idCategorie", idCategorie);
-            model.addAttribute("utilisateurConnecte", utilisateurConnecte);
-
-            return "page9";//reste sur la meme page si erreur
-        }
-
+    public String vendreArticle(@ModelAttribute("article") Article article,
+                                @ModelAttribute("retrait") Retrait retrait)
+                                //@RequestParam("idCategorie") Long idCategorie,
+    {
+    	 
+    	
         this.articleService.vendreArticle(article);//enregistrement de l'article
+        article.setEtatVente("CREEE");
+        //retrait.setArticle(article.getArticle());
 
-        //lieuRetrait.setArticle(article.getArticle());
-
-        return "page10"; //envoie vers la page nouvelle vente avec bouton annuler la vente
+        return "redirect:/encheres"; //envoie vers la page d'accueil
     }
 
 }

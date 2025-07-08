@@ -8,7 +8,7 @@
 
 <body>
 
-<form th:action="@{/vendreArticle}" method="post" th:object="${article}" enctype="multipart/form-data">
+<form th:action="@{/encheres/vendreArticle}" method="post" th:object="${article}" enctype="multipart/form-data">
 
   <h1>Créer une nouvelle vente</h1>
 
@@ -39,9 +39,11 @@
     </li>
     <li>
       <!-- Champ image (optionnel) -->
+      <!-- 
       <label for="image">Image de l'article :</label>
-      <input type="file" id="image" name="image" accept="image/*">
-    </li>
+      <input type="file" id="image" name="image" accept="image/*">  
+      -->
+    </li> 
     <li>
       <!-- Sélection de catégorie -->
       <label for="categorie">Catégorie :</label>
@@ -54,21 +56,22 @@
           Catégorie
         </option>
       </select>
-      <!-- <div th:if="${#fields.hasErrors('categorieId')}" class="error">
-        <span th:errors="*{categorieId}"></span>
-      </div> -->
+      <!-- <div th:if="${#fields.hasErrors('idCategorie')}" class="error">  
+        <span th:errors="*{idCategorie}"></span>
+      </div>
+      -->
 
     </li>
     <li>
       <!--  date début enchere -->
       <label for="dateDebutEncheres">Début de l'enchère</label>
-      <input type="datetime-local" id="dateDebut" th:field="*{dateDebutEncheres}" required>
+      <input type="datetime-local" id="dateDebut" th:field="*{dateDebutEnchere}" required>
     </li>
     <li>
       <!-- Date de fin d'enchère -->
       <label for="dateFinEncheres">Fin de l'enchère :</label>
-      <input type="datetime-local" id="dateFin" th:field="*{dateFinEncheres}" required>
-      <span th:errors="*{dateFinEncheres}"></span>
+      <input type="datetime-local" id="dateFin" th:field="*{dateFinEnchere}" required>
+      <span th:errors="*{dateFinEnchere}"></span>
     </li>
   </ul>
 
