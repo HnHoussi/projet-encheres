@@ -48,7 +48,14 @@ INSERT INTO [UTILISATEURS] (pseudo, nom, prenom, email, telephone, rue, codePost
 INSERT INTO [UTILISATEURS] (pseudo, nom, prenom, email, telephone, rue, codePostal, ville, motDePasse, credit, administrateur, compteActif) VALUES ('sgobin@campus-eni.fr','gobin','stephane','sgobin@campus-eni.fr',0777777777,'rue de la rue',44000,'Nantes','{bcrypt}$2a$10$B5U29ajHsIKd8aY3c/JNn.xTJpOCAeoXvT9XvfzbbHGP4iIFV9Lkm',200,1,1);/*Mot de Passe = stephane*/
 
 --Insère des enregistrements dans la table ROLES
-INSERT INTO [ROLES] (idUtilisateur, role) VALUES (6,'UTILISATEUR');
-INSERT INTO [ROLES] (idUtilisateur, role) VALUES (7,'UTILISATEUR');
-INSERT INTO [ROLES] (idUtilisateur, role) VALUES (6,'ADMIN');
-INSERT INTO [ROLES] (idUtilisateur, role) VALUES (7,'ADMIN');
+INSERT INTO [ROLES] (idUtilisateur, role) VALUES (6,'ROLE_UTILISATEUR');
+INSERT INTO [ROLES] (idUtilisateur, role) VALUES (7,'ROLE_UTILISATEUR');
+INSERT INTO [ROLES] (idUtilisateur, role) VALUES (6,'ROLE_ADMIN');
+INSERT INTO [ROLES] (idUtilisateur, role) VALUES (7,'ROLE_ADMIN');
+
+INSERT INTO [ROLES] (idUtilisateur, role) VALUES (1,'ROLE_UTILISATEUR');
+INSERT INTO [ROLES] (idUtilisateur, role) VALUES (2,'ROLE_UTILISATEUR');
+
+SELECT * FROM ROLES r
+                  JOIN UTILISATEURS u ON u.idutilisateur = r.idutilisateur
+WHERE u.pseudo = 'abaille@campus-eni.fr';

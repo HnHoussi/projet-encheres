@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Erreur - ENI-Enchères</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.3/dist/sketchy/bootstrap.min.css">
+</head>
+<body>
+<div class="container mt-5 text-center">
+  <h1 class="display-4 text-danger">Oups ! 😵</h1>
+  <p class="lead">Une erreur s’est produite lors de votre navigation.</p>
+
+  <!-- Message affiché dynamiquement en fonction du code d'erreur -->
+  <p th:text="${status} + ' - ' + ${error}" class="text-muted"></p>
+
+  <a href="/" class="btn btn-primary mt-3">Retour à l'accueil</a>
+</div>
+</body>
+</html>

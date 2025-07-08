@@ -17,14 +17,18 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarColor04">
-                <div th:if="${!true}" class="navbar-nav ms-auto">
+                <div th:if="${utilisateurSession==null}" class="navbar-nav ms-auto">
                     <a th:href="@{/utilisateur/connexion}" class="btn btn-outline-dark">S'inscrire - Se connecter</a>
                 </div>
-                <ul th:if="${true}" class="navbar-nav ms-auto">
+                <ul th:if="${utilisateurSession != null}" class="navbar-nav ms-auto">
+                    <li class="nav-item"> <a th:text="${utilisateurSession.pseudo}"class="nav-link"></a></li>
                     <li class="nav-item"><a th:href="@{/encheres}" class="nav-link">Enchères</a></li>
                     <li class="nav-item"><a th:href="@{/vendre-article}" class="nav-link">Vendre un article</a></li>
                     <li class="nav-item"><a th:href="@{/mon-profil}" class="nav-link">Mon profil</a></li>
-                    <li class="nav-item"><a th:href="@{/deconnexion}" class="nav-link">Déconnexion</a></li>
+                    <form th:action="@{/deconnexion}" method="post" th:object="${#httpServletRequest}">
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                        <button type="submit" class="btn btn-link nav-link" style="padding: 0; border: none;">Déconnexion</button>
+                    </form>
                 </ul>
             </div>
         </div>
@@ -60,7 +64,7 @@
                 </div>
             </div>
 
-            <div class="row">
+            <div class="row" th:if="${utilisateurSession}">
                 <div class="col-md-6">
                     <div class="form-check mb-2">
                         <input class="form-check-input" type="radio" name="typeRecherche" id="achats" value="achats" checked>
