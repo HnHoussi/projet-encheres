@@ -2,23 +2,31 @@
 <html lang="fr" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Nouvelle vente - ENI-Enchères</title>
-  <link rel="stylesheet" th:href="@{/css/style.css}">
+  <link rel="stylesheet" th:href="@{/css/view-accueil-encheres.css}">
 </head>
 
 <body>
+<header>
+	<nav>
+		<a href="@{/encheres}" class="text-decoration-none text-dark">ENI-Enchères</a>
+	</nav>
+</header>
 
-<form th:action="@{/encheres/vendreArticle}" method="post" th:object="${article}" enctype="multipart/form-data">
+<form th:action="@{/vendreArticle}" method="post" th:object="${article}">
 
-  <h1>Créer une nouvelle vente</h1>
+  <h1>Nouvelle vente</h1>
 
-  <!--  recuperation id de l'article créé -->
+  <!--  recuperation des données avec des champs cachés -->
   <input type="hidden" id="idArticle" th:field="*{idArticle}">
-
+  <input type="hidden" th:field="*{utilisateur.idUtilisateur}">
+  <input type="hidden" th:field="*{etatVente}">
+  
   <ul>
     <li>
       <!-- Champ nom de l'article -->
-      <label for="article">Nom de l'article :</label>
+      <label for="article">Article :</label>
       <input type="text" id="article" th:field="*{nomArticle}" required>
 
       <span th:errors="*{nomArticle}"></span>
@@ -56,20 +64,22 @@
           Catégorie
         </option>
       </select>
-      <!-- <div th:if="${#fields.hasErrors('idCategorie')}" class="error">  
-        <span th:errors="*{idCategorie}"></span>
+      <!-- <div th:if="${#fields.hasErrors('categorie')}" class="error">  
+        <span th:errors="*{categorie}"></span>
       </div>
       -->
 
     </li>
     <li>
       <!--  date début enchere -->
-      <label for="dateDebutEncheres">Début de l'enchère</label>
-      <input type="datetime-local" id="dateDebut" th:field="*{dateDebutEnchere}" required>
+      <label for="dateDebutEnchere">Début de l'enchère</label>
+      <input type="datetime-local" id="dateDebut"  min="2025-07-09" th:field="*{dateDebutEnchere}" required>
+    
+   		<span th:errors="*{dateDebutEnchere}"></span>
     </li>
     <li>
       <!-- Date de fin d'enchère -->
-      <label for="dateFinEncheres">Fin de l'enchère :</label>
+      <label for="dateFinEnchere">Fin de l'enchère :</label>
       <input type="datetime-local" id="dateFin" th:field="*{dateFinEnchere}" required>
       <span th:errors="*{dateFinEnchere}"></span>
     </li>
@@ -101,17 +111,15 @@
   <!-- Boutons d'action -->
   <div class="buttons">
     <button type="submit">Enregistrer</button>
-    <button type="button" class="cancel" th:onclick="'location.href=\'' + @{/encheres} + '\''">Annuler</button>
+   <button type="button" class="cancel" th:onclick="'location.href=\'' + @{/encheres} + '\''">Annuler</button> 
   </div>
+	
 </form>
-
-
-
-
-
+ 
+ <!--  <a th:href="@{/}" class="btn btn-outline-dark px-4">Annuler</a> -->
 
 <!-- Navigation -->
-<nav class="navigation">
+<!-- <nav class="navigation">
   <a th:href="@{/encheres}">← Retour aux enchères</a>
 </nav>
 
@@ -126,7 +134,7 @@
       e.preventDefault();
     }
   });
-</script>
+</script> -->
 </body>
 </html>
 

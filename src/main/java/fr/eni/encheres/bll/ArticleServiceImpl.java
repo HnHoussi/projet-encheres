@@ -15,6 +15,7 @@ public class ArticleServiceImpl implements ArticleService {
         this.articleDAO = articleDAO;
     }
 
+    //faire transaction pour valider nouvel article (nouvelle vente)
     @Override
     public void vendreArticle(Article article) {
         articleDAO.create(article);
@@ -47,5 +48,20 @@ public class ArticleServiceImpl implements ArticleService {
         return articleDAO.findByCategorieEtMotCles(idCategorie, nomArticle);
 
     }
-
+    
+    //gerer etat vente creation nouvelle vente
+    public String gererEtatVente(Article article) {
+    	System.out.println("gererEtatVente");
+    	if(article.getDateDebutEnchere().compareTo(article.getDateFinEnchere()) > 0) {
+    		article.setEtatVente("Non débutée");
+    	} else
+    	if(article.getDateDebutEnchere().compareTo(article.getDateFinEnchere()) == 0) {
+    		article.setEtatVente("En cours");
+    	} else { 
+    		System.out.println("erreur : date de fin antérieur à date de début");
+    	}
+    	
+    	return article.getEtatVente();
+    }
+    	
 }

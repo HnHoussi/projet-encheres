@@ -150,7 +150,9 @@ public class ArticleDAOImpl implements ArticleDAO{
                         INSERT INTO Articles(nomArticle, description, dateDebutEnchere, dateFinEnchere, miseAPrix, prixVente, etatVente, idUtilisateur, idCategorie)
                         VALUES (:nomArticle, :description, :dateDebutEnchere, :dateFinEnchere, :miseAPrix, :prixVente, :etatVente, :idUtilisateur, :idCategorie)
                         """;
-
+        
+        System.out.println("appel de la method create de articleDAO");
+        
         MapSqlParameterSource  parameterSource = new MapSqlParameterSource();
         parameterSource.addValue("nomArticle", article.getNomArticle());
         parameterSource.addValue("description", article.getDescription());
