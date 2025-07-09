@@ -16,65 +16,57 @@ import javax.sql.DataSource;
 @EnableWebSecurity
 public class SecurityConfig {
 
-	@Bean
-	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-		http
-				.authorizeHttpRequests(auth -> auth
-						.requestMatchers("/encheres", "/encheres/detail", "/encheres/creer").hasAnyRole("UTILISATEUR", "ADMIN")
-						.requestMatchers("/utilisateur/creer").hasRole("ADMIN")
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/encheres", "/encheres/detail", "/encheres/creer").hasAnyRole("UTILISATEUR", "ADMIN")
+                        .requestMatchers("/utilisateur/creer").hasRole("ADMIN")
+                        .requestMatchers("/", "/css/**", "/images/**", "/js/**", "/favicon.ico").permitAll()
+                        .requestMatchers("/utilisateur/login", "/utilisateur/after-login", "/utilisateur/inscription",
+                                "/utilisateur/profil-creer", "/error").permitAll()
+                        .anyRequest().denyAll()
+                )
+                .formLogin(form -> form
+                        .loginPage("/utilisateur/login")
+                        .loginProcessingUrl("/login")
+                        .failureUrl("/utilisateur/login?error")
+                        .defaultSuccessUrl("/utilisateur/after-login", true)
+                        .permitAll()
+                )
+                .logout(logout -> logout
+                        .logoutUrl("/deconnexion")
+                        .logoutSuccessUrl("/encheres")
+                        .invalidateHttpSession(true)
+                        .deleteCookies("JSESSIONID")
+                        .permitAll()
+                );
 
-						.requestMatchers("/", "/css/**", "/images/**", "/js/**", "/favicon.ico").permitAll()
-						.requestMatchers("/utilisateur/login", "/utilisateur/after-login", "/utilisateur/inscription",
-								"/utilisateur/profil-creer", "/error").permitAll()
+        return http.build();
+    }
 
-						.anyRequest().denyAll()
-				)
-				.formLogin(form -> form
-						.loginPage("/utilisateur/login")
-						.loginProcessingUrl("/login")
-						.failureUrl("/utilisateur/login?error")
-						.defaultSuccessUrl("/utilisateur/after-login", true)
-						.permitAll()
-				)
-				.logout(logout -> logout
-						.logoutUrl("/deconnexion")
-						.logoutSuccessUrl("/encheres")
-						.invalidateHttpSession(true)
-						.deleteCookies("JSESSIONID")
-						.permitAll()
-				);
+    @Bean
+    public UserDetailsManager users(DataSource dataSource) {
+        JdbcUserDetailsManager users = new JdbcUserDetailsManager(dataSource);
 
-		return http.build();
-	}
-
-	/**
-	 * 🔐 Requête SQL permettant l’authentification par pseudo ou email.
-	 * Utilise `OR` pour tenter la connexion avec l’un ou l’autre.
-	 */
-	@Bean
-	public UserDetailsManager users(DataSource dataSource) {
-		JdbcUserDetailsManager users = new JdbcUserDetailsManager(dataSource);
-
-		// Authentification possible par pseudo ou email
-		users.setUsersByUsernameQuery("""
+        users.setUsersByUsernameQuery("""
             SELECT pseudo AS username, motdepasse AS password, 1 AS enabled
             FROM UTILISATEURS
-            WHERE pseudo = ? OR email = ?
+            WHERE pseudo = ?
         """);
 
-		// Récupération des rôles (en se basant sur pseudo)
-		users.setAuthoritiesByUsernameQuery("""
+        users.setAuthoritiesByUsernameQuery("""
             SELECT u.pseudo AS username, r.role
             FROM ROLES r
             JOIN UTILISATEURS u ON u.idutilisateur = r.idutilisateur
             WHERE u.pseudo = ?
         """);
 
-		return users;
-	}
+        return users;
+    }
 
-	@Bean
-	public PasswordEncoder passwordEncoder() {
-		return new BCryptPasswordEncoder();
-	}
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 }
