@@ -8,9 +8,11 @@ import java.util.List;
 
 @Service
 public class UtilisateurServiceImpl implements UtilisateurService {
+
     private UtilisateurDAO utilisateurDAO;
 
     public UtilisateurServiceImpl(UtilisateurDAO utilisateurDAO) {
+
         this.utilisateurDAO = utilisateurDAO;
     }
 
@@ -65,5 +67,10 @@ public class UtilisateurServiceImpl implements UtilisateurService {
     return null;
 
   }
+
+    @Override
+    public Utilisateur consulterUtilisateurParPseudo(String pseudo) {
+        return utilisateurDAO.findBypseudo(pseudo);
+    }
 
 }

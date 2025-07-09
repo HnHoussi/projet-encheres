@@ -1,10 +1,14 @@
-package fr.eni.encheres.controller;
+package fr.eni.encheres.controllers;
 
 import fr.eni.encheres.bll.CategorieService;
 import fr.eni.encheres.bll.EnchereService;
 import fr.eni.encheres.bll.UtilisateurService;
 import fr.eni.encheres.bll.UtilisateurServiceImpl;
 import fr.eni.encheres.bo.Utilisateur;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -15,18 +19,23 @@ import java.util.List;
 @Controller
 @RequestMapping("/utilisateur")
 @SessionAttributes("utilisateurSession")
+
 public class UtilisateurController {
 
     private final UtilisateurService utilisateurService;
     private final EnchereService enchereService;
     private final CategorieService categorieService;
     private final UtilisateurServiceImpl utilisateurServiceImpl;
+    private final PasswordEncoder passwordEncoder;
 
-    public UtilisateurController(UtilisateurService utilisateurService, EnchereService enchereService, CategorieService categorieService, UtilisateurServiceImpl utilisateurServiceImpl) {
+    public UtilisateurController(UtilisateurService utilisateurService,EnchereService enchereService, CategorieService categorieService,
+                                 UtilisateurServiceImpl utilisateurServiceImpl, PasswordEncoder passwordEncoder) {
+
         this.utilisateurService = utilisateurService;
         this.enchereService = enchereService;
         this.categorieService = categorieService;
         this.utilisateurServiceImpl = utilisateurServiceImpl;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @ModelAttribute("utilisateurSession")
@@ -49,15 +58,23 @@ public class UtilisateurController {
     }
 
     @GetMapping("/inscription")
-    public String formulaireInscription() {
-        return "inscription";
+    public String formulaireInscription(Model model) {
+        model.addAttribute("utilisateur", new Utilisateur());
+        return "view-inscription";
     }
 
     @PostMapping("/inscription")
     public String inscrireUtilisateur(@ModelAttribute Utilisateur utilisateur, Model model) {
-        utilisateurService.creerCompte(utilisateur);
-        model.addAttribute("utilisateurSession", utilisateur);
-        return "redirect:/utilisateur/login";
+        try {
+            String motDePasseEncode = passwordEncoder.encode(utilisateur.getMotDePasse());
+            utilisateur.setMotDePasse(motDePasseEncode);
+            utilisateurService.creerCompte(utilisateur);
+            return "redirect:/utilisateur/login";
+        } catch (Exception e) {
+            e.printStackTrace();
+            model.addAttribute("messageErreur", "Erreur lors de la création du compte.");
+            return "view-inscription";
+        }
     }
 
     @GetMapping("/modifier")
@@ -73,7 +90,6 @@ public class UtilisateurController {
         return "redirect:/utilisateur/mon-profil";
     }
 
-
     @GetMapping("/logout")
     public String deconnexion(SessionStatus status) {
         status.setComplete();
@@ -84,7 +100,7 @@ public class UtilisateurController {
     public String chargerUtilisateurSession(@ModelAttribute("utilisateurSession") Utilisateur utilisateurSession,
                                             @RequestParam(name = "email", required = false, defaultValue = "jtrillard@campus-eni.fr") String email) {
 
-        Utilisateur aCharger = utilisateurServiceImpl.charger(email); // Assure-toi que cette méthode existe
+        Utilisateur aCharger = utilisateurServiceImpl.charger(email);
 
         if (aCharger != null) {
             utilisateurSession.setIdUtilisateur(aCharger.getIdUtilisateur());
@@ -117,27 +133,30 @@ public class UtilisateurController {
     }
 
     @GetMapping("/login")
-    public String formulaireLogin() {
-        return "seConnecter";
+    public String formulaireLogin(Model model) {
+        model.addAttribute("utilisateur", new Utilisateur());
+        return "view-connexion";
     }
 
-    @PostMapping("/login")
-    public String connecterUtilisateur(
-            @RequestParam String email,
-            @RequestParam String pseudo,
-            @RequestParam String motDePasse,
-            Model model) {
-
-        Utilisateur utilisateur = utilisateurServiceImpl.connexion(email, motDePasse, pseudo);
+    @GetMapping("/after-login")
+    public String postConnexion(Model model) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String pseudo = authentication.getName();
+        Utilisateur utilisateur = utilisateurService.consulterUtilisateurParPseudo(pseudo);
 
         if (utilisateur != null) {
             model.addAttribute("utilisateurSession", utilisateur);
-            return "redirect:/accueil";
-        } else {
-            model.addAttribute("error", "Email, pseudo ou mot de passe incorrect.");
-            return "seConnecter";
         }
+
+        return "redirect:/encheres";
     }
 
-
+    @GetMapping("/encheres")
+    public String afficherAccueil(Model model,
+                                  @SessionAttribute(name = "utilisateurSession", required = false) Utilisateur utilisateurSession) {
+        if (utilisateurSession != null) {
+            model.addAttribute("utilisateurSession", utilisateurSession);
+        }
+        return "index";
+    }
 }

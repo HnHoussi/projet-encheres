@@ -8,6 +8,7 @@ import fr.eni.encheres.bo.Utilisateur;
 import java.util.List;
 
 public interface UtilisateurService {
+
     public void creerCompte(Utilisateur utilisateur);
 
     public void supprimerCompte(long idUtilisateur);
@@ -22,4 +23,5 @@ public interface UtilisateurService {
 
     public void activerCompte(long idUtilisateur);
 
+    Utilisateur consulterUtilisateurParPseudo(String pseudo);
 }
