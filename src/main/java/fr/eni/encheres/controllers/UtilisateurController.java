@@ -5,39 +5,37 @@ import fr.eni.encheres.bll.EnchereService;
 import fr.eni.encheres.bll.UtilisateurService;
 import fr.eni.encheres.bll.UtilisateurServiceImpl;
 import fr.eni.encheres.bo.Utilisateur;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.support.SessionStatus;
 
 import java.util.List;
 
 @Controller
 @RequestMapping("/utilisateur")
 @SessionAttributes("utilisateurSession")
-
 public class UtilisateurController {
 
     private final UtilisateurService utilisateurService;
     private final EnchereService enchereService;
     private final CategorieService categorieService;
-    private final UtilisateurServiceImpl utilisateurServiceImpl;
     private final PasswordEncoder passwordEncoder;
 
-    public UtilisateurController(UtilisateurService utilisateurService,EnchereService enchereService, CategorieService categorieService,
+    public UtilisateurController(UtilisateurService utilisateurService, EnchereService enchereService, CategorieService categorieService,
                                  UtilisateurServiceImpl utilisateurServiceImpl, PasswordEncoder passwordEncoder) {
 
         this.utilisateurService = utilisateurService;
         this.enchereService = enchereService;
         this.categorieService = categorieService;
-        this.utilisateurServiceImpl = utilisateurServiceImpl;
         this.passwordEncoder = passwordEncoder;
     }
 
+    // 🔐 Affiche la page de connexion personnalisée
+    @GetMapping("/login")
+    public String afficherConnexion(Model model) {
+        model.addAttribute("utilisateur", new Utilisateur());
+        return "view-connexion";
     @ModelAttribute("utilisateurSession")
     public Utilisateur utilisateurSession() {
         return new Utilisateur();
@@ -57,11 +55,39 @@ public class UtilisateurController {
         return "afficherUtilisateur";
     }
 
+    @GetMapping("/after-login")
+    public String postConnexion(Model model) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String pseudo = authentication.getName();
+        Utilisateur utilisateur = utilisateurService.consulterUtilisateurParPseudo(pseudo);
+
+        if (utilisateur != null) {
+            model.addAttribute("utilisateurSession", utilisateur);
+        }
+
+        return "redirect:/encheres";
+    }
+
+    // 🏠 Affiche la page d’accueil (vue index.html)
+    @GetMapping("/encheres")
+    public String afficherAccueil(Model model,
+                                  @SessionAttribute(name = "utilisateurSession", required = false) Utilisateur utilisateurSession) {
+        if (utilisateurSession != null) {
+            model.addAttribute("utilisateurSession", utilisateurSession);
+            System.out.println(utilisateurSession);
+        }
+        return "index";
+    }
+
+
+
+    // 📝 Affiche le formulaire d’inscription
     @GetMapping("/inscription")
-    public String formulaireInscription(Model model) {
+    public String afficherCreationProfil(Model model) {
         model.addAttribute("utilisateur", new Utilisateur());
         return "view-inscription";
     }
+
 
     @PostMapping("/inscription")
     public String inscrireUtilisateur(@ModelAttribute Utilisateur utilisateur, Model model) {
@@ -70,8 +96,11 @@ public class UtilisateurController {
             utilisateur.setMotDePasse(motDePasseEncode);
             utilisateurService.creerCompte(utilisateur);
             return "redirect:/utilisateur/login";
+
         } catch (Exception e) {
             e.printStackTrace();
+            model.addAttribute("messageErreur", "Erreur lors de la création du compte.");
+            return "view-inscription";
             model.addAttribute("messageErreur", "Erreur lors de la création du compte.");
             return "view-inscription";
         }
@@ -159,4 +188,6 @@ public class UtilisateurController {
         }
         return "index";
     }
+
+
 }
