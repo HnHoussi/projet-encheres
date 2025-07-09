@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Arrays;
 import java.util.List;
 @Controller
-@SessionAttributes({ "categoriesEnSession" })
+@SessionAttributes({"categoriesEnSession", "utilisateurSession"})
 @RequestMapping({"/encheres", "/"})
 public class EnchereController {
 
@@ -34,13 +34,13 @@ public class EnchereController {
         return this.categorieService.consulterCategories();
     }
 
-    //afficher la page d'acceuil avant la connection d'utilisateur
     @GetMapping
     public String rechercherEncheres(
             @RequestParam(required = false) String motClesEnchere,
             @RequestParam(required = false) Long idCategorie,
             @RequestParam(required = false, defaultValue = "achats") String filtrePrincipal,  // e.g., "achats" or "ventes"
             @RequestParam(required = false) List<String> sousFiltres, // e.g., ["ouvertes", "mesEncheres", "mesVentes"]
+            @SessionAttribute(name = "utilisateurSession", required = false) Utilisateur utilisateurSession,
             Model model,
             @ModelAttribute("categoriesEnSession") List<Categorie> categoriesEnSession) {
 
@@ -48,6 +48,16 @@ public class EnchereController {
         if (sousFiltres == null || sousFiltres.isEmpty()) {
             sousFiltres = Arrays.asList("ouvertes");
         }
+        // Ajouter l'utilisateur dans le modèle s'il est en session
+        if (utilisateurSession != null) {
+            model.addAttribute("utilisateurSession", utilisateurSession);
+        }
+
+        List<Article> articles;
+
+        // Recherche combinée : mot-clé + catégorie
+        if ((motClesEnchere != null && !motClesEnchere.isBlank()) && idCategorie != null) {
+            articles = articleService.consulterArticleParCategorieEtMotCles(idCategorie, motClesEnchere);
 
         // Call the service with dynamic filters
         List<Article> articles = articleService.findArticlesWithDynamicFilters(

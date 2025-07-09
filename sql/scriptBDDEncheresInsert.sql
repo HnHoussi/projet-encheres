@@ -48,3 +48,22 @@ VALUES
 (1, 6, '2025-06-25 09:00:00', 55),
 (3, 6, '2025-06-24 15:00:00', 50),
 (2, 7, '2025-06-21 15:00:00', 30);
+
+(1, 4, '2025-07-02 15:00:00', 25);
+
+--Insère les utilisateurs/
+INSERT INTO [UTILISATEURS] (pseudo, nom, prenom, email, telephone, rue, codePostal, ville, motDePasse, credit, administrateur, compteActif) VALUES ('abaille@campus-eni.fr','baille','alice','abaille@campus-eni.fr',0666666666,'rue de la rue',44000,'Nantes','{bcrypt}$2a$10$KaSHgvH9p/cUnsOVPzYvzunWDAIv68whrOxmui1S.0AjzbP5RX7yO',200,0,1);/*Mot de Passe = annelise*/
+INSERT INTO [UTILISATEURS] (pseudo, nom, prenom, email, telephone, rue, codePostal, ville, motDePasse, credit, administrateur, compteActif) VALUES ('sgobin@campus-eni.fr','gobin','stephane','sgobin@campus-eni.fr',0777777777,'rue de la rue',44000,'Nantes','{bcrypt}$2a$10$B5U29ajHsIKd8aY3c/JNn.xTJpOCAeoXvT9XvfzbbHGP4iIFV9Lkm',200,1,1);/*Mot de Passe = stephane*/
+
+--Insère des enregistrements dans la table ROLES
+INSERT INTO [ROLES] (idUtilisateur, role) VALUES (6,'ROLE_UTILISATEUR');
+INSERT INTO [ROLES] (idUtilisateur, role) VALUES (7,'ROLE_UTILISATEUR');
+INSERT INTO [ROLES] (idUtilisateur, role) VALUES (6,'ROLE_ADMIN');
+INSERT INTO [ROLES] (idUtilisateur, role) VALUES (7,'ROLE_ADMIN');
+
+INSERT INTO [ROLES] (idUtilisateur, role) VALUES (1,'ROLE_UTILISATEUR');
+INSERT INTO [ROLES] (idUtilisateur, role) VALUES (2,'ROLE_UTILISATEUR');
+
+UPDATE UTILISATEURS
+SET MOTDEPASSE = '$2a$10$Z2XhsWXDH5Vr9RVJqDUFgOdpB3d1VUnsmfGZH2EO9VSOu3mDz3cQC'
+WHERE PSEUDO = 'sgobin@campus-eni.fr';

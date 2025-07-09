@@ -12,6 +12,7 @@ public interface UtilisateurService {
     public void supprimerCompte(long idUtilisateur);
     public void modifierProfil(Utilisateur utilisateur);
     public Utilisateur consulterUtilisateur(long idUtilisateur);
+    public Utilisateur consulterUtilisateurParPseudo(String pseudo);
     public List<Utilisateur> consulterListeUtilisateurs();
     public void desactiverCompte(long idUtilisateur);
     public void activerCompte(long idUtilisateur);

@@ -17,6 +17,7 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
 
     private final String FIND_BY_ID = "SELECT * FROM UTILISATEURS WHERE IDUTILISATEUR=:IDUTILISATEUR";
     private final String FIND_ALL = "SELECT PSEUDO, NOM, PRENOM, EMAIL, TELEPHONE, RUE, CODEPOSTAL, VILLE, MOTDEPASSE, CREDIT, ADMINISTRATEUR, COMPTEACTIF FROM UTILISATEURS";
+    private final String FIND_BY_PSEUDO="SELECT PSEUDO, NOM, PRENOM, EMAIL, TELEPHONE, RUE, CODEPOSTAL, VILLE, MOTDEPASSE as password, CREDIT, ADMINISTRATEUR, COMPTEACTIF FROM UTILISATEURS WHERE PSEUDO=:PSEUDO";
     private final String INSERT = """
         INSERT INTO Utilisateurs(PSEUDO, NOM, PRENOM, EMAIL, TELEPHONE, RUE, CODEPOSTAL, VILLE, MOTDEPASSE, CREDIT, ADMINISTRATEUR, COMPTEACTIF) 
         VALUES (:PSEUDO, :NOM, :PRENOM, :EMAIL, :TELEPHONE, :RUE, :CODEPOSTAL, :VILLE, :MOTDEPASSE, :CREDIT, :ADMINISTRATEUR, :COMPTEACTIF)
@@ -63,6 +64,13 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
         MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
         mapSqlParameterSource.addValue("IDUTILISATEUR", idUtilisateur);
         return jdbcTemplate.queryForObject(FIND_BY_ID, mapSqlParameterSource, new BeanPropertyRowMapper<>(Utilisateur.class));
+    }
+
+    @Override
+    public Utilisateur findBypseudo(String pseudo) {
+        MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
+        mapSqlParameterSource.addValue("PSEUDO", pseudo);
+        return jdbcTemplate.queryForObject(FIND_BY_PSEUDO, mapSqlParameterSource, new BeanPropertyRowMapper<>(Utilisateur.class));
     }
 
     @Override

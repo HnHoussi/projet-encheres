@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>ENI-Enchères</title>
+  <link rel="stylesheet" th:href="@{/css/view-article-detail.css}"/>
+</head>
+<body>
+
+    <header>
+      <div class="header-bar">
+        <a th:href="@{/encheres/affcherAccueil}"><h1>ENI-Enchères</h1></a>
+
+        <div class="user-actions">
+          <a th:if="${utilisateur == null}" th:href="@{/encheres/connexion}" class="btn-link">Inscription / Connexion</a>
+          <button th:if="${utilisateur != null}" th:text="'Bienvenue, ' + ${utilisateur.pseudo}"></button>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section class="item-details">
+        <div class="image-placeholder">
+          <img src="article.jpg" alt="Phot de l'article">
+        </div>
+
+        <div class="details">
+          <h2 th:text="${article.nomArticle}">Détail Article</h2>
+          <p><strong>Description : </strong><span th:text="${article.description}"></span></p>
+          <p><strong>Catégorie : </strong><span th:text="${article.categorie.libelle}"></span></p>
+          <p><strong>Meilleure offre : </strong><span th:text="${article.prixVente}"></span> par XXX</p>
+          <p><strong>Mise à prix : </strong><span th:text="${article.miseAPrix}"></span></p>
+          <p><strong>Fin de l'enchère : </strong><span th:text="${article.dateFinEnchere}"></span></p>
+          <p><strong>Retrait : </strong><span th:text="${article.retrait}"></span></p>
+          <p><strong>Vendeur : </strong><a th:href="@{/encheres/vendeur(id=${article.utilisateur.idUtilisateur})}"><span th:text="${article.utilisateur.pseudo}"></span></a></p>
+
+          <form action="submit_bid.php" method="post">
+            <label for="bid">Ma proposition :</label>
+            <input type="number" id="bid" name="bid" th:value="${article.prixVente}">
+            <button type="submit">Enchérir</button>
+          </form>
+        </div>
+      </section>
+    </main>
+    <footer class="footer">
+      <div class="container">
+        <p>Aide | Conditions d’utilisation</p>
+        <p>Contact e-mail | Mentions légales</p>
+        <p>Suivez-nous : @instagram</p>
+        <p><em>Projet ENI Informatique</em></p>
+      </div>
+    </footer>
+</body>
+</html>

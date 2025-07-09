@@ -50,4 +50,30 @@ public class ArticleServiceImpl implements ArticleService {
         articleDAO.delete(idArticle);
     }
 
+    @Override
+    public List<Article> consulterArticles() {
+        return articleDAO.findAll();
+    }
+
+    @Override
+    public List<Article> consulterArticlesParMotCles(String nomArticle) {
+        return articleDAO.findByMotCles(nomArticle);
+    }
+
+    @Override
+    public List<Article> consulterArticlesParCategorie(long idCategorie) {
+        return articleDAO.findByCategorie(idCategorie);
+    }
+
+    // Recherche par mots clés et catégorie
+    @Override
+    public List<Article> consulterArticleParCategorieEtMotCles(long idCategorie, String nomArticle) {
+        return articleDAO.findByCategorieEtMotCles(idCategorie, nomArticle);
+
+    }
+
+    @Override
+    public Article consulterArticle(long idArticle) {
+        return articleDAO.findById(idArticle);
+    }
 }
