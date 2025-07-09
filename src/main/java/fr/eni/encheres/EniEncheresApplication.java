@@ -9,6 +9,7 @@ public class EniEncheresApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(EniEncheresApplication.class, args);
+        System.out.println(new BCryptPasswordEncoder().encode("stephane"));
     }
 
 }

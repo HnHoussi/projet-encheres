@@ -56,6 +56,6 @@ INSERT INTO [ROLES] (idUtilisateur, role) VALUES (7,'ROLE_ADMIN');
 INSERT INTO [ROLES] (idUtilisateur, role) VALUES (1,'ROLE_UTILISATEUR');
 INSERT INTO [ROLES] (idUtilisateur, role) VALUES (2,'ROLE_UTILISATEUR');
 
-SELECT * FROM ROLES r
-                  JOIN UTILISATEURS u ON u.idutilisateur = r.idutilisateur
-WHERE u.pseudo = 'abaille@campus-eni.fr';
+UPDATE UTILISATEURS
+SET MOTDEPASSE = '$2a$10$Z2XhsWXDH5Vr9RVJqDUFgOdpB3d1VUnsmfGZH2EO9VSOu3mDz3cQC'
+WHERE PSEUDO = 'sgobin@campus-eni.fr';
