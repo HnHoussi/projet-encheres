@@ -21,4 +21,5 @@ public interface UtilisateurService {
     public void desactiverCompte(long idUtilisateur);
 
     public void activerCompte(long idUtilisateur);
+
 }

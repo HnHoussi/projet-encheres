@@ -60,6 +60,10 @@ public class UtilisateurServiceImpl implements UtilisateurService {
 
         return null;
     }
+    public Utilisateur charger(String email){
 
+    return null;
+
+  }
 
 }

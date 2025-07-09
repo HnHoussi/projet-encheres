@@ -14,7 +14,7 @@ import java.util.List;
 @Controller
 @SessionAttributes({ "categoriesEnSession" })
 @RequestMapping({"/encheres", "/"})
-public class EnchereController {
+public class git checkout mainEnchereController {
 
     private ArticleService articleService;
     private CategorieService  categorieService;

@@ -29,6 +29,11 @@ public class UtilisateurController {
         this.utilisateurServiceImpl = utilisateurServiceImpl;
     }
 
+    @ModelAttribute("utilisateurSession")
+    public Utilisateur utilisateurSession() {
+        return new Utilisateur();
+    }
+
     @GetMapping("/liste")
     public String consulterUtilisateurs(Model model) {
         List<Utilisateur> utilisateurs = utilisateurService.consulterListeUtilisateurs();
@@ -52,26 +57,56 @@ public class UtilisateurController {
     public String inscrireUtilisateur(@ModelAttribute Utilisateur utilisateur, Model model) {
         utilisateurService.creerCompte(utilisateur);
         model.addAttribute("utilisateurSession", utilisateur);
-        return "redirect:utilisateur/connexion";
+        return "redirect:/utilisateur/login";
     }
 
     @GetMapping("/modifier")
     public String formulaireModification(Model model, @SessionAttribute("utilisateurSession") Utilisateur utilisateur) {
         model.addAttribute("utilisateur", utilisateur);
-        return "redirect:modifier";
-    }
-
-    @GetMapping("/mon-profil")
-    public String afficherMonProfil(Model model, @SessionAttribute("utilisateurSession") Utilisateur utilisateur) {
-        model.addAttribute("utilisateur", utilisateur);
-        return "mon-profil";
+        return "modifierProfil";
     }
 
     @PostMapping("/modifier")
     public String modifierProfil(@ModelAttribute Utilisateur utilisateur, Model model) {
         utilisateurService.modifierProfil(utilisateur);
         model.addAttribute("utilisateurSession", utilisateur);
-        return "redirect:/monCompte";
+        return "redirect:/utilisateur/mon-profil";
+    }
+
+
+    @GetMapping("/logout")
+    public String deconnexion(SessionStatus status) {
+        status.setComplete();
+        return "redirect:/accueil";
+    }
+
+    @GetMapping("/utilisateursession")
+    public String chargerUtilisateurSession(@ModelAttribute("utilisateurSession") Utilisateur utilisateurSession,
+                                            @RequestParam(name = "email", required = false, defaultValue = "jtrillard@campus-eni.fr") String email) {
+
+        Utilisateur aCharger = utilisateurServiceImpl.charger(email); // Assure-toi que cette méthode existe
+
+        if (aCharger != null) {
+            utilisateurSession.setIdUtilisateur(aCharger.getIdUtilisateur());
+            utilisateurSession.setNom(aCharger.getNom());
+            utilisateurSession.setPrenom(aCharger.getPrenom());
+            utilisateurSession.setPseudo(aCharger.getPseudo());
+            utilisateurSession.setAdministrateur(aCharger.isAdministrateur());
+        } else {
+            utilisateurSession.setIdUtilisateur(0);
+            utilisateurSession.setNom(null);
+            utilisateurSession.setPrenom(null);
+            utilisateurSession.setPseudo(null);
+            utilisateurSession.setAdministrateur(false);
+        }
+
+        return "mon-profil";
+    }
+
+    @GetMapping("/mon-profil")
+    public String afficherMonProfil(Model model, @SessionAttribute("utilisateurSession") Utilisateur utilisateur) {
+        model.addAttribute("utilisateur", utilisateur);
+        return "mon-profil";
     }
 
     @PostMapping("/supprimer")
@@ -99,14 +134,10 @@ public class UtilisateurController {
             model.addAttribute("utilisateurSession", utilisateur);
             return "redirect:/accueil";
         } else {
-            model.addAttribute("error", "Email, pseudo ou mot de passe incorrect alors ciao.");
+            model.addAttribute("error", "Email, pseudo ou mot de passe incorrect.");
             return "seConnecter";
         }
     }
 
-    @GetMapping("/logout")
-    public String deconnexion(SessionStatus status) {
-        status.setComplete();
-        return "redirect:/accueil";
-    }
+
 }
