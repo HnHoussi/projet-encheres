@@ -56,11 +56,11 @@ public class SecurityConfig {
         """);
 
         users.setAuthoritiesByUsernameQuery("""
-            SELECT u.pseudo AS username, r.role
-            FROM ROLES r
-            JOIN UTILISATEURS u ON u.idutilisateur = r.idutilisateur
-            WHERE u.pseudo = ?
-        """);
+    SELECT u.pseudo AS username, COALESCE(r.role, 'ROLE_UTILISATEUR') AS role
+    FROM UTILISATEURS u
+    LEFT JOIN ROLES r ON u.idutilisateur = r.idutilisateur
+    WHERE u.pseudo = ?
+""");
 
         return users;
     }

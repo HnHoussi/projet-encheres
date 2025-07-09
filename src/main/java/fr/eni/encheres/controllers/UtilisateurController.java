@@ -83,10 +83,17 @@ public class UtilisateurController {
      * - redirige vers /encheres
      */
     @PostMapping("/profil-creer")
-    public String creationCompte(@ModelAttribute Utilisateur utilisateur, Model model) {
+    public String creationCompte(@ModelAttribute Utilisateur utilisateur,@RequestParam String confirmation, Model model) {
+        if (!utilisateur.getMotDePasse().equals(confirmation)) {
+            model.addAttribute("messageErreur", "Les mots de passe ne correspondent pas.");
+            return "view-inscription";
+        }
+
         try {
+            System.out.println("Mot de passe en clair : " + utilisateur.getMotDePasse());
             String motDePasseEncode = passwordEncoder.encode(utilisateur.getMotDePasse());
             utilisateur.setMotDePasse(motDePasseEncode);
+            System.out.println("Mot de passe encodé : " + motDePasseEncode);
             utilisateurService.creerCompte(utilisateur);
             return "redirect:/encheres";
         } catch (Exception e) {

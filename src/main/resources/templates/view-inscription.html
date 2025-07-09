@@ -77,7 +77,8 @@
 
                                     <div class="mb-3">
                                         <label for="confirmation">Confirmation :</label>
-                                        <input type="password" id="confirmation" th:field="*{motDePasse}" required>
+                                        <!-- Champ de confirmation NON lié à l’objet -->
+                                        <input type="password" id="confirmation" name="confirmation" required>
                                     </div>
                                 </div>
                             </div>
