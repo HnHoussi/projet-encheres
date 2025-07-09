@@ -48,4 +48,8 @@ public class ArticleServiceImpl implements ArticleService {
 
     }
 
+    @Override
+    public Article consulterArticle(long idArticle) {
+        return articleDAO.findById(idArticle);
+    }
 }

@@ -32,6 +32,11 @@ public class UtilisateurServiceImpl implements UtilisateurService {
     }
 
     @Override
+    public Utilisateur consulterUtilisateurParPseudo(String pseudo) {
+        return utilisateurDAO.findBypseudo(pseudo);
+    }
+
+    @Override
     public void desactiverCompte(long idUtilisateur) {
 
         Utilisateur utilisateur = utilisateurDAO.findById(idUtilisateur);
