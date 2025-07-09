@@ -9,20 +9,23 @@ import java.util.List;
 
 public interface UtilisateurService {
 
-    public void creerCompte(Utilisateur utilisateur);
+    void creerCompte(Utilisateur utilisateur);
 
-    public void supprimerCompte(long idUtilisateur);
+    void supprimerCompte(long idUtilisateur);
 
-    public void modifierProfil(Utilisateur utilisateur);
+    void modifierProfil(Utilisateur utilisateur);
 
-    public Utilisateur consulterUtilisateur(long idUtilisateur);
-
-    public Utilisateur consulterUtilisateurParPseudo(String pseudo);
-    public List<Utilisateur> consulterListeUtilisateurs();
-
-    public void desactiverCompte(long idUtilisateur);
-
-    public void activerCompte(long idUtilisateur);
+    Utilisateur consulterUtilisateur(long idUtilisateur);
 
     Utilisateur consulterUtilisateurParPseudo(String pseudo);
+
+    List<Utilisateur> consulterListeUtilisateurs();
+
+    void desactiverCompte(long idUtilisateur);
+
+    void activerCompte(long idUtilisateur);
+
+    default Utilisateur consulterUtilisateurParPseudo(String pseudo) {
+        return null;
+    }
 }
