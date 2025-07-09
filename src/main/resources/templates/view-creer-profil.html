@@ -22,7 +22,13 @@
 </header>
 <main role="main">
 	<section>
-		<form th:action="@{/encheres/profil-creer}" method="post" th:object="${utilisateur}">
+		<div th:if="${messageErreur}" class="alert alert-danger">
+			<p th:text="${messageErreur}"></p>
+		</div>
+
+		<form th:action="@{/utilisateur/profil-creer}" method="post" th:object="${utilisateur}">
+		<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+
 			<h1 id="nav-title">Mon profil</h1>
 			<ul>
 				<li>
