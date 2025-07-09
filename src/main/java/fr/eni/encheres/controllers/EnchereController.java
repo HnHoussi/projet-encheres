@@ -18,7 +18,7 @@ public class EnchereController {
 
     private ArticleService articleService;
     private CategorieService  categorieService;
-    UtilisateurService utilisateurService;
+    private UtilisateurService utilisateurService;
     // Simulated connected user ID
     private static final Long CONNECTED_USER_ID = 1L;
 

@@ -1,11 +1,11 @@
 package fr.eni.encheres.dal;
 
 import fr.eni.encheres.bo.Article;
-import fr.eni.encheres.bo.Enchere;
 
 import java.util.List;
 
 public interface ArticleDAO {
+
     List<Article> findArticlesWithDynamicFilters(
             Long idUtilisateur,
             String motCle,
@@ -19,7 +19,6 @@ public interface ArticleDAO {
 
     //Retourner article par ID
     Article findById(long idArticle);
-
 
     //Création d'un nouvel article
     void create(Article article);

@@ -40,66 +40,87 @@ public class ArticleDAOImpl implements ArticleDAO {
             String filtrePrincipal,
             List<String> sousFiltres) {
 
+        // La requête SQL de base
         StringBuilder sql = new StringBuilder("SELECT * FROM Articles a WHERE 1=1 ");
+        // Objet pour stocker les valeurs des paramètres de la requête
         MapSqlParameterSource params = new MapSqlParameterSource();
 
+        // Si l'utilisateur a saisi un mot clé pour rechercher des articles
         if (motCle != null && !motCle.isBlank()) {
+            // condition pour que le nom de l'article contienne le mot clé
             sql.append("AND LOWER(a.nomArticle) LIKE LOWER('%' + :motCle + '%') ");
             params.addValue("motCle", motCle);
         }
 
+        // Si une catégorie est sélectionnée
         if (idCategorie != null) {
+            //condition pour filtrer sur cette catégorie
             sql.append("AND a.idCategorie = :idCategorie ");
             params.addValue("idCategorie", idCategorie);
         }
 
+        // Si l'utilisateur n'est pas connecté
         if (idUtilisateur == null) {
-            // Not connected: only open auctions
+            // seulement les enchères ouvertes
             sql.append("AND CAST(GETDATE() AS DATE) BETWEEN a.dateDebutEnchere AND a.dateFinEnchere ");
         } else {
+            // L'utilisateur est connecté et veut filtrer ses achats
             if ("achats".equalsIgnoreCase(filtrePrincipal)) {
                 if (sousFiltres != null && !sousFiltres.isEmpty()) {
+                    // liste vide pour ajouter des conditions selon les sous-filtres choisis
                     List<String> conditions = new ArrayList<>();
 
                     if (sousFiltres.contains("ouvertes")) {
+                        // Voir seulement les enchères ouvertes
                         conditions.add("CAST(GETDATE() AS DATE) BETWEEN a.dateDebutEnchere AND a.dateFinEnchere");
                     }
                     if (sousFiltres.contains("mesEncheres")) {
+                        // Voir seulement les articles où l'utilisateur a fait une enchère
                         conditions.add("EXISTS (SELECT 1 FROM Encheres e WHERE e.idArticle = a.idArticle AND e.idUtilisateur = :idUtilisateur)");
                     }
                     if (sousFiltres.contains("mesEncheresRemportees")) {
+                        // Voir les articles gagnés par l'utilisateur
                         conditions.add("(a.idUtilisateur <> :idUtilisateur AND CAST(GETDATE() AS DATE) > a.dateFinEnchere)");
                     }
 
                     if (!conditions.isEmpty()) {
+                        // Si on a des conditions, on les ajoute dans la requête avec un OR entre elles
                         sql.append("AND (");
                         sql.append(String.join(" OR ", conditions));
                         sql.append(") ");
                     }
                     params.addValue("idUtilisateur", idUtilisateur);
                 } else {
-                    // No subfilters: by default, show open auctions
+                    // Aucun sous-filtre choisi : par défaut, on affiche les enchères ouvertes
                     sql.append("AND CAST(GETDATE() AS DATE) BETWEEN a.dateDebutEnchere AND a.dateFinEnchere ");
                 }
+
+            // L'utilisateur est connecté et veut filtrer ses ventes
             } else if ("ventes".equalsIgnoreCase(filtrePrincipal)) {
                 if (sousFiltres != null && !sousFiltres.isEmpty()) {
+                    // liste vide pour ajouter des conditions selon les sous-filtres choisis
                     List<String> conditions = new ArrayList<>();
 
                     if (sousFiltres.contains("mesVentesEnCours")) {
+                        // Voir les ventes en cours
                         conditions.add("CAST(GETDATE() AS DATE) BETWEEN a.dateDebutEnchere AND a.dateFinEnchere");
                     }
                     if (sousFiltres.contains("ventesNonDebutees")) {
+                        // Voir les ventes qui n'ont pas encore commencé
                         conditions.add("CAST(GETDATE() AS DATE) < a.dateDebutEnchere");
                     }
                     if (sousFiltres.contains("ventesTerminees")) {
+                        // Voir les ventes terminées
                         conditions.add("CAST(GETDATE() AS DATE) > a.dateFinEnchere");
                     }
 
                     if (!conditions.isEmpty()) {
+                        // On ajoute la condition que l'article appartient à l'utilisateur et qu'il correspond à un des sous-filtres
                         sql.append("AND a.idUtilisateur = :idUtilisateur AND (");
                         sql.append(String.join(" OR ", conditions));
                         sql.append(") ");
                     } else {
+                        // Aucun sous-filtre choisi : on affiche tous les articles de l'utilisateur
                         sql.append("AND a.idUtilisateur = :idUtilisateur ");
                     }
                     params.addValue("idUtilisateur", idUtilisateur);
