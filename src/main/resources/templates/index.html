@@ -21,14 +21,20 @@
                     <a th:href="@{/utilisateur/connexion}" class="btn btn-outline-dark">S'inscrire - Se connecter</a>
                 </div>
                 <ul th:if="${utilisateurSession != null}" class="navbar-nav ms-auto">
-                    <li class="nav-item"> <a th:text="${utilisateurSession.pseudo}"class="nav-link"></a></li>
                     <li class="nav-item"><a th:href="@{/encheres}" class="nav-link">Enchères</a></li>
                     <li class="nav-item"><a th:href="@{/vendre-article}" class="nav-link">Vendre un article</a></li>
-                    <li class="nav-item"><a th:href="@{/mon-profil}" class="nav-link">Mon profil</a></li>
-                    <form th:action="@{/deconnexion}" method="post" th:object="${#httpServletRequest}">
-                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-                        <button type="submit" class="btn btn-link nav-link" style="padding: 0; border: none;">Déconnexion</button>
-                    </form>
+                    <li class="nav-item"><a th:href="@{/utilisateur/mon-profil}" class="nav-link">Mon profil ( <span th:text="${utilisateurSession.pseudo}"></span> )</a></li>
+                    <li class="nav-item d-flex align-items-center">
+                        <form th:action="@{/deconnexion}" method="post" style="margin: 0;">
+                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                            <button type="submit" class="btn btn-link nav-link px-2" style="text-decoration: none;">
+                                Déconnexion
+                            </button>
+                        </form>
+                    </li>
+
+
+
                 </ul>
             </div>
         </div>

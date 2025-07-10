@@ -7,6 +7,7 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -14,22 +15,50 @@ import java.util.List;
 @Repository
 public class UtilisateurDAOImpl implements UtilisateurDAO {
 
+    private final NamedParameterJdbcTemplate jdbcTemplate;
 
-    private final String FIND_BY_ID = "SELECT PSEUDO, NOM, PRENOM, EMAIL, TELEPHONE, RUE, CODEPOSTAL, VILLE, MOTDEPASSE, CREDIT, ADMINISTRATEUR, COMPTEACTIF FROM UTILISATEURS WHERE IDUTILISATEUR=:IDUTILISATEUR";
-    private final String FIND_ALL = "SELECT PSEUDO, NOM, PRENOM, EMAIL, TELEPHONE, RUE, CODEPOSTAL, VILLE, MOTDEPASSE, CREDIT, ADMINISTRATEUR, COMPTEACTIF FROM UTILISATEURS";
-    private final String FIND_BY_PSEUDO="SELECT PSEUDO, NOM, PRENOM, EMAIL, TELEPHONE, RUE, CODEPOSTAL, VILLE, MOTDEPASSE as password, CREDIT, ADMINISTRATEUR, COMPTEACTIF FROM UTILISATEURS WHERE PSEUDO=:PSEUDO";
+    private final String FIND_BY_ID = """
+        SELECT idUtilisateur, pseudo, nom, prenom, email, telephone, rue, codePostal, ville,
+               motDePasse, credit, administrateur, compteActif
+        FROM UTILISATEURS
+        WHERE idUtilisateur = :idUtilisateur
+    """;
+
+    private final String FIND_ALL = """
+        SELECT idUtilisateur, pseudo, nom, prenom, email, telephone, rue, codePostal, ville,
+               motDePasse, credit, administrateur, compteActif
+        FROM UTILISATEURS
+    """;
+
+    private final String FIND_BY_PSEUDO = """
+        SELECT idUtilisateur, pseudo, nom, prenom, email, telephone, rue, codePostal, ville,
+               motDePasse, credit, administrateur, compteActif
+        FROM UTILISATEURS
+        WHERE pseudo = :pseudo
+    """;
+
     private final String INSERT = """
-        INSERT INTO Utilisateurs(PSEUDO, NOM, PRENOM, EMAIL, TELEPHONE, RUE, CODEPOSTAL, VILLE, MOTDEPASSE, CREDIT, ADMINISTRATEUR, COMPTEACTIF) 
-        VALUES (:PSEUDO, :NOM, :PRENOM, :EMAIL, :TELEPHONE, :RUE, :CODEPOSTAL, :VILLE, :MOTDEPASSE, :CREDIT, :ADMINISTRATEUR, :COMPTEACTIF)
-        """;
-    private static final String UPDATE = """ 
-        UPDATE UTILISATEURS SET PSEUDO =:PSEUDO, NOM = :NOM, PRENOM =:PRENOM, TELEPHONE=:TELEPHONE,
-             RUE=:RUE, CODEPOSTAL=:CODEPOSTAL, VILLE=:VILLE, MOTDEPASSE=:MOTDEPASSE, CREDIT=:CREDIT, ADMINISTRATEUR=:ADMINISTRATEUR, COMPTEACTIF=:COMPTEACTIF WHERE EMAIL = :EMAIL 
-             """;
-    private final String UPDATEACTIVATION= "UPDATE UTILISATEURS SET COMPTEACTIF=:COMPTEACTIF WHERE EMAIL = :EMAIL";
-    private final String DELETE = "DELETE FROM UTILISATEURS WHERE IDUTILISATEUR = :IDUTILISATEUR";
+        INSERT INTO UTILISATEURS(pseudo, nom, prenom, email, telephone, rue, codePostal, ville,
+                                 motDePasse, credit, administrateur, compteActif)
+        VALUES (:pseudo, :nom, :prenom, :email, :telephone, :rue, :codePostal, :ville,
+                :motDePasse, :credit, :administrateur, :compteActif)
+    """;
 
-    private NamedParameterJdbcTemplate jdbcTemplate;
+    private final String UPDATE = """
+        UPDATE UTILISATEURS SET
+            nom = :nom, prenom = :prenom, email = :email, telephone = :telephone,
+            rue = :rue, codePostal = :codePostal, ville = :ville,
+            credit = :credit, administrateur = :administrateur, compteActif = :compteActif
+        WHERE pseudo =  :pseudo
+    """;
+
+    private final String UPDATE_ACTIVATION = """
+        UPDATE UTILISATEURS SET compteActif = :compteActif WHERE email = :email
+    """;
+
+    private final String DELETE = """
+        DELETE FROM UTILISATEURS WHERE idUtilisateur = :idUtilisateur
+    """;
 
     public UtilisateurDAOImpl(NamedParameterJdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
@@ -37,44 +66,39 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
 
     @Override
     public void create(Utilisateur utilisateur) {
-        MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
-        mapSqlParameterSource.addValue("PSEUDO",  utilisateur.getPseudo());
-        mapSqlParameterSource.addValue("NOM", utilisateur.getNom());
-        mapSqlParameterSource.addValue("PRENOM", utilisateur.getPrenom());
-        mapSqlParameterSource.addValue("EMAIL", utilisateur.getEmail());
-        mapSqlParameterSource.addValue("TELEPHONE",utilisateur.getTelephone());
-        mapSqlParameterSource.addValue("RUE",utilisateur.getRue());
-        mapSqlParameterSource.addValue("CODEPOSTAL",utilisateur.getCodePostal());
-        mapSqlParameterSource.addValue("VILLE",utilisateur.getVille());
-        mapSqlParameterSource.addValue("MOTDEPASSE",utilisateur.getMotDePasse());
-        mapSqlParameterSource.addValue("CREDIT",utilisateur.getCredit());
-        mapSqlParameterSource.addValue("ADMINISTRATEUR",utilisateur.isAdministrateur());
-        mapSqlParameterSource.addValue("COMPTEACTIF",utilisateur.isCompteActif());
-
+        BeanPropertySqlParameterSource params = new BeanPropertySqlParameterSource(utilisateur);
         KeyHolder keyHolder = new GeneratedKeyHolder();
-        jdbcTemplate.update(INSERT, mapSqlParameterSource, keyHolder);
+        jdbcTemplate.update(INSERT, params, keyHolder);
 
-        if(keyHolder != null && keyHolder.getKey() != null) {
+        if (keyHolder.getKey() != null) {
             utilisateur.setIdUtilisateur(keyHolder.getKey().intValue());
         }
     }
 
     @Override
     public Utilisateur findById(long idUtilisateur) {
-        MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
-        mapSqlParameterSource.addValue("IDUTILISATEUR", idUtilisateur);
-        return jdbcTemplate.queryForObject(FIND_BY_ID, mapSqlParameterSource, new BeanPropertyRowMapper<>(Utilisateur.class));
+        MapSqlParameterSource params = new MapSqlParameterSource("idUtilisateur", idUtilisateur);
+        try {
+            return jdbcTemplate.queryForObject(FIND_BY_ID, params, new BeanPropertyRowMapper<>(Utilisateur.class));
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
     }
 
     @Override
     public Utilisateur findBypseudo(String pseudo) {
-        MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
-        mapSqlParameterSource.addValue("PSEUDO", pseudo);
-        return jdbcTemplate.queryForObject(FIND_BY_PSEUDO, mapSqlParameterSource, new BeanPropertyRowMapper<>(Utilisateur.class));
+        MapSqlParameterSource params = new MapSqlParameterSource("pseudo", pseudo);
+        try {
+            return jdbcTemplate.queryForObject(FIND_BY_PSEUDO, params, new BeanPropertyRowMapper<>(Utilisateur.class));
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
     }
 
     @Override
-    public List<Utilisateur> findAll() {return jdbcTemplate.query(FIND_ALL, new BeanPropertyRowMapper<>(Utilisateur.class));}
+    public List<Utilisateur> findAll() {
+        return jdbcTemplate.query(FIND_ALL, new BeanPropertyRowMapper<>(Utilisateur.class));
+    }
 
     @Override
     public void update(Utilisateur utilisateur) {
@@ -83,14 +107,12 @@ public class UtilisateurDAOImpl implements UtilisateurDAO {
 
     @Override
     public void updateActivation(Utilisateur utilisateur) {
-        jdbcTemplate.update(UPDATEACTIVATION, new BeanPropertySqlParameterSource(utilisateur));
+        jdbcTemplate.update(UPDATE_ACTIVATION, new BeanPropertySqlParameterSource(utilisateur));
     }
 
     @Override
     public void delete(long idUtilisateur) {
-        MapSqlParameterSource params = new MapSqlParameterSource("IDUTILISATEUR", idUtilisateur);
+        MapSqlParameterSource params = new MapSqlParameterSource("idUtilisateur", idUtilisateur);
         jdbcTemplate.update(DELETE, params);
-
     }
-
 }

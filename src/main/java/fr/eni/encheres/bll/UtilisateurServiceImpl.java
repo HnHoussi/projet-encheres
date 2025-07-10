@@ -60,4 +60,9 @@ public class UtilisateurServiceImpl implements UtilisateurService {
     public List<Utilisateur> consulterListeUtilisateurs() {
         return utilisateurDAO.findAll();
     }
+
+    @Override
+    public boolean existeParPseudo(String pseudo) {
+        return utilisateurDAO.findBypseudo(pseudo) != null;
+    }
 }

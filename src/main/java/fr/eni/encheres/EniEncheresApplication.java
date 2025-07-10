@@ -10,9 +10,9 @@ public class EniEncheresApplication {
     public static void main(String[] args) {
         SpringApplication.run(EniEncheresApplication.class, args);
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        String hash = encoder.encode("testpseudo");
+        String hash = encoder.encode("annelise");
         System.out.println("Hash : " + hash);
-        System.out.println("Vérification : " + encoder.matches("testpseudo", hash)); // ➜ true
+        System.out.println("Vérification : " + encoder.matches("annelise", hash)); // ➜ true
 
     }
 

@@ -16,4 +16,5 @@ public interface UtilisateurService {
     public List<Utilisateur> consulterListeUtilisateurs();
     public void desactiverCompte(long idUtilisateur);
     public void activerCompte(long idUtilisateur);
+    public boolean existeParPseudo(String pseudo);
 }

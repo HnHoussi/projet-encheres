@@ -15,9 +15,9 @@ public class Utilisateur implements Serializable {
     private String codePostal;
     private String ville;
     private String motDePasse;
-    private int credit;
+    private int credit = 100;
     private boolean administrateur;
-    private boolean compteActif;
+    private boolean compteActif = true;
 
     private List<Article> articles;
     private List<Enchere> encheres;

@@ -84,8 +84,15 @@ public class UtilisateurController {
      */
     @PostMapping("/profil-creer")
     public String creationCompte(@ModelAttribute Utilisateur utilisateur,@RequestParam String confirmation, Model model) {
+
         if (!utilisateur.getMotDePasse().equals(confirmation)) {
             model.addAttribute("messageErreur", "Les mots de passe ne correspondent pas.");
+            return "view-inscription";
+        }
+
+        // Vérifie si le pseudo ou l'email existe déjà
+        if (utilisateurService.existeParPseudo(utilisateur.getPseudo())) {
+            model.addAttribute("messageErreur", "Un compte avec ce pseudo existe déjà.");
             return "view-inscription";
         }
 
@@ -102,4 +109,20 @@ public class UtilisateurController {
             return "view-inscription";
         }
     }
+
+    @GetMapping("/mon-profil")
+    public String afficherMonProfil(Model model, @SessionAttribute("utilisateurSession") Utilisateur utilisateur) {
+        model.addAttribute("utilisateur", utilisateur);
+        return "view-profil-details";        }
+
+    @GetMapping("/edit")
+    public String formulaireModification(Model model, @SessionAttribute("utilisateurSession") Utilisateur utilisateur) {
+        model.addAttribute("utilisateur", utilisateur);
+        return "view-profil-modification";        }
+
+    @PostMapping("/editProfil")
+    public String modifierProfil(@ModelAttribute Utilisateur utilisateur, Model model) {
+        utilisateurService.modifierProfil(utilisateur);
+        model.addAttribute("utilisateurSession", utilisateur);
+        return "redirect:/utilisateur/mon-profil";        }
 }
