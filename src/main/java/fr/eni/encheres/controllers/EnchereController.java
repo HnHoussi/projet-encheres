@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Arrays;
 import java.util.List;
 @Controller
-@SessionAttributes({"categoriesEnSession", "utilisateurSession"})
+@SessionAttributes({ "categoriesEnSession" })
 @RequestMapping({"/encheres", "/"})
 public class EnchereController {
 
@@ -34,13 +34,13 @@ public class EnchereController {
         return this.categorieService.consulterCategories();
     }
 
+    //afficher la page d'acceuil avant la connection d'utilisateur
     @GetMapping
     public String rechercherEncheres(
             @RequestParam(required = false) String motClesEnchere,
             @RequestParam(required = false) Long idCategorie,
             @RequestParam(required = false, defaultValue = "achats") String filtrePrincipal,  // e.g., "achats" or "ventes"
             @RequestParam(required = false) List<String> sousFiltres, // e.g., ["ouvertes", "mesEncheres", "mesVentes"]
-            @SessionAttribute(name = "utilisateurSession", required = false) Utilisateur utilisateurSession,
             Model model,
             @ModelAttribute("categoriesEnSession") List<Categorie> categoriesEnSession) {
 
@@ -48,16 +48,8 @@ public class EnchereController {
         if (sousFiltres == null || sousFiltres.isEmpty()) {
             sousFiltres = Arrays.asList("ouvertes");
         }
-        // Ajouter l'utilisateur dans le modèle s'il est en session
-        if (utilisateurSession != null) {
-            model.addAttribute("utilisateurSession", utilisateurSession);
-        }
 
-        List<Article> articles;
-
-        // Recherche combinée : mot-clé + catégorie
-        if ((motClesEnchere != null && !motClesEnchere.isBlank()) && idCategorie != null) {
-            articles = articleService.consulterArticleParCategorieEtMotCles(idCategorie, motClesEnchere);
+        Utilisateur utilisateur = utilisateurService.consulterUtilisateur(CONNECTED_USER_ID);
 
         // Call the service with dynamic filters
         List<Article> articles = articleService.findArticlesWithDynamicFilters(
@@ -75,6 +67,7 @@ public class EnchereController {
         model.addAttribute("idCategorie", idCategorie);
         model.addAttribute("filtrePrincipal", filtrePrincipal);
         model.addAttribute("sousFiltres", sousFiltres);
+        model.addAttribute("utilisateur", utilisateur);
 
         return "index";
     }
@@ -84,6 +77,11 @@ public class EnchereController {
         Utilisateur vendeur = utilisateurService.consulterUtilisateur(idUtilisateur);
         model.addAttribute("vendeur", vendeur);
         return "view-vendeur-details"; // The Thymeleaf view to show vendeur details
+    }
+
+    @GetMapping("/utilisateur/connexion")
+    public String connexion() {
+        return "view-connexion";
     }
 
     @GetMapping("/article")
@@ -110,19 +108,19 @@ public class EnchereController {
         Article article = new Article();
 
         // Simulated connected user
-        Utilisateur utilisateurConnecte = utilisateurService.consulterUtilisateur(CONNECTED_USER_ID);
+        Utilisateur utilisateur = utilisateurService.consulterUtilisateur(CONNECTED_USER_ID);
 
         // Create default retrait object with user's address
         Retrait retrait = new Retrait();
-        retrait.setRue(utilisateurConnecte.getRue());
-        retrait.setCodePostal(utilisateurConnecte.getCodePostal());
-        retrait.setVille(utilisateurConnecte.getVille());
+        retrait.setRue(utilisateur.getRue());
+        retrait.setCodePostal(utilisateur.getCodePostal());
+        retrait.setVille(utilisateur.getVille());
 
         article.setRetrait(retrait);
 
         model.addAttribute("article", article);
         model.addAttribute("categories", categoriesEnSession);
-        model.addAttribute("utilisateur", utilisateurConnecte);
+        model.addAttribute("utilisateur", utilisateur);
 
         return "view-nouvelle-vente";
     }

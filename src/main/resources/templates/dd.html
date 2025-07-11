@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org" >
+<head>
+	<meta charset="UTF-8">
+	<title>Affichage Profil Vendeur</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+	<!-- meta pour le référencement -->
+	<meta name="description" content="Site enchères ENI">
+	<link rel="stylesheet" data-th-href="@{/css/view-profil-vendeur.css}">
+	<!-- ressource fontawesome -->
+	<link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.15.4/css/all.css">
+	<!-- ressource bootstrap -->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+</head>
+<body class="container mt-4 mb-4">
+	<nav class="navbar navbar-expand-lg bg-body-tertiary header-container mb-4">
+		<div class="container-fluid">
+			<a th:href="@{/encheres}" class="navbar-brand">ENI-Enchères</a>
+			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor04"
+					aria-controls="navbarColor04" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbarColor04">
+				<ul class="navbar-nav ms-auto">
+					<li class="nav-item"><a th:href="@{/encheres}" class="nav-link">Enchères</a></li>
+					<li class="nav-item"><a th:href="@{/encheres/vendre-article}" class="nav-link">Vendre un article</a></li>
+					<li class="nav-item"><a th:href="@{/mon-profil}" class="nav-link">Mon profil</a></li>
+					<li class="nav-item"><a th:href="@{/encheres}" class="nav-link">Déconnexion</a></li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+
+	<footer class="footer">
+		<div class="container">
+			<p>Aide | Conditions d’utilisation</p>
+			<p>Contact e-mail | Mentions légales</p>
+			<p>Suivez-nous : @instagram</p>
+			<p><em>Projet ENI Informatique</em></p>
+		</div>
+	</footer>
+	
+	
+</body>
+</html>

@@ -18,7 +18,7 @@ public class CategorieDAOImpl implements CategorieDAO {
     private final String INSERT = "INSERT INTO Categories(libelle) VALUES (:libelle)";
     private final String FIND_BY_ID = "SELECT * FROM CATEGORIES WHERE idCategorie=:idCategorie";
     private final String DELETE = "DELETE FROM Categories WHERE idCategorie = :idCategorie";
-    private final String FIND_ALL = "SELECT idCategorie, libelle FROM CATEGORIES";
+    private final String FIND_ALL = "SELECT * FROM CATEGORIES";
     private static final String UPDATE = "UPDATE CATEGORIES SET libelle =:libelle WHERE idCategorie = :idCategorie";
 
     private NamedParameterJdbcTemplate jdbcTemplate;

@@ -5,169 +5,178 @@
     <title>ENI-Enchères</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.3/dist/sketchy/bootstrap.min.css">
     <link rel="stylesheet" th:href="@{/css/view-acceuil-encheres.css}">
+    <style>
+        html, body {
+            height: 100%;
+        }
+        body {
+            display: flex;
+            flex-direction: column;
+        }
+        main {
+            flex: 1;
+        }
+    </style>
 </head>
 
-<body class="container mt-4">
-
-    <nav class="navbar navbar-expand-lg bg-body-tertiary header-container mb-4">
-        <div class="container-fluid">
+<body class="container">
+    <!-- Navbar with left/right spacing -->
+    <nav class="navbar navbar-expand-lg bg-body-tertiary my-4">
+        <div class="container">
             <a th:href="@{/encheres}" class="navbar-brand">ENI-Enchères</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor04"
-                    aria-controls="navbarColor04" aria-expanded="false" aria-label="Toggle navigation">
+                    aria-controls="navbarColor04" aria-expanded="true" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarColor04">
                 <div th:if="${!true}" class="navbar-nav ms-auto">
-                <div th:if="${utilisateurSession==null}" class="navbar-nav ms-auto">
                     <a th:href="@{/utilisateur/connexion}" class="btn btn-outline-dark">S'inscrire - Se connecter</a>
                 </div>
-                <ul th:if="${utilisateurSession != null}" class="navbar-nav ms-auto">
-                    <li class="nav-item"> <a th:text="${utilisateurSession.pseudo}"class="nav-link"></a></li>
+                <ul th:if="${true}" class="navbar-nav ms-auto">
                     <li class="nav-item"><a th:href="@{/encheres}" class="nav-link">Enchères</a></li>
                     <li class="nav-item"><a th:href="@{/encheres/vendre-article}" class="nav-link">Vendre un article</a></li>
-                    <li class="nav-item"><a th:href="@{/mon-profil}" class="nav-link">Mon profil</a></li>
-                    <form th:action="@{/deconnexion}" method="post" th:object="${#httpServletRequest}">
-                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-                        <button type="submit" class="btn btn-link nav-link" style="padding: 0; border: none;">Déconnexion</button>
-                    </form>
+                    <li class="nav-item">
+                        <a th:href="@{/mon-profil}" class="nav-link">
+                            Mon profil
+                            <span th:text="'[' + ${utilisateur.prenom} + ']'" style="color: blue"></span>
+                        </a>
+                    </li>
+                    <li class="nav-item"><a th:href="@{/encheres}" class="nav-link">Déconnexion</a></li>
                 </ul>
             </div>
         </div>
     </nav>
 
-    <h2 class="text-center mb-4">Liste des enchères</h2>
+    <main class="container mb-4">
+        <h2 class="text-center mb-4">Liste des enchères</h2>
 
-    <!-- Formulaire de recherche -->
-    <form th:action="@{/encheres}" method="get" class="row g-5 align-items-start mb-5">
-
-        <!-- Left part: search and filters -->
-        <div class="col-md-8">
-
-            <div class="row mb-3">
-                <div class="col-md-6 mb-2">
-                    <div class="input-group">
-                        <span class="input-group-text">🔍</span>
-                        <input type="text" id="motClesEnchere" name="motClesEnchere"
-                               class="form-control"
-                               placeholder="Le nom de l'article contient"
-                               th:value="${motClesEnchere}">
+        <!-- Formulaire de recherche -->
+        <form th:action="@{/encheres}" method="get" class="row g-5 align-items-start mb-5">
+            <div class="col-md-8">
+                <div class="row mb-3">
+                    <div class="col-md-6 mb-2">
+                        <div class="input-group">
+                            <span class="input-group-text">🔍</span>
+                            <input type="text" id="motClesEnchere" name="motClesEnchere"
+                                   class="form-control"
+                                   placeholder="Le nom de l'article contient"
+                                   th:value="${motClesEnchere}">
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-2">
+                        <select name="idCategorie" class="form-select">
+                            <option value="">Toutes les catégories</option>
+                            <option th:each="cat : ${categoriesEnSession}"
+                                    th:value="${cat.idCategorie}"
+                                    th:text="${cat.libelle}"
+                                    th:selected="${idCategorie} == ${cat.idCategorie}">
+                            </option>
+                        </select>
                     </div>
                 </div>
-                <div class="col-md-4 mb-2">
-                    <select name="idCategorie" class="form-select">
-                        <option value="">Toutes les catégories</option>
-                        <option th:each="cat : ${categoriesEnSession}"
-                                th:value="${cat.idCategorie}"
-                                th:text="${cat.libelle}"
-                                th:selected="${idCategorie} == ${cat.idCategorie}">
-                        </option>
-                    </select>
+
+                <div th:if="${true}" class="row">
+                    <div class="col-md-6">
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="radio" name="filtrePrincipal" id="achats" value="achats"
+                                   th:checked="${filtrePrincipal == null or filtrePrincipal == 'achats'}">
+                            <label class="form-check-label" for="achats"><strong>Achats</strong></label>
+                        </div>
+                        <div class="ms-3" id="achatsCheckboxes">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="sousFiltres" id="ouvertes" value="ouvertes"
+                                       th:checked="${sousFiltres != null and sousFiltres.contains('ouvertes')}">
+                                <label class="form-check-label" for="ouvertes">enchères ouvertes</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="sousFiltres" id="mesEncheres" value="mesEncheres"
+                                       th:checked="${sousFiltres != null and sousFiltres.contains('mesEncheres')}">
+                                <label class="form-check-label" for="mesEncheres">mes enchères en cours</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="sousFiltres" id="mesEncheresRemportees" value="mesEncheresRemportees"
+                                       th:checked="${sousFiltres != null and sousFiltres.contains('mesEncheresRemportees')}">
+                                <label class="form-check-label" for="mesEncheresRemportees">mes enchères remportées</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="radio" name="filtrePrincipal" id="ventes" value="ventes"
+                                   th:checked="${filtrePrincipal == 'ventes'}">
+                            <label class="form-check-label" for="ventes"><strong>Mes ventes</strong></label>
+                        </div>
+                        <div class="ms-3" id="ventesCheckboxes">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="sousFiltres" id="mesVentesEnCours" value="mesVentesEnCours"
+                                       th:checked="${sousFiltres != null and sousFiltres.contains('mesVentesEnCours')}">
+                                <label class="form-check-label" for="mesVentesEnCours">mes ventes en cours</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="sousFiltres" id="ventesNonDebutees" value="ventesNonDebutees"
+                                       th:checked="${sousFiltres != null and sousFiltres.contains('ventesNonDebutees')}">
+                                <label class="form-check-label" for="ventesNonDebutees">ventes non débutées</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="sousFiltres" id="ventesTerminees" value="ventesTerminees"
+                                       th:checked="${sousFiltres != null and sousFiltres.contains('ventesTerminees')}">
+                                <label class="form-check-label" for="ventesTerminees">ventes terminées</label>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <div th:if="${true}" class="row">
-            <div class="row" th:if="${utilisateurSession}">
-                <div class="col-md-6">
-                    <div class="form-check mb-2">
-                        <input class="form-check-input" type="radio" name="filtrePrincipal" id="achats" value="achats"
-                               th:checked="${filtrePrincipal == null or filtrePrincipal == 'achats'}">
-                        <label class="form-check-label" for="achats"><strong>Achats</strong></label>
-                    </div>
-                    <div class="ms-3" id="achatsCheckboxes">
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="sousFiltres" id="ouvertes" value="ouvertes"
-                                   th:checked="${sousFiltres != null and sousFiltres.contains('ouvertes')}">
-                            <label class="form-check-label" for="ouvertes">enchères ouvertes</label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="sousFiltres" id="mesEncheres" value="mesEncheres"
-                                   th:checked="${sousFiltres != null and sousFiltres.contains('mesEncheres')}">
-                            <label class="form-check-label" for="mesEncheres">mes enchères en cours</label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="sousFiltres" id="mesEncheresRemportees" value="mesEncheresRemportees"
-                                   th:checked="${sousFiltres != null and sousFiltres.contains('mesEncheresRemportees')}">
-                            <label class="form-check-label" for="mesEncheresRemportees">mes enchères remportées</label>
-                        </div>
-                    </div>
-                </div>
+            <div class="col-md-1 d-flex justify-content-center">
+                <button type="submit" class="btn btn-primary px-5 py-3">Rechercher</button>
+            </div>
+        </form>
 
-                <div class="col-md-6">
-                    <div class="form-check mb-2">
-                        <input class="form-check-input" type="radio" name="filtrePrincipal" id="ventes" value="ventes"
-                               th:checked="${filtrePrincipal == 'ventes'}">
-                        <label class="form-check-label" for="ventes"><strong>Mes ventes</strong></label>
-                    </div>
-                    <div class="ms-3" id="ventesCheckboxes">
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="sousFiltres" id="mesVentesEnCours" value="mesVentesEnCours"
-                                   th:checked="${sousFiltres != null and sousFiltres.contains('mesVentesEnCours')}">
-                            <label class="form-check-label" for="mesVentesEnCours">mes ventes en cours</label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="sousFiltres" id="ventesNonDebutees" value="ventesNonDebutees"
-                                   th:checked="${sousFiltres != null and sousFiltres.contains('ventesNonDebutees')}">
-                            <label class="form-check-label" for="ventesNonDebutees">ventes non débutées</label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="sousFiltres" id="ventesTerminees" value="ventesTerminees"
-                                   th:checked="${sousFiltres != null and sousFiltres.contains('ventesTerminees')}">
-                            <label class="form-check-label" for="ventesTerminees">ventes terminées</label>
-                        </div>
-                    </div>
+        <!-- Liste des enchères -->
+        <div class="encheres-grid" th:if="${listArticles != null and !listArticles.isEmpty()}">
+            <div class="enchere-card card border-primary" th:each="article : ${listArticles}">
+                <div class="enchere-image">
+                    <img th:src="@{'/images/' + ${#strings.toLowerCase(#strings.replace(article.nomArticle, ' ', '-'))} + '.jpg'}"
+                         th:alt="${article.nomArticle}" class="img-fluid">
                 </div>
+                <h5>
+                    <a th:if="${true}"
+                       th:href="@{/encheres/article(idArticle=${article.idArticle})}"
+                       th:text="${article.nomArticle}">
+                        Nom Article
+                    </a>
+                    <span th:unless="${true}" th:text="${article.nomArticle}">Nom Article</span>
+                </h5>
+                <p>Prix : <span th:text="${article.miseAPrix}">0</span> points</p>
+                <p>Fin de l'enchère : <span th:text="${#temporals.format(article.dateFinEnchere, 'dd/MM/yyyy')}">Date</span></p>
+                <p>Vendeur :
+                    <a th:if="${true}" th:href="@{encheres/utilisateur(idUtilisateur=${article.utilisateur.idUtilisateur})}"
+                       th:text="${article.utilisateur.pseudo}">Pseudo</a>
+                    <span th:unless="${true}" th:text="${article.utilisateur.pseudo}">Pseudo</span>
+                </p>
             </div>
         </div>
 
-        <div class="col-md-1 d-flex justify-content-center">
-            <button type="submit" class="btn btn-primary px-5 py-3">Rechercher</button>
+        <!-- Message si aucune enchère -->
+        <div class="no-encheres alert alert-warning" th:if="${listArticles == null or listArticles.isEmpty()}">
+            Aucun résultat pour cette recherche.
         </div>
+    </main>
 
-    </form>
-
-    <!-- Liste des enchères -->
-    <div class="encheres-grid" th:if="${listArticles != null and !listArticles.isEmpty()}">
-        <div class="enchere-card card border-primary" th:each="article : ${listArticles}">
-            <div class="enchere-image">
-                <img th:src="@{'/images/' + ${#strings.toLowerCase(#strings.replace(article.nomArticle, ' ', '-'))} + '.jpg'}"
-                     th:alt="${article.nomArticle}"
-                     class="img-fluid">
-            </div>
-            <h5>
-                <a      th:if="${true}"
-                        th:href="@{/encheres/article(idArticle=${article.idArticle})}"
-                        th:text="${article.nomArticle}">
-                    Nom Article
-                </a>
-                <span   th:unless="${true}"
-                        th:text="${article.nomArticle}">Nom Article</span>
-            </h5>
-            <p>Prix : <span th:text="${article.miseAPrix}">0</span> points</p>
-            <p>Fin de l'enchère : <span th:text="${#temporals.format(article.dateFinEnchere, 'dd/MM/yyyy')}">Date</span></p>
-            <p>
-                Vendeur :
-                <a
-                        th:if="${true}"
-                        th:href="@{encheres/utilisateur(idUtilisateur=${article.utilisateur.idUtilisateur})}"
-                        th:text="${article.utilisateur.pseudo}">
-                    Pseudo
-                </a>
-                <span th:unless="${true}"
-                      th:text="${article.utilisateur.pseudo}">Pseudo</span>
+    <!-- Footer always at bottom -->
+    <footer class="footer mt-auto py-3">
+        <div class="container text-center">
+            <p class="mb-0 small">
+                Aide | Conditions d’utilisation | Contact e-mail | Mentions légales | Suivez-nous : @instagram | <em>Projet ENI Informatique</em>
             </p>
         </div>
-    </div>
-
-    <!-- Message si aucune enchère -->
-    <div class="no-encheres alert alert-warning" th:if="${listArticles == null or listArticles.isEmpty()}">
-        Aucun résultat pour cette recherche.
-    </div>
+    </footer>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const achatsRadio = document.getElementById('achats');
             const ventesRadio = document.getElementById('ventes');
-
             const achatsCheckboxes = document.querySelectorAll('#achatsCheckboxes input[type="checkbox"]');
             const ventesCheckboxes = document.querySelectorAll('#ventesCheckboxes input[type="checkbox"]');
 
@@ -178,7 +187,6 @@
             }
 
             toggleCheckboxes();
-
             if (achatsRadio) achatsRadio.addEventListener('change', toggleCheckboxes);
             if (ventesRadio) ventesRadio.addEventListener('change', toggleCheckboxes);
         });

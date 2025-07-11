@@ -18,7 +18,6 @@ public interface ArticleService {
     void annulerVente(long idArticle);
     Article consulterArticle(long idArticle);
     List<Article> consulterArticles();
-    List<Article> consulterArticlesParMotCles(String nomArticle);
-    List<Article> consulterArticlesParCategorie(long idCategorie);
+
 
 }
